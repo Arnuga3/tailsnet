@@ -1,0 +1,21 @@
+node_modules
+.env
+
+#client
+# dependencies
+/client/node_modules
+/client/.pnp
+/client/.pnp.js
+
+# testing
+/client/coverage
+
+# production
+/client/build
+
+# misc
+/client/.DS_Store
+
+/client/npm-debug.log*
+/client/yarn-debug.log*
+/client/yarn-error.log*
