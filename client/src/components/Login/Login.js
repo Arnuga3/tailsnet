@@ -1,7 +1,6 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Paper, Typography, TextField, Button, Link } from '@material-ui/core';
-import SocialLoginBtn from './SocialLoginBtn';
 
 const styles = theme => ({
     wrapper: {
@@ -20,18 +19,7 @@ const styles = theme => ({
     }
 });
 
-const google_client_id = '161384501365-cj2sqlkttm82s1j45nvfr305baocb3sn.apps.googleusercontent.com';
-
 const Login = ({ classes }) => {
-
-    const handleSocialLogin = (user) => {
-        console.log(user)
-    };
-
-    const handleSocialLoginFailure = (err) => {
-        console.error(err)
-    };
-
     return (
         <div className={classes.wrapper}>
             <Paper className={classes.paper}>
@@ -47,15 +35,8 @@ const Login = ({ classes }) => {
                 <Button className={classes.loginBtn} variant='contained' color='primary'>
                     Login
                 </Button>
-                <SocialLoginBtn
-                    provider='google'
-                    appId={google_client_id}
-                    onLoginSuccess={handleSocialLogin}
-                    onLoginFailure={handleSocialLoginFailure}
-                    >
-                    Sign in with Google
-                </SocialLoginBtn>
                 <Link href='/auth/facebook'>Facebook login</Link>
+                <Link href='/auth/google'>Google login</Link>
             </Paper>
         </div>
     );

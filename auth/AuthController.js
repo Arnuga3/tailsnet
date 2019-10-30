@@ -3,30 +3,52 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
 passport.use(new FacebookStrategy({
-    clientID: process.env.FACEBOOK_APP_ID,
-    clientSecret: process.env.FACEBOOK_APP_SECRET,
-    callbackURL: "http://localhost:3000/auth/facebook/callback"
-  },
-  (accessToken, refreshToken, profile, done) => {
-    console.log(accessToken);
-    console.log(refreshToken);
-    console.log(profile);
-    done();
-  }
-));
+  clientID: process.env.FACEBOOK_APP_ID,
+  clientSecret: process.env.FACEBOOK_APP_SECRET,
+  callbackURL: "http://localhost:3000/auth/facebook/callback"
+},
+(accessToken, refreshToken, profile, done) => {
+  console.log(accessToken);
+  console.log(refreshToken);
+  console.log(profile);
+  done();
+}));
+
+passport.use(new GoogleStrategy({
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: "http://localhost:3000/auth/google/callback"
+},
+(accessToken, refreshToken, profile, done) => {
+  onsole.log(accessToken);
+  console.log(refreshToken);
+  console.log(profile);
+  done();
+}));
 
 router.get('/facebook', passport.authenticate('facebook'));
-
 router.get('/facebook/callback',
     passport.authenticate('facebook', {
         successRedirect: '/',
         failureRedirect: '/login'
     })
+);
+
+router.get('/google', passport.authenticate('google', {
+  scope: ['https://www.googleapis.com/auth/plus.login']
+}));
+
+router.get('/google/callback', 
+  passport.authenticate('google', {
+    successRedirect: '/',
+    failureRedirect: '/login'
+  })
 );
 
 // const jwt = require('jsonwebtoken');

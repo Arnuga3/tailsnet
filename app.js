@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-// require('dotenv').config();
+require('dotenv').config();
 // require('./db');
 
 // var UserEndPoint = require('./api/AuthEndPoint');

@@ -6,7 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-client": "cd client && npm run-script build",
-    "start": "npm run-script build-client && node server.js"
+    "start": "npm run-script build-client && npm run-script start-server",
+    "start-server": "node server.js",
+    "watch-server": "nodemon --watch auth --exec npm run-script start-server",
+    "watch-client": "nodemon --watch client --exec npm run-script start"
   },
   "author": "arnuga3",
   "license": "ISC",
@@ -15,6 +18,10 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "passport": "^0.4.0",
-    "passport-facebook": "^3.0.0"
+    "passport-facebook": "^3.0.0",
+    "passport-google-oauth": "^2.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.4"
   }
 }
