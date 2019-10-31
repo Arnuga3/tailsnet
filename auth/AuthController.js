@@ -26,7 +26,7 @@ passport.use(new GoogleStrategy({
   callbackURL: "https://tailsnet.herokuapp.com/auth/google/callback"
 },
 (accessToken, refreshToken, profile, done) => {
-  onsole.log(accessToken);
+  console.log(accessToken);
   console.log(refreshToken);
   console.log(profile);
   done();
