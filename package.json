@@ -5,9 +5,9 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build-client": "cd client && npm run-script build",
+    "build-client": "cd client && npm install && npm run-script build",
     "start": "npm run-script build-client && npm run-script start-server",
-    "start-server": "node server.js",
+    "start-server": "npm install && node server.js",
     "watch-server": "nodemon --watch auth --exec npm run-script start-server",
     "watch-client": "nodemon --watch client --exec npm run-script start"
   },
