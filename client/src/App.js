@@ -1,9 +1,16 @@
 import React from 'react';
-import Login from './components/Login/Login';
+import Login from './components/Login';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 function App() {
   return (
-    <Login/>
+    <Router>
+        <Switch>
+          <Route exact path="/">
+            <Login/>
+          </Route>
+        </Switch>
+    </Router>
   );
 }
 
