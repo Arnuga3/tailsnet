@@ -5,17 +5,6 @@ const bodyParser = require('body-parser');
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-
-// // Create a new user
-// router.post('/', async (req, res) =>{
-//   const newUser = new User(req.body)
-//   await newUser.save()
-//     .catch(error => res.status(400)
-//       .send(`There was a problem saving a user. Error: ${error}`))
-  
-//   return res.status(200).send("User saved successfully")
-// })
-
 // // Get all users
 // router.get('/', async (req, res) => {
 //   const users = await User.find({}).exec()

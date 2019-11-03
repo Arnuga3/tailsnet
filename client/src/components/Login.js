@@ -3,6 +3,62 @@ import { withStyles } from '@material-ui/core/styles';
 import { Paper, Typography, TextField, Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import logo from './../TAILSNET.png';
+import axios from 'axios';
+
+const Login = ({ classes }) => {
+
+    let emailRef = React.createRef();
+    let passwordRef = React.createRef();
+
+    const handleSubmit = e => {
+        e.preventDefault();
+
+        axios.post('/auth/local', {
+            email: emailRef.value,
+            password: passwordRef.value
+        })
+        .then(res => console.log(res))
+        .catch(err => console.log(err));
+    };
+
+    return (
+        <div className={classes.wrapper}>
+            <Paper className={classes.paper}>
+                <div className={classes.logoWrapper}>
+                    <img className={classes.logoImg} src={logo} alt=''/>
+                    <Typography variant='h5' align='center'>
+                        TailsNet
+                    </Typography>
+                </div>
+                <div className={classes.rowWrapper}>
+                    <form className={classes.columnWrapper} onSubmit={handleSubmit}>
+                        <TextField inputRef={el => emailRef = el} variant='outlined' label='email' margin='dense'>
+                            email
+                        </TextField>
+                        <TextField inputRef={el => passwordRef = el} variant='outlined' label='password' margin='dense'>
+                            password
+                        </TextField>
+                        <Button type='submit' className={classes.loginBtn} variant='contained' color='primary'>
+                            Login
+                        </Button>
+                        <Typography variant='caption'>
+                            Not Registered? <Link to='/register'>Register with email</Link>
+                        </Typography>
+                    </form>
+                    <div className={classes.divider}></div>
+                    <div className={classes.columnWrapper}>
+                        <Button className={classes.loginBtn} href='/auth/facebook' variant='contained'>
+                            Continue with Facebook
+                        </Button>
+                        <Button className={classes.loginBtn} href='/auth/google' variant='contained'>
+                            Continue with Google
+                        </Button>
+                    </div>
+                </div>
+            </Paper>
+        </div>
+    );
+};
 
 const styles = theme => ({
     wrapper: {
@@ -42,45 +98,5 @@ const styles = theme => ({
         margin: `${theme.spacing(1)}px 0`
     }
 });
-
-const Login = ({ classes }) => {
-    return (
-        <div className={classes.wrapper}>
-            <Paper className={classes.paper}>
-                <div className={classes.logoWrapper}>
-                    <img className={classes.logoImg} src={logo} alt=''/>
-                    <Typography variant='h5' align='center'>
-                        TailsNet
-                    </Typography>
-                </div>
-                <div className={classes.rowWrapper}>
-                    <div className={classes.columnWrapper}>
-                        <TextField variant='outlined' label='username' margin='dense'>
-                            username
-                        </TextField>
-                        <TextField variant='outlined' label='password' margin='dense'>
-                            password
-                        </TextField>
-                        <Button className={classes.loginBtn} variant='contained' color='primary'>
-                            Login
-                        </Button>
-                        <Typography variant='caption'>
-                            Not Registered? <Link to=''>Register with email</Link>
-                        </Typography>
-                    </div>
-                    <div className={classes.divider}></div>
-                    <div className={classes.columnWrapper}>
-                        <Button className={classes.loginBtn} href='/auth/facebook' variant='contained'>
-                            Continue with Facebook
-                        </Button>
-                        <Button className={classes.loginBtn} href='/auth/google' variant='contained'>
-                            Continue with Google
-                        </Button>
-                    </div>
-                </div>
-            </Paper>
-        </div>
-    );
-};
 
 export default withStyles(styles)(Login);
