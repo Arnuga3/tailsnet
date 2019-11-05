@@ -21,14 +21,11 @@ passport.use(new LocalStrategy({
     User.findOne({ email: username }, (err, user) => {
       if (err)
         return done(err);
-
       if (!user)
         return done(null, false, { message: 'Incorrect email' });
-
       const validPassword = bcrypt.compareSync(password, user.password);
       if (!validPassword)
         return done(null, false, { message: 'Incorrect password' });
-
       return done(null, user);
     });
   }
@@ -104,57 +101,8 @@ router.get('/google/callback',
   })
 );
 
-// const VerifyToken = require('./VerifyToken');
-
-// // Login
-// router.post('/login', async (req, res) => {
-//   const { email, password } = req.body
-
-//   const user = await User.findOne({ email }).exec()
-//     .catch(error => res.status(500)
-//       .send(`Server error. Error: ${error}`))
-
-//   if (!user) return res.status(404).send('User not found')
-
-//   const passwordIsValid = bcrypt.compareSync(password, user.password)
-//   if (!passwordIsValid) return res.status(401).send({ auth: false, token: null })
-
-//   const token = jwt.sign({ id: user._id }, process.env.SECRET, {
-//     expiresIn: 86400  // 24h
-//   })
-
-//   return res.status(200).send({ auth: true, token: token })
-// })
-
-// // Logout
-// router.get('/logout', (req, res) => res.status(200).send({ auth: false, token: null }))
-
-// // Register
-// router.post('/register', async (req, res) => {
-//   const { name, email, password } = req.body
-//   const hashedPassword = bcrypt.hashSync(password, 8)
-
-//   const user = await User.create({
-//     name,
-//     email,
-//     password: hashedPassword
-//   }).catch(error => res.status(500)
-//       .send(`There was a problem registering a user. Error: ${error}`))
-
-//   const token = jwt.sign({ id: user._id }, process.env.SECRET, {
-//     expiresIn: 86400  // 24h
-//   })
-
-//   return res.status(200).send({ auth: true, token: token })
-// })
-
-// router.get('/me', VerifyToken, async (req, res) => {
-//   const user = await User.findById(req.userId, { password: 0 }).exec()
-//     .catch(error => res.status(500)
-//       .send(`There was a problem finding a user. Error: ${error}`))
-
-//   if (!user) return res.status(404).send('User not found')
-//   return res.status(200).send(user)
-// })
+router.get('/logout', (req, res) => 
+  res.status(200)
+  .send({ auth: false, token: null }));
 
 module.exports = router;

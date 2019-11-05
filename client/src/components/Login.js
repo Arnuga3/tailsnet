@@ -32,11 +32,11 @@ const Login = ({ classes }) => {
                 </div>
                 <div className={classes.rowWrapper}>
                     <form className={classes.columnWrapper} onSubmit={handleSubmit}>
-                        <TextField inputRef={el => emailRef = el} variant='outlined' label='email' margin='dense'>
-                            email
+                        <TextField inputRef={el => emailRef = el} variant='outlined' label='Email' margin='dense'>
+                            Email
                         </TextField>
-                        <TextField inputRef={el => passwordRef = el} variant='outlined' label='password' margin='dense'>
-                            password
+                        <TextField inputRef={el => passwordRef = el} variant='outlined' label='Password' margin='dense'>
+                            Password
                         </TextField>
                         <Button type='submit' className={classes.loginBtn} variant='contained' color='primary'>
                             Login
