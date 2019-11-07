@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Paper, TextField, Button, Typography, MenuItem, Grid } from '@material-ui/core';
+import { Paper, TextField, Button, Fab, Typography, MenuItem, Grid } from '@material-ui/core';
+import ArrowBack from '@material-ui/icons/ArrowBack';
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import Validation from './../utils/Validation';
@@ -37,7 +38,7 @@ const Register = ({ classes }) => {
         let freshErrors = [];
 
         if (title === 0)
-            freshErrors.push({ error: Configuration.REQUIRED, name: 'title' });
+            freshErrors.push({ name: 'title' });
 
         if (nameRef.value.trim() === '')
             freshErrors.push({ name: nameRef.name });
@@ -93,12 +94,14 @@ const Register = ({ classes }) => {
     const formError = field =>
         errors.filter(err => err.name === field);
     
-
     return (
         <div className={classes.wrapper}>
             <Paper className={classes.paper}>
                 <form onSubmit={handleSubmit}>
                     <Grid container>
+                        <Fab href='/' size='small'>
+                            <ArrowBack color='action'/>
+                        </Fab>
                         <Grid item xs={12} className={classes.logoWrapper}>
                             <img className={classes.logoImg} src={logo} alt=''/>
                             <Typography variant='h5' align='center'>TailsNet</Typography>
@@ -204,13 +207,12 @@ const Register = ({ classes }) => {
                                 </TextField>
                             </div>
                         </Grid>
+                        <Button variant='contained' fullWidth color='primary' className={classes.button}
+                            type='submit'
+                        >
+                            Register
+                        </Button>
                     </Grid>
-                    <Button variant='contained' className={classes.registerBtn} color='primary'
-                        fullWidth
-                        type='submit'
-                    >
-                        Register
-                    </Button>
                 </form>
             </Paper>
         </div>
@@ -248,8 +250,8 @@ const styles = theme => ({
         flexDirection: 'column',
         margin: theme.spacing(1)
     },
-    registerBtn: {
-        margin: `${theme.spacing(3)}px 0 0 0`
+    button: {
+        margin: `${theme.spacing(1)}px 0`
     }
 });
 
