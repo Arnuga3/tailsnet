@@ -1,6 +1,6 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Paper, Typography, TextField, Button } from '@material-ui/core';
+import { Paper, Typography, TextField, Button, Grid } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import logo from './../TAILSNET.png';
 import axios from 'axios';
@@ -24,37 +24,40 @@ const Login = ({ classes }) => {
     return (
         <div className={classes.wrapper}>
             <Paper className={classes.paper}>
-                <div className={classes.logoWrapper}>
+                <Grid item xs={12} className={classes.logoWrapper}>
                     <img className={classes.logoImg} src={logo} alt=''/>
                     <Typography variant='h5' align='center'>
                         TailsNet
                     </Typography>
-                </div>
-                <div className={classes.rowWrapper}>
-                    <form className={classes.columnWrapper} onSubmit={handleSubmit}>
-                        <TextField inputRef={el => emailRef = el} variant='outlined' label='Email' margin='dense'>
-                            Email
-                        </TextField>
-                        <TextField inputRef={el => passwordRef = el} variant='outlined' label='Password' margin='dense'>
-                            Password
-                        </TextField>
-                        <Button type='submit' className={classes.loginBtn} variant='contained' color='primary'>
-                            Login
-                        </Button>
-                        <Typography variant='caption'>
-                            Not Registered? <Link to='/register'>Register with email</Link>
-                        </Typography>
-                    </form>
-                    <div className={classes.divider}></div>
-                    <div className={classes.columnWrapper}>
-                        <Button className={classes.loginBtn} href='/auth/facebook' variant='contained'>
-                            Continue with Facebook
-                        </Button>
-                        <Button className={classes.loginBtn} href='/auth/google' variant='contained'>
-                            Continue with Google
-                        </Button>
-                    </div>
-                </div>
+                </Grid>
+                <Grid container>
+                    <Grid item xs={12} sm={6}>
+                        <form className={classes.columnWrapper} onSubmit={handleSubmit}>
+                            <TextField inputRef={el => emailRef = el} variant='outlined' label='Email' margin='dense'>
+                                Email
+                            </TextField>
+                            <TextField inputRef={el => passwordRef = el} variant='outlined' label='Password' margin='dense'>
+                                Password
+                            </TextField>
+                            <Button type='submit' className={classes.loginBtn} variant='contained' color='primary'>
+                                Login
+                            </Button>
+                            <Typography variant='caption'>
+                                Not Registered? <Link to='/register'>Register with email</Link>
+                            </Typography>
+                        </form>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <div className={classes.columnWrapper}>
+                            <Button className={classes.loginBtn} href='/auth/facebook' variant='contained'>
+                                Sign In with Facebook
+                            </Button>
+                            <Button className={classes.loginBtn} href='/auth/google' variant='contained'>
+                                Sign In with Google
+                            </Button>
+                        </div>
+                    </Grid>
+                </Grid>
             </Paper>
         </div>
     );
@@ -76,7 +79,8 @@ const styles = theme => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        marginBottom: theme.spacing(2)
+        marginBottom: theme.spacing(2),
+        color: 'rgba(0,0,0,.7)'
     },
     logoImg: {
         width: 45,
@@ -87,12 +91,8 @@ const styles = theme => ({
     },
     columnWrapper: {
         display: 'flex',
-        flexDirection: 'column'
-    },
-    divider: {
-        borderLeft: '1px solid rgba(0,0,0,.3)',
-        margin: `0 ${theme.spacing(2)}px`,
-        marginTop: theme.spacing(1)
+        flexDirection: 'column',
+        margin: theme.spacing(1)
     },
     loginBtn: {
         margin: `${theme.spacing(1)}px 0`

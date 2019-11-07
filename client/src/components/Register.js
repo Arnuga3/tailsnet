@@ -1,98 +1,217 @@
 import React, { useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Paper, TextField, Button, Typography, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
+import { Paper, TextField, Button, Typography, MenuItem, Grid } from '@material-ui/core';
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
+import Validation from './../utils/Validation';
+import Configuration from './../utils/Configuration';
 import axios from 'axios';
 import logo from './../TAILSNET.png';
 
 const Register = ({ classes }) => {
 
+    let nameRef = React.createRef();
+    let surnameRef = React.createRef();
     let emailRef = React.createRef();
+    let emailRepeatRef = React.createRef();
     let passwordRef = React.createRef();
+    let passwordRepeatRef = React.createRef();
 
-    const [selectedDate, handleDateChange] = useState(null);
-    const [userTitle, setUserTitle] = React.useState(0);
+    const [title, setTitle] = React.useState(0);
+    const [DOB, handleDOBChange] = useState(null);
+    const [errors, setErrors] = useState([]);
+    const [passwordStrength, setPasswordStrength] = useState('');
 
-    const handleTitleChange = event => {
-        console.log(event.target.value);
-        setUserTitle(event.target.value);
+    const handleTitleChange = event =>
+        setTitle(event.target.value);
+
+    const handlePasswordInput = event => {
+        const password = event.target.value;
+        setPasswordStrength(Validation.analysePassword(password));
+
+        if (password === '')
+            setPasswordStrength('');
+    };
+
+    const validateForm = () => {
+        let freshErrors = [];
+
+        if (title === 0)
+            freshErrors.push({ error: Configuration.REQUIRED, name: 'title' });
+
+        if (nameRef.value.trim() === '')
+            freshErrors.push({ name: nameRef.name });
+
+        if (surnameRef.value.trim() === '')
+            freshErrors.push({ name: surnameRef.name });
+
+        if (DOB === null)
+            freshErrors.push({ name: 'DOB' });
+
+        if (emailRef.value.trim() === '')
+            freshErrors.push({ name: emailRef.name });
+
+        else if (!Validation.validEmail(emailRef.value))
+            freshErrors.push({ error: Configuration.NOT_VALID, name: emailRef.name });
+
+        if (emailRepeatRef.value.trim() === '')
+            freshErrors.push({ name: emailRepeatRef.name });
+
+        else if (emailRef.value.trim() !== emailRepeatRef.value.trim())
+            freshErrors.push({ error: Configuration.NOT_MATCHING, name: emailRepeatRef.name });
+
+        if (passwordRef.value.trim() === '')
+            freshErrors.push({ name: passwordRef.name });
+
+        if (passwordRepeatRef.value.trim() === '')
+            freshErrors.push({ name: passwordRepeatRef.name });
+
+        if (passwordRef.value.trim() !== passwordRepeatRef.value.trim())
+            freshErrors.push({ error: Configuration.NOT_MATCHING, name: passwordRepeatRef.name });
+
+        setErrors(freshErrors);
+        return freshErrors.length === 0;
     };
 
     const handleSubmit = e => {
         e.preventDefault();
+        const isDataValid = validateForm();
 
-        axios.post('/auth/local/register', {
-            email: emailRef.value,
-            password: passwordRef.value
-        })
-        .then(res => console.log(res))
-        .catch(err => console.log(err));
+        if (isDataValid)
+            axios.post('/auth/local/register', {
+                title,
+                name: nameRef.value,
+                surname: surnameRef.value,
+                DOB,
+                email: emailRef.value,
+                password: passwordRef.value
+            })
+            .then(res => console.log(res))
+            .catch(err => console.log(err));
     };
+
+    const formError = field =>
+        errors.filter(err => err.name === field);
+    
 
     return (
         <div className={classes.wrapper}>
             <Paper className={classes.paper}>
-                <div className={classes.logoWrapper}>
-                    <img className={classes.logoImg} src={logo} alt=''/>
-                    <Typography variant='h5' align='center'>
-                        TailsNet
-                    </Typography>
-                </div>
-                <div className={classes.rowWrapper}>
-                    <form className={classes.columnWrapper} onSubmit={handleSubmit}>
-                        <FormControl margin='dense' variant="outlined" className={classes.formControl}>
-                            <InputLabel id="userTitle">Title</InputLabel>
-                            <Select
-                                labelWidth={35}
-                                value={userTitle}
-                                onChange={handleTitleChange}
-                            >
-                                <MenuItem value={0}>&nbsp;</MenuItem>
-                                <MenuItem value={1}>Mr</MenuItem>
-                                <MenuItem value={2}>Mrs</MenuItem>
-                                <MenuItem value={3}>Ms</MenuItem>
-                            </Select>
-                        </FormControl>
-                        <TextField inputRef={el => emailRef = el} variant='outlined' label='Name' margin='dense'>
-                            Name
-                        </TextField>
-                        <TextField inputRef={el => emailRef = el} variant='outlined' label='Surname' margin='dense'>
-                            Surname
-                        </TextField>
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            <DatePicker
-                                disableFuture
-                                inputVariant='outlined'
-                                margin='dense'
-                                openTo='year'
-                                format='dd/MM/yyyy'
-                                label='Date of birth'
-                                views={['year', 'month', 'date']}
-                                value={selectedDate}
-                                onChange={handleDateChange}
-                            />
-                        </MuiPickersUtilsProvider>
-                    </form>
-                    <div className={classes.divider}></div>
-                    <div className={classes.columnWrapper}>
-                        <TextField inputRef={el => emailRef = el} variant='outlined' label='Email' margin='dense'>
-                            Email
-                        </TextField>
-                        <TextField inputRef={el => emailRef = el} variant='outlined' label='Repeat email' margin='dense'>
-                            Repeat Email
-                        </TextField>
-                        <TextField inputRef={el => passwordRef = el} variant='outlined' label='Password' margin='dense'>
-                            Password
-                        </TextField>
-                        <TextField inputRef={el => passwordRef = el} variant='outlined' label='Repeat Password' margin='dense'>
-                            Repeat Password
-                        </TextField>
-                    </div>
-                </div>
-                <Button type='submit' className={classes.registerBtn} variant='contained' color='primary'>
-                    Register
-                </Button>
+                <form onSubmit={handleSubmit}>
+                    <Grid container>
+                        <Grid item xs={12} className={classes.logoWrapper}>
+                            <img className={classes.logoImg} src={logo} alt=''/>
+                            <Typography variant='h5' align='center'>TailsNet</Typography>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <div className={classes.columnWrapper}>
+                                <TextField variant='outlined' margin='dense'
+                                    select
+                                    label='Title'
+                                    name='title'
+                                    value={title}
+                                    onChange={handleTitleChange}
+                                    error={formError('title').length > 0} 
+                                >
+                                    <MenuItem value={0}>&nbsp;</MenuItem>
+                                    <MenuItem value={'Mr'}>Mr</MenuItem>
+                                    <MenuItem value={'Mrs'}>Mrs</MenuItem>
+                                    <MenuItem value={'Ms'}>Ms</MenuItem>
+                                </TextField>
+                                <TextField variant='outlined' margin='dense'
+                                    name='name'
+                                    label='Name'
+                                    inputRef={el => nameRef = el}
+                                    error={formError('name').length > 0}
+                                >
+                                    Name
+                                </TextField>
+                                <TextField variant='outlined' margin='dense'
+                                    name='surname'
+                                    label='Surname'
+                                    inputRef={el => surnameRef = el}
+                                    error={formError('surname').length > 0}
+                                >
+                                    Surname
+                                </TextField>
+                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                    <DatePicker inputVariant='outlined' margin='dense'
+                                        name='DOB'
+                                        label='Date of birth'
+                                        disableFuture
+                                        openTo='year'
+                                        format='dd/MM/yyyy'
+                                        views={['year', 'month', 'date']}
+                                        value={DOB}
+                                        onChange={handleDOBChange}
+                                        error={formError('DOB').length > 0}
+                                    />
+                                </MuiPickersUtilsProvider>
+                            </div>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <div className={classes.columnWrapper}>
+                                <TextField variant='outlined' margin='dense'
+                                    name='email'
+                                    label={
+                                        formError('email').length > 0 && formError('email')[0].error
+                                            ? `Email - ${formError('email')[0].error}`
+                                            : 'Email'
+                                    }
+                                    inputRef={el => emailRef = el}
+                                    error={formError('email').length > 0}
+                                >
+                                    Email
+                                </TextField>
+                                <TextField variant='outlined' margin='dense'
+                                    name='emailRepeat'
+                                    label={
+                                        formError('emailRepeat').length > 0 && formError('emailRepeat')[0].error
+                                            ? `Repeat email - ${formError('emailRepeat')[0].error}`
+                                            : 'Repeat email'
+                                    }
+                                    inputRef={el => emailRepeatRef = el}
+                                    error={formError('emailRepeat').length > 0}
+                                >
+                                    Repeat Email
+                                </TextField>
+                                <TextField variant='outlined' margin='dense'
+                                    name='password'
+                                    type='password'
+                                    label={
+                                        passwordStrength !== ''
+                                            ? `Password - ${passwordStrength}`
+                                            : 'Passowrd'
+                                    }
+                                    inputRef={el => passwordRef = el}
+                                    onChange={handlePasswordInput}
+                                    error={formError('password').length > 0}
+                                >
+                                    Password
+                                </TextField>
+                                <TextField variant='outlined' margin='dense'
+                                    name='passwordRepeat'
+                                    type='password'
+                                    label={
+                                        formError('passwordRepeat').length > 0 && formError('passwordRepeat')[0].error
+                                            ? `Repeat password - ${formError('passwordRepeat')[0].error}`
+                                            : 'Repeat password'
+                                    }
+                                    inputRef={el => passwordRepeatRef = el}
+                                    error={formError('passwordRepeat').length > 0}
+                                >
+                                    Repeat Password
+                                </TextField>
+                            </div>
+                        </Grid>
+                    </Grid>
+                    <Button variant='contained' className={classes.registerBtn} color='primary'
+                        fullWidth
+                        type='submit'
+                    >
+                        Register
+                    </Button>
+                </form>
             </Paper>
         </div>
     );
@@ -114,7 +233,8 @@ const styles = theme => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        marginBottom: theme.spacing(2)
+        marginBottom: theme.spacing(2),
+        color: 'rgba(0,0,0,.7)'
     },
     logoImg: {
         width: 45,
@@ -125,12 +245,8 @@ const styles = theme => ({
     },
     columnWrapper: {
         display: 'flex',
-        flexDirection: 'column'
-    },
-    divider: {
-        borderLeft: '1px solid rgba(0,0,0,.3)',
-        margin: `0 ${theme.spacing(2)}px`,
-        marginTop: theme.spacing(1)
+        flexDirection: 'column',
+        margin: theme.spacing(1)
     },
     registerBtn: {
         margin: `${theme.spacing(3)}px 0 0 0`

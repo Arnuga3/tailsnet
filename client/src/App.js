@@ -8,11 +8,11 @@ const theme = createMuiTheme({
   palette: {
     primary: {
       main: `rgb(105, 190, 105)`,
-      contrastText: 'white'
+      contrastText: 'rgb(255,255,255)'
     }
   },
   status: {
-    danger: 'orange',
+    danger: 'orange'
   },
   typography: {
     "fontFamily": "Comfortaa\", cursive, \"Roboto\", \"Helvetica\", \"Arial\", sans-serif",
