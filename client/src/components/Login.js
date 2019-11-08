@@ -2,7 +2,6 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Paper, Typography, TextField, Button, Fab, Grid } from '@material-ui/core';
 import ArrowForward from '@material-ui/icons/ArrowForward';
-import { Link } from 'react-router-dom';
 import logo from './../TAILSNET.png';
 import axios from 'axios';
 

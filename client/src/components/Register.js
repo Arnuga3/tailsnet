@@ -29,7 +29,6 @@ const Register = ({ classes }) => {
     const handlePasswordInput = event => {
         const password = event.target.value;
         setPasswordStrength(Validation.analysePassword(password));
-
         if (password === '')
             setPasswordStrength('');
     };
@@ -126,16 +125,14 @@ const Register = ({ classes }) => {
                                     label='Name'
                                     inputRef={el => nameRef = el}
                                     error={formError('name').length > 0}
-                                >
-                                    Name
+                                >Name
                                 </TextField>
                                 <TextField variant='outlined' margin='dense'
                                     name='surname'
                                     label='Surname'
                                     inputRef={el => surnameRef = el}
                                     error={formError('surname').length > 0}
-                                >
-                                    Surname
+                                >Surname
                                 </TextField>
                                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                     <DatePicker inputVariant='outlined' margin='dense'
@@ -163,8 +160,7 @@ const Register = ({ classes }) => {
                                     }
                                     inputRef={el => emailRef = el}
                                     error={formError('email').length > 0}
-                                >
-                                    Email
+                                >Email
                                 </TextField>
                                 <TextField variant='outlined' margin='dense'
                                     name='emailRepeat'
@@ -175,8 +171,7 @@ const Register = ({ classes }) => {
                                     }
                                     inputRef={el => emailRepeatRef = el}
                                     error={formError('emailRepeat').length > 0}
-                                >
-                                    Repeat Email
+                                >Repeat Email
                                 </TextField>
                                 <TextField variant='outlined' margin='dense'
                                     name='password'
@@ -189,8 +184,7 @@ const Register = ({ classes }) => {
                                     inputRef={el => passwordRef = el}
                                     onChange={handlePasswordInput}
                                     error={formError('password').length > 0}
-                                >
-                                    Password
+                                >Password
                                 </TextField>
                                 <TextField variant='outlined' margin='dense'
                                     name='passwordRepeat'
@@ -202,15 +196,13 @@ const Register = ({ classes }) => {
                                     }
                                     inputRef={el => passwordRepeatRef = el}
                                     error={formError('passwordRepeat').length > 0}
-                                >
-                                    Repeat Password
+                                >Repeat Password
                                 </TextField>
                             </div>
                         </Grid>
                         <Button variant='contained' fullWidth color='primary' className={classes.button}
                             type='submit'
-                        >
-                            Register
+                        >Register
                         </Button>
                     </Grid>
                 </form>
