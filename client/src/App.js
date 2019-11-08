@@ -1,8 +1,8 @@
 import React from 'react';
-import Login from './components/Login';
-import Register from './components/Register';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import Login from './components/Login';
+import Register from './components/Register';
 
 const theme = createMuiTheme({
   palette: {
@@ -28,12 +28,8 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <Router>
           <Switch>
-            <Route exact path="/">
-              <Login/>
-            </Route>
-            <Route exact path="/register">
-              <Register/>
-            </Route>
+            <Route exact path="/" component={Login}/>
+            <Route path="/register" component={Register}/>
           </Switch>
       </Router>
     </ThemeProvider>
