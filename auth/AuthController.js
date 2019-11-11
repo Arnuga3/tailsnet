@@ -7,6 +7,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const AuthToken = require('./AuthToken');
 
 const User = require('./../database/models/User');
 
@@ -19,14 +20,20 @@ passport.use(new LocalStrategy({
   },
   (username, password, done) => {
     User.findOne({ email: username }, (err, user) => {
-      if (err)
-        return done(err);
-      if (!user)
-        return done(null, false, { message: 'Incorrect email' });
+      if (err) return done(err);
+
+      if (!user) return done(null, false, {
+        message: 'Incorrect email'
+      });
+
       const validPassword = bcrypt.compareSync(password, user.password);
       if (!validPassword)
-        return done(null, false, { message: 'Incorrect password' });
-      return done(null, user);
+        return done(null, false, {
+          message: 'Incorrect password'
+        });
+      
+      const token = AuthToken.createToken(user.id);
+      return done(null, token);
     });
   }
 ));
@@ -56,10 +63,13 @@ passport.use(new GoogleStrategy({
 }));
 
 router.post('/local/register', (req, res) => {
-  const { email, password } = req.body;
+  const { title, name, surname, DOB, email, password } = req.body;
   const hashedPassword = bcrypt.hashSync(password, 8);
-
   const user = User.create({
+    title,
+    name,
+    surname,
+    dob: DOB,
     email,
     password: hashedPassword
   })
@@ -72,13 +82,18 @@ router.post('/local/register', (req, res) => {
     .send({ auth: true, token });
 });
 
-router.post('/local',
-  passport.authenticate('local', { 
-    successRedirect: '/',
-    failureRedirect: '/login',
-    session: false
-  })
-);
+router.post('/local', (req, res, next) => {
+  passport.authenticate('local', (err, token) => {
+    if(err)
+      return res.status(500).send();
+
+    if(!token)
+      return res.status(401).send();
+
+    res.setHeader('tntoken', token);
+    return res.status(200).send();
+  })(req, res, next);
+});
 
 router.get('/facebook', passport.authenticate('facebook'));
 router.get('/facebook/callback',

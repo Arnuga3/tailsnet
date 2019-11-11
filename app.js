@@ -12,4 +12,9 @@ app.use(express.static(path.join(__dirname, '/client/build')));
 app.use('/api/users', UserEndPoint);
 app.use('/auth', AuthController);
 
+// Handle the rest endpoints
+app.get('*', (req, res) => {
+  res.sendFile('index.html', {root: path.join(__dirname, '/client/build/')});
+});
+
 module.exports = app;
