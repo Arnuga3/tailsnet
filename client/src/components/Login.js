@@ -4,9 +4,9 @@ import { Paper, Typography, TextField, Button, Fab, Grid } from '@material-ui/co
 import { Link } from 'react-router-dom';
 import ArrowForward from '@material-ui/icons/ArrowForward';
 import logo from './../TAILSNET.png';
-import axios from 'axios';
+import { login } from '../api/api';
 
-const Login = ({ classes }) => {
+const Login = ({ classes, history }) => {
 
     let emailRef = React.createRef();
     let passwordRef = React.createRef();
@@ -14,12 +14,15 @@ const Login = ({ classes }) => {
     const handleSubmit = e => {
         e.preventDefault();
 
-        axios.post('/auth/local', {
-            email: emailRef.value,
-            password: passwordRef.value
-        })
-        .then(res => console.log(res))
-        .catch(err => console.log(err));
+        login(emailRef.value, passwordRef.value)
+            .then(res => {
+                const token = res.headers.tntoken;
+                if (token) {
+                    localStorage.setItem('tntoken', token);
+                    history.push('/');
+                }
+            })
+            .catch(err => console.log(err));
     };
 
     return (
