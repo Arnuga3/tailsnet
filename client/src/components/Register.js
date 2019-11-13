@@ -7,7 +7,6 @@ import DateFnsUtils from "@date-io/date-fns";
 import Validation from './../utils/Validation';
 import Configuration from './../utils/Configuration';
 import axios from 'axios';
-import logo from './../TAILSNET.png';
 
 const Register = ({ classes }) => {
 
@@ -102,7 +101,7 @@ const Register = ({ classes }) => {
                             <ArrowBack color='action'/>
                         </Fab>
                         <Grid item xs={12} className={classes.logoWrapper}>
-                            <img className={classes.logoImg} src={logo} alt=''/>
+                            <img className={classes.logoImg} src='/TAILSNET.png' alt=''/>
                             <Typography variant='h5' align='center'>TailsNet</Typography>
                         </Grid>
                         <Grid item xs={12} sm={6}>

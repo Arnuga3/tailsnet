@@ -10,3 +10,9 @@ export function getProfile() {
         .then(({ data }) => data)
         .catch(err => err);
 }
+
+export function getPetAccounts() {
+    return AuthAPI.get('/api/pets')
+        .then(({ data }) => data)
+        .catch(err => err);
+}

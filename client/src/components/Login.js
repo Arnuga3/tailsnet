@@ -3,7 +3,6 @@ import { withStyles } from '@material-ui/core/styles';
 import { Paper, Typography, TextField, Button, Fab, Grid } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import ArrowForward from '@material-ui/icons/ArrowForward';
-import logo from './../TAILSNET.png';
 import { login } from '../api/api';
 
 const Login = ({ classes, history }) => {
@@ -29,7 +28,7 @@ const Login = ({ classes, history }) => {
         <div className={classes.wrapper}>
             <Paper className={classes.paper}>
                 <Grid item xs={12} className={classes.logoWrapper}>
-                    <img className={classes.logoImg} src={logo} alt=''/>
+                    <img className={classes.logoImg} src='/TAILSNET.png' alt=''/>
                     <Typography variant='h5' align='center'>
                         TailsNet
                     </Typography>

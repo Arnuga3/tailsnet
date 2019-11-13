@@ -1,46 +1,44 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import clsx from 'clsx';
-import  { 
+
+// Mui components
+import { 
     AppBar,
     Drawer,
     Toolbar,
-    Button,
     IconButton,
     ListItemIcon,
     ListItemText,
     ListItem,
     List,
-    Divider
+    Divider,
+    Hidden
 } from '@material-ui/core';
+
+// Icons
 import MenuIcon from '@material-ui/icons/Menu';
+import Add from '@material-ui/icons/Add';
+import Person from '@material-ui/icons/Person';
+import SettingsApplications from '@material-ui/icons/SettingsApplications';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import { getProfile } from '../api/api';
+
+// import { retrievePetAccounts } from './../actions/petActions';
+import Search from './Search';
 
 const drawerWidth = 256;
 
-const Home = ({ classes }) => {
+const Home = ({ classes, dispatch }) => {
 
-    const [userData, setUserData] = useState(null);
     const [open, setOpen] = useState(false);
-
-    const getUserData = () => {
-        getProfile()
-            .then(user => {
-                setUserData(user);
-                console.log(userData)
-            })
-            .catch(err => console.error(err));
-    };
-
-    const handleDrawerOpen = () => setOpen(true);
-    const handleDrawerClose = () => setOpen(false);
+    const handleDrawerOpenClose = () => setOpen(!open);
 
     useEffect(() => {
-    });
+        // dispatch(retrievePetAccounts());
+    }, []);
 
     return (
         <div className={classes.root}>
@@ -51,16 +49,15 @@ const Home = ({ classes }) => {
                 })}
             >
                 <Toolbar className={classes.toolbar}>
-                    <IconButton className={classes.title}>
-                        <AccountCircle fontSize='large'/>
-                    </IconButton>
-                    {userData && userData.name}
+                    <img className={classes.logoImg} src='/TAILSNETW.png' alt='logo'/>
+                    <Hidden xsDown>
+                        <Search light/>
+                    </Hidden>
                     <IconButton
                         color='inherit'
                         aria-label='open drawer'
                         edge='end'
-                        onClick={handleDrawerOpen}
-                        className={clsx(open && classes.hide)}
+                        onClick={handleDrawerOpenClose}
                     >
                         <MenuIcon />
                     </IconButton>
@@ -71,7 +68,7 @@ const Home = ({ classes }) => {
                 })}
             >
                 <div className={classes.drawerHeader} />
-                <Button onClick={getUserData}>GET</Button>
+                
             </main>
             <Drawer
                 className={classes.drawer}
@@ -81,38 +78,35 @@ const Home = ({ classes }) => {
                 classes={{ paper: classes.drawerPaper }}
             >
                 <div className={classes.drawerHeader}>
-                    <IconButton onClick={handleDrawerClose}>
+                    <IconButton onClick={handleDrawerOpenClose}>
                         <ChevronRightIcon/>
                     </IconButton>
                 </div>
                 <Divider />
+                <Hidden smUp>
+                    <Search/>
+                </Hidden>
                 <List>
-                    <ListItem button>
+                    <ListItem button component={Link} to='pet/create'>
                         <ListItemIcon>
-                            <InboxIcon/>
+                            <Add/>
                         </ListItemIcon>
-                        <ListItemText primary={'text'}/>
+                        <ListItemText primary='Pet Profile'/>
                     </ListItem>
                     <ListItem button>
                         <ListItemIcon>
-                            <InboxIcon/>
+                            <Person/>
                         </ListItemIcon>
-                        <ListItemText primary={'text'}/>
+                        <ListItemText primary='Pet Owner Profile'/>
                     </ListItem>
                 </List>
                 <Divider />
                 <List>
                     <ListItem button>
                         <ListItemIcon>
-                            <InboxIcon/>
+                            <SettingsApplications/>
                         </ListItemIcon>
-                        <ListItemText primary={'text'}/>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemIcon>
-                            <InboxIcon/>
-                        </ListItemIcon>
-                        <ListItemText primary={'text'}/>
+                        <ListItemText primary='Settings'/>
                     </ListItem>
                 </List>
             </Drawer>
@@ -143,11 +137,9 @@ const styles = theme => ({
         display: 'flex',
         justifyContent: 'space-between'
     },
-    title: {
-        color: 'rgb(255,255,255)'
-    },
-    hide: {
-        display: 'none'
+    logoImg: {
+        width: 45,
+        marginRight: theme.spacing(1)
     },
     drawer: {
         width: drawerWidth,
@@ -181,4 +173,8 @@ const styles = theme => ({
     },
 });
 
-export default withStyles(styles)(Home);
+const mapStateToProps = ({ pets }) => ({
+    petAccounts: pets ? pets.accounts : []
+});
+
+export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Home));
