@@ -1,7 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { Paper, Typography, TextField, Button, Fab, Grid } from '@material-ui/core';
-import { Link } from 'react-router-dom';
 import ArrowForward from '@material-ui/icons/ArrowForward';
 import { login } from '../api/api';
 
@@ -48,9 +48,9 @@ const Login = ({ classes, history }) => {
                             <Typography variant='caption' align='center'>
                                 Do not have an account?
                             </Typography>
-                            <Fab to='/register' component={Link} size='small' variant='extended' className={classes.registerBtn}>
+                            <Button to='/register' component={Link} size='small' variant='outlined' className={classes.registerBtn}>
                                 Register with Email &nbsp;<ArrowForward color='action'/>
-                            </Fab>
+                            </Button>
                         </form>
                     </Grid>
                     <Grid item xs={12} sm={6}>

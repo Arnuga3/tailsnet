@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import { Paper, TextField, Button, Fab, Typography, MenuItem, Grid } from '@material-ui/core';
+import { Paper, TextField, Button, Typography, MenuItem, Grid } from '@material-ui/core';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
@@ -97,9 +98,14 @@ const Register = ({ classes }) => {
             <Paper className={classes.paper}>
                 <form onSubmit={handleSubmit}>
                     <Grid container>
-                        <Fab href='/' size='small'>
-                            <ArrowBack color='action'/>
-                        </Fab>
+                        <Grid item xs={2} className={classes.columnWrapper}>
+                            <Typography variant='caption' align='center'>
+                                Have an account?
+                            </Typography>
+                            <Button className={classes.goToLoginBtn} to='/login' variant='outlined' component={Link} size='small'>
+                                <ArrowBack color='action'/> &nbsp; Go to Login
+                            </Button>
+                        </Grid>
                         <Grid item xs={12} className={classes.logoWrapper}>
                             <img className={classes.logoImg} src='/TAILSNET.png' alt=''/>
                             <Typography variant='h5' align='center'>TailsNet</Typography>
@@ -241,7 +247,12 @@ const styles = theme => ({
         flexDirection: 'column',
         margin: theme.spacing(1)
     },
+    goToLoginBtn: {
+        textTransform: 'none',
+        margin: `${theme.spacing(.5)}px 0 0 0`
+    },
     button: {
+        textTransform: 'none',
         margin: `${theme.spacing(1)}px 0`
     }
 });

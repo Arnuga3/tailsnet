@@ -6,9 +6,9 @@ import { Search as SearchIcon } from '@material-ui/icons';
 const Search = ({ classes, light = false }) => {
     return (
         <Paper className={classes.paper} elevation={0}>
-            <InputBase className={light && classes.input} placeholder='Search...'/>
+            <InputBase className={light ? classes.input : ''} placeholder='Search...'/>
             <IconButton type='submit' size='small'>
-                <SearchIcon className={light && classes.icon}/>
+                <SearchIcon className={light ? classes.icon : ''}/>
             </IconButton>
         </Paper>
     );
