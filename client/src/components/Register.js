@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import { Paper, TextField, Button, Typography, MenuItem, Grid } from '@material-ui/core';
+import { Paper, Button, Typography, MenuItem, Grid } from '@material-ui/core';
+import PTextField from './commons/generic/PTextField';
+import PButton from './commons/generic/PButton';
+import BirthDatePicker from './commons/BirthDatePicker';
 import ArrowBack from '@material-ui/icons/ArrowBack';
-import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns";
 import Validation from './../utils/Validation';
 import Configuration from './../utils/Configuration';
 import axios from 'axios';
@@ -112,8 +113,7 @@ const Register = ({ classes }) => {
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <div className={classes.columnWrapper}>
-                                <TextField variant='outlined' margin='dense'
-                                    select
+                                <PTextField select
                                     label='Title'
                                     name='title'
                                     value={title}
@@ -124,91 +124,68 @@ const Register = ({ classes }) => {
                                     <MenuItem value={'Mr'}>Mr</MenuItem>
                                     <MenuItem value={'Mrs'}>Mrs</MenuItem>
                                     <MenuItem value={'Ms'}>Ms</MenuItem>
-                                </TextField>
-                                <TextField variant='outlined' margin='dense'
-                                    name='name'
-                                    label='Name'
-                                    inputRef={el => nameRef = el}
-                                    error={formError('name').length > 0}
-                                >Name
-                                </TextField>
-                                <TextField variant='outlined' margin='dense'
-                                    name='surname'
-                                    label='Surname'
-                                    inputRef={el => surnameRef = el}
-                                    error={formError('surname').length > 0}
-                                >Surname
-                                </TextField>
-                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                    <DatePicker inputVariant='outlined' margin='dense'
-                                        name='DOB'
-                                        label='Date of birth'
-                                        disableFuture
-                                        openTo='year'
-                                        format='dd/MM/yyyy'
-                                        views={['year', 'month', 'date']}
-                                        value={DOB}
-                                        onChange={handleDOBChange}
-                                        error={formError('DOB').length > 0}
-                                    />
-                                </MuiPickersUtilsProvider>
+                                </PTextField>
+                                <PTextField label='Name' name='name' inputRef={el => nameRef = el} error={formError('name').length > 0}>
+                                    Name
+                                </PTextField>
+                                <PTextField label='Surname' name='surname' inputRef={el => surnameRef = el} error={formError('surname').length > 0}>
+                                    Surname
+                                </PTextField>
+                                <BirthDatePicker value={DOB}
+                                    onChange={handleDOBChange}
+                                    error={formError('DOB').length > 0}
+                                />
                             </div>
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <div className={classes.columnWrapper}>
-                                <TextField variant='outlined' margin='dense'
-                                    name='email'
+                                <PTextField name='email' inputRef={el => emailRef = el}
                                     label={
                                         formError('email').length > 0 && formError('email')[0].error
                                             ? `Email - ${formError('email')[0].error}`
                                             : 'Email'
                                     }
-                                    inputRef={el => emailRef = el}
                                     error={formError('email').length > 0}
-                                >Email
-                                </TextField>
-                                <TextField variant='outlined' margin='dense'
-                                    name='emailRepeat'
+                                >
+                                    Email
+                                </PTextField>
+                                <PTextField name='emailRepeat' inputRef={el => emailRepeatRef = el}
                                     label={
                                         formError('emailRepeat').length > 0 && formError('emailRepeat')[0].error
                                             ? `Repeat email - ${formError('emailRepeat')[0].error}`
                                             : 'Repeat email'
                                     }
-                                    inputRef={el => emailRepeatRef = el}
                                     error={formError('emailRepeat').length > 0}
-                                >Repeat Email
-                                </TextField>
-                                <TextField variant='outlined' margin='dense'
-                                    name='password'
-                                    type='password'
+                                >
+                                    Repeat Email
+                                </PTextField>
+                                <PTextField name='password' type='password' inputRef={el => passwordRef = el} onChange={handlePasswordInput}
                                     label={
                                         passwordStrength !== ''
                                             ? `Password - ${passwordStrength}`
                                             : 'Passowrd'
                                     }
-                                    inputRef={el => passwordRef = el}
-                                    onChange={handlePasswordInput}
                                     error={formError('password').length > 0}
-                                >Password
-                                </TextField>
-                                <TextField variant='outlined' margin='dense'
-                                    name='passwordRepeat'
-                                    type='password'
+                                >
+                                    Password
+                                </PTextField>
+                                <PTextField name='passwordRepeat' type='password' inputRef={el => passwordRepeatRef = el}
                                     label={
                                         formError('passwordRepeat').length > 0 && formError('passwordRepeat')[0].error
                                             ? `Repeat password - ${formError('passwordRepeat')[0].error}`
                                             : 'Repeat password'
                                     }
-                                    inputRef={el => passwordRepeatRef = el}
                                     error={formError('passwordRepeat').length > 0}
-                                >Repeat Password
-                                </TextField>
+                                >
+                                    Repeat Password
+                                </PTextField>
                             </div>
                         </Grid>
-                        <Button variant='contained' fullWidth color='primary' className={classes.button}
-                            type='submit'
-                        >Register
-                        </Button>
+                        <Grid container justify='center'>
+                            <PButton type='submit'>
+                                Register
+                            </PButton>
+                        </Grid>
                     </Grid>
                 </form>
             </Paper>

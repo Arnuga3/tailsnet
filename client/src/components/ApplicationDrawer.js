@@ -40,7 +40,7 @@ const ApplicationDrawer = ({ classes, open, handleDrawer }) => {
                 <Search/>
             </Hidden>
             <List>
-                <ListItem button component={Link} to='pet/create'>
+                <ListItem button component={Link} to='/create/pet/profile' onClick={handleDrawer}>
                     <ListItemIcon>
                         <Add/>
                     </ListItemIcon>

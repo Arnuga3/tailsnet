@@ -8,6 +8,10 @@ const theme = createMuiTheme({
     primary: {
       main: `rgb(90, 175, 90)`,
       contrastText: 'rgb(255,255,255)'
+    },
+    text: {
+      primary: 'rgba(0,0,0,.75)',
+      secondary: 'rgba(0,0,0,.25)'
     }
   },
   status: {

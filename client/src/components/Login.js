@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import { Paper, Typography, TextField, Button, Fab, Grid } from '@material-ui/core';
+import { Paper, Typography, Button, Grid } from '@material-ui/core';
+import PTextField from './commons/generic/PTextField';
 import ArrowForward from '@material-ui/icons/ArrowForward';
 import { login } from '../api/api';
 
@@ -36,12 +37,12 @@ const Login = ({ classes, history }) => {
                 <Grid container>
                     <Grid item xs={12} sm={6}>
                         <form className={classes.columnWrapper} onSubmit={handleSubmit}>
-                            <TextField inputRef={el => emailRef = el} variant='outlined' label='Email' margin='dense'>
+                            <PTextField inputRef={el => emailRef = el} label='Email'>
                                 Email
-                            </TextField>
-                            <TextField inputRef={el => passwordRef = el} variant='outlined' label='Password' margin='dense'>
+                            </PTextField>
+                            <PTextField inputRef={el => passwordRef = el} label='Password'>
                                 Password
-                            </TextField>
+                            </PTextField>
                             <Button type='submit' className={classes.loginBtn} variant='contained' color='primary'>
                                 Login
                             </Button>

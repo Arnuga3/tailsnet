@@ -6,13 +6,14 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 // import { retrievePetAccounts } from './../actions/petActions';
 import ApplicationBar from './ApplicationBar';
 import ApplicationDrawer from './ApplicationDrawer';
+import Home from './Home';
 import CreatePetProfile from './CreatePetProfile';
 import Login from './Login';
 import Register from './Register';
 
 const drawerWidth = 256;
 
-const Home = ({ classes, dispatch }) => {
+const Index = ({ classes, dispatch }) => {
 
     const [open, setOpen] = useState(false);
     const handleDrawer = () => setOpen(!open);
@@ -28,9 +29,10 @@ const Home = ({ classes, dispatch }) => {
             <main className={classes.content}>
 
                 <Switch>
-                    <Route path='/login' component={Login} />
-                    <Route path='/register' component={Register} />
-                    <Route path={'/pet/create'} component={CreatePetProfile}/>
+                    <Route exact path='/' component={Home}/>
+                    <Route path='/login' component={Login}/>
+                    <Route path='/register' component={Register}/>
+                    <Route path='/create/pet/profile' component={CreatePetProfile}/>
                 </Switch>
 
             </main>
@@ -58,4 +60,4 @@ const mapStateToProps = ({ pets }) => ({
     petAccounts: pets ? pets.accounts : []
 });
 
-export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Home));
+export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Index));
