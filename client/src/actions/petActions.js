@@ -2,17 +2,9 @@
     getPetAccounts
 } from './../api/api';
 
-const GET_ACCOUNTS = 'GET_ACCOUNTS';
+const SAVE_PET_ACCOUNT = 'SAVE_PET_ACCOUNT';
 
-export const savePetAccounts = petAccounts => ({
-    type: GET_ACCOUNTS,
-    value: petAccounts
+export const createPetAccount = petAccount => ({
+    type: SAVE_PET_ACCOUNT,
+    value: petAccount
 });
-
-export function retrievePetAccounts() {
-    return dispatch => {
-        getPetAccounts()
-            .then(data => dispatch(savePetAccounts(data)))
-            .catch(err => console.log(err));
-    }
-}

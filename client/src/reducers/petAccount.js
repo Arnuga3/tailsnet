@@ -1,4 +1,4 @@
-const GET_ACCOUNTS = 'GET_ACCOUNTS';
+const SAVE_PET_ACCOUNT = 'SAVE_PET_ACCOUNT';
 
 const defaultState = {
     accounts: null
@@ -7,10 +7,10 @@ const defaultState = {
 const pets = (state = defaultState, { type, value }) => {
 
     switch (type) {
-        case GET_ACCOUNTS:
+        case SAVE_PET_ACCOUNT:
             return {
                 ...state,
-                accounts: value
+                accounts: [...state.accounts, value]
             }
         
         default:
