@@ -74,7 +74,7 @@ router.post('/local/register', (req, res) => {
     password: hashedPassword
   })
   .catch(error => res.status(500)
-  .send(`There was a problem registering a user. Error: ${error}`));
+    .send(`There was a problem registering a user. Error: ${error}`));
 
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: 86400 });
 

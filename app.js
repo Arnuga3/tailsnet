@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const UserEndPoint = require('./api/UserEndPoint');
-const PetsEndPoint = require('./api/PetsEndPoint');
+const PetEndPoint = require('./api/PetEndPoint');
 const AuthController = require('./auth/AuthController');
 const app = express();
 
@@ -11,7 +11,7 @@ require('./database/mongodb');
 app.use(express.static(path.join(__dirname, '/client/build')));
 
 app.use('/api/users', UserEndPoint);
-app.use('/api/pets', PetsEndPoint);
+app.use('/api/pets', PetEndPoint);
 app.use('/auth', AuthController);
 
 // Handle the rest endpoints

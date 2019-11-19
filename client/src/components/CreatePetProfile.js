@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Paper } from '@material-ui/core';
@@ -7,26 +7,51 @@ import PButton from './commons/generic/PButton';
 import ProfileImage from './commons/ProfileImage';
 import BirthDatePicker from './commons/BirthDatePicker';
 import PetType from './commons/PetType';
-import { createPetAccount } from './../actions/petActions';
+import { retrievePetAccounts, postPetAccount } from './../actions/petActions';
 import PageWrapper from './commons/generic/PageWrapper';
 
-const CreatePetProfile = ({ classes, dispatch }) => {
+const CreatePetProfile = ({ classes, dispatch, petAccounts }) => {
 
-    let petName = React.createRef();
+    const [petType, setPetType] = useState('Cat');
+    let petNameRef = React.createRef();
     const [dob, handleDOBChange] = useState(null);
-    const type = 'Cat';
+    const [errors, setErrors] = useState([]);
 
     const handleCreate = () => {
-        dispatch(createPetAccount({
-            petName,
-            dob,
-            type
-        }));
+        const isDataValid = validateForm();
+        if (isDataValid) {
+            dispatch(postPetAccount({
+                petName: petNameRef.value,
+                dob,
+                petType
+            }));
+        } else console.error('Not all data provided');
     };
+
+    const validateForm = () => {
+        let freshErrors = [];
+
+        if (petType === null)
+            freshErrors.push({ name: 'petType' });
+
+        if (petNameRef.value.trim() === '')
+            freshErrors.push({ name: petNameRef.name });
+
+        setErrors(freshErrors);
+        return freshErrors.length === 0;
+    };
+
+    const formError = field =>
+        errors.filter(err => err.name === field);
+
+    useEffect(() => {
+        dispatch(retrievePetAccounts());
+    }, []);
 
     return (
         <PageWrapper pageTitle='Pet Profile'>
             <Paper className={classes.paper}>
+    {petAccounts.map(acc => <p key={acc._id}>{acc.petName}</p>)}
                 <Grid container>
                     <Grid item xs={12} md={6} className={classes.grid}>
                         <PetType/>
@@ -34,7 +59,12 @@ const CreatePetProfile = ({ classes, dispatch }) => {
                     <Grid item xs={12} md={6} className={classes.grid}>
                         <ProfileImage/>
                         <div className={classes.fieldWrapper}>
-                            <PTextField label='Pet Name' inputRef={el => petName = el}>
+                            <PTextField
+                                label='Pet Name'
+                                name='petName'
+                                inputRef={el => petNameRef = el}
+                                error={formError('petName').length > 0}
+                            >
                                 Pet Name
                             </PTextField>
                         </div>

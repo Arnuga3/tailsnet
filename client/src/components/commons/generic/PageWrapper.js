@@ -5,7 +5,7 @@ import { Grid, Typography } from '@material-ui/core';
 const PageWrapper = ({ classes, children, pageTitle }) => {
     return (
         <div className={classes.root}>
-            <Grid container justify='center' maxWidth='sm'>
+            <Grid container justify='center'>
                 <Grid item xs={12} md={9}>
                     <Typography variant='h5' gutterBottom>{pageTitle}</Typography>
                 </Grid>

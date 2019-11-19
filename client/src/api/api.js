@@ -12,7 +12,17 @@ export function getProfile() {
 }
 
 export function getPetAccounts() {
-    return AuthAPI.get('/api/pets')
-        .then(({ data }) => data)
-        .catch(err => err);
+    return new Promise((resolve, reject) => {
+        AuthAPI.get('/api/pets')
+            .then(({ data }) => resolve(data))
+            .catch(err => reject(err));
+    });
+}
+
+export function createPetAccount(account) {
+    return new Promise((resolve, reject) => {
+        AuthAPI.post('/api/pets/create', account)
+            .then(data => resolve(data))
+            .catch(err => reject(err));
+    });
 }

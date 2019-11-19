@@ -15,55 +15,27 @@ const PetType = ({ classes }) => {
         },
         {
             id: '3',
-            type: 'Rabbit'
+            type: 'Water animal'
         },
         {
             id: '4',
-            type: 'Hamster'
+            type: 'Outdoor animal'
         },
         {
             id: '5',
-            type: 'Snake'
+            type: 'Reptile'
         },
         {
-            id: '1',
-            type: 'Dog'
+            id: '6',
+            type: 'Insect'
         },
         {
-            id: '2',
-            type: 'Cat'
+            id: '7',
+            type: 'Roddent'
         },
         {
-            id: '3',
-            type: 'Rabbit'
-        },
-        {
-            id: '4',
-            type: 'Hamster'
-        },
-        {
-            id: '5',
-            type: 'Snake'
-        },
-        {
-            id: '1',
-            type: 'Dog'
-        },
-        {
-            id: '2',
-            type: 'Cat'
-        },
-        {
-            id: '3',
-            type: 'Rabbit'
-        },
-        {
-            id: '4',
-            type: 'Hamster'
-        },
-        {
-            id: '5',
-            type: 'Snake'
+            id: '8',
+            type: 'Other'
         }
     ];
 
