@@ -4,8 +4,9 @@ const bodyParser = require('body-parser');
 const AuthToken = require('../auth/AuthToken');
 const auth = AuthToken.vaidateToken;
 
-const User = require('../database/models/User');
-const Pet = require('../database/models/Pet');
+const User = require('./../database/models/User');
+const Pet = require('./../database/models/Pet');
+const PetService = require('./../services/PetService');
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
@@ -20,17 +21,13 @@ router.get('/', auth, async (req, res) => {
 });
 
 router.post('/create', auth, async (req, res) => {
-  const { petType, petName, dob, profileImage } = req.body;
-  const pet = await Pet.create({
-    petType,
-    petName,
-    dob,
-    profileImage
-  })
-  .catch(error => res.status(500)
-    .send(`There was a problem registering a pet. Error: ${error}`));
-
-  return res.status(200).send(pet);
+    const petDTO = req.body;
+    try {
+      const pet = await PetService.createPet(petDTO);
+      res.status(200).send(pet);
+    } catch(e) {
+      res.status(500).send(`There was a problem creating a pet profile. Error: ${error}`);
+    }
 });
 
 module.exports = router;

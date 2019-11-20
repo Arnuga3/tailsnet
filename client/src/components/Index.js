@@ -10,6 +10,7 @@ import Home from './Home';
 import CreatePetProfile from './CreatePetProfile';
 import Login from './Login';
 import Register from './Register';
+import UserProfile from './UserProfile';
 
 const drawerWidth = 256;
 
@@ -32,6 +33,7 @@ const Index = ({ classes, dispatch }) => {
                     <Route exact path='/' component={Home}/>
                     <Route path='/login' component={Login}/>
                     <Route path='/register' component={Register}/>
+                    <Route path='/user/profile' component={UserProfile}/>
                     <Route path='/create/pet/profile' component={CreatePetProfile}/>
                 </Switch>
 

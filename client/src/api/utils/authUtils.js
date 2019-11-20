@@ -1,5 +1,3 @@
-import history from './../history';
-
 const tntoken = 'tntoken';
 
 function getToken() {
@@ -8,11 +6,6 @@ function getToken() {
 
 function removeToken() {
     localStorage.removeItem(tntoken);
-    goTologin();
-}
-
-function goTologin() {
-    history.push('/login');
 }
 
 export function getOptions() {

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getOptions, handleError } from './apiUtils';
+import { getOptions, handleError } from './authUtils';
 
 export default class AuthAPI {
 

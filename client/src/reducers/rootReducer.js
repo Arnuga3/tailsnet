@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import petAccount from './petAccount';
+import pets from './petAccount';
 
 export default combineReducers({
-    petAccount
+    pets
 });

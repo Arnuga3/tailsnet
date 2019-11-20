@@ -8,7 +8,7 @@ import BirthDatePicker from './commons/BirthDatePicker';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import Validation from './../utils/Validation';
 import Configuration from './../utils/Configuration';
-import axios from 'axios';
+import { register } from './../api/user';
 
 const Register = ({ classes }) => {
 
@@ -79,7 +79,7 @@ const Register = ({ classes }) => {
         const isDataValid = validateForm();
 
         if (isDataValid)
-            axios.post('/auth/local/register', {
+            register({
                 title,
                 name: nameRef.value,
                 surname: surnameRef.value,

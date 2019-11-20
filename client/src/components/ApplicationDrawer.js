@@ -46,7 +46,7 @@ const ApplicationDrawer = ({ classes, open, handleDrawer }) => {
                     </ListItemIcon>
                     <ListItemText primary='Pet Profile'/>
                 </ListItem>
-                <ListItem button>
+                <ListItem button component={Link} to='/user/profile' onClick={handleDrawer}>
                     <ListItemIcon>
                         <Person/>
                     </ListItemIcon>

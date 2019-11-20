@@ -1,15 +1,4 @@
-import AuthAPI from './AuthAPI';
-import PublicAPI from './PublicAPI';
-
-export function login(email, password) {
-    return PublicAPI.post('/auth/local', { email, password });
-}
-
-export function getProfile() {
-    return AuthAPI.get('/api/users/profile')
-        .then(({ data }) => data)
-        .catch(err => err);
-}
+import AuthAPI from './utils/AuthAPI';
 
 export function getPetAccounts() {
     return new Promise((resolve, reject) => {
@@ -22,7 +11,7 @@ export function getPetAccounts() {
 export function createPetAccount(account) {
     return new Promise((resolve, reject) => {
         AuthAPI.post('/api/pets/create', account)
-            .then(data => resolve(data))
+            .then(({ data }) => resolve(data))
             .catch(err => reject(err));
     });
 }

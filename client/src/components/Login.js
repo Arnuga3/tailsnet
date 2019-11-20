@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { Paper, Typography, Button, Grid } from '@material-ui/core';
 import PTextField from './commons/generic/PTextField';
 import ArrowForward from '@material-ui/icons/ArrowForward';
-import { login } from '../api/api';
+import { login } from '../api/user';
 
 const Login = ({ classes, history }) => {
 

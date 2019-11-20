@@ -23,6 +23,6 @@ const pets = (state = defaultState, { type, value }) => {
         default:
             return state;
     }
-}
+};
 
 export default pets;
