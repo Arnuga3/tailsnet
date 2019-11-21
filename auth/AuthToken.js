@@ -18,6 +18,7 @@ module.exports = {
             if (err)
                 return res.status(401).send({ message: 'Failed to authenticate token' });
 
+            // Add user's id to request to make it available for other actions
             req.userId = decoded.id;
             next();
         });
