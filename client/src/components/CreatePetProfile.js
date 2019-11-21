@@ -8,7 +8,7 @@ import ProfileImage from './commons/ProfileImage';
 import BirthDatePicker from './commons/BirthDatePicker';
 import PetType from './commons/PetType';
 import PageWrapper from './commons/generic/PageWrapper';
-import { postPetAccount } from './../actions/petActions';
+import { createAndStorePetAccount } from './../actions/petActions';
 
 class CreatePetProfile extends React.Component {
     constructor(props) {
@@ -29,7 +29,7 @@ class CreatePetProfile extends React.Component {
         const { dispatch } = this.props;
         const isDataValid = this.validateForm();
         if (isDataValid) {
-            dispatch(postPetAccount({
+            dispatch(createAndStorePetAccount({
                 petName: this.petNameRef.value,
                 dob,
                 petType
@@ -118,8 +118,8 @@ const styles = theme => ({
     }
 });
 
-const mapStateToProps = ({ pets }) => ({
-    pets
+const mapStateToProps = ({ petStore }) => ({
+    petStore
 });
 
 export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(CreatePetProfile));

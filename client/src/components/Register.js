@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { Paper, Button, Typography, MenuItem, Grid } from '@material-ui/core';
 import PTextField from './commons/generic/PTextField';
@@ -8,9 +9,9 @@ import BirthDatePicker from './commons/BirthDatePicker';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import Validation from './../utils/Validation';
 import Configuration from './../utils/Configuration';
-import { register } from './../api/user';
+import { registerAndStoreUserAccount } from '../actions/userActions';
 
-const Register = ({ classes }) => {
+const Register = ({ classes, dispatch }) => {
 
     let nameRef = React.createRef();
     let surnameRef = React.createRef();
@@ -79,16 +80,16 @@ const Register = ({ classes }) => {
         const isDataValid = validateForm();
 
         if (isDataValid)
-            register({
-                title,
-                name: nameRef.value,
-                surname: surnameRef.value,
-                DOB,
-                email: emailRef.value,
-                password: passwordRef.value
-            })
-            .then(res => console.log(res))
-            .catch(err => console.log(err));
+            dispatch(
+                registerAndStoreUserAccount({
+                    title,
+                    name: nameRef.value,
+                    surname: surnameRef.value,
+                    DOB,
+                    email: emailRef.value,
+                    password: passwordRef.value
+                })
+            );
     };
 
     const formError = field =>
@@ -234,4 +235,6 @@ const styles = theme => ({
     }
 });
 
-export default withStyles(styles)(Register);
+const mapStateToProps = ({}) => ({});
+
+export default connect(mapStateToProps)(withStyles(styles)(Register));

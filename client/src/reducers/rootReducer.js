@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
-import pets from './petAccount';
+import petStore from './petReducer';
+import userStore from './userReducer';
 
 export default combineReducers({
-    pets
+    petStore,
+    userStore
 });

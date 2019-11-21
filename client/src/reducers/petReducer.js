@@ -5,7 +5,7 @@ const defaultState = {
     accounts: []
 };
 
-const pets = (state = defaultState, { type, value }) => {
+const petStore = (state = defaultState, { type, value }) => {
 
     switch (type) {
         case SAVE_PET_ACCOUNT:
@@ -25,4 +25,4 @@ const pets = (state = defaultState, { type, value }) => {
     }
 };
 
-export default pets;
+export default petStore;

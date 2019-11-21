@@ -1,28 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { Paper, Typography, Button, Grid } from '@material-ui/core';
 import PTextField from './commons/generic/PTextField';
 import ArrowForward from '@material-ui/icons/ArrowForward';
-import { login } from '../api/user';
+import { loginAndStoreUserAccount } from '../actions/userActions';
 
-const Login = ({ classes, history }) => {
+const Login = ({ classes, dispatch }) => {
 
     let emailRef = React.createRef();
     let passwordRef = React.createRef();
 
     const handleSubmit = e => {
         e.preventDefault();
-
-        login(emailRef.value, passwordRef.value)
-            .then(res => {
-                const token = res.headers.tntoken;
-                if (token) {
-                    localStorage.setItem('tntoken', token);
-                    history.push('/');
-                }
-            })
-            .catch(err => console.log(err));
+        dispatch(
+            loginAndStoreUserAccount(emailRef.value, passwordRef.value)
+        );
     };
 
     return (
@@ -121,4 +115,6 @@ const styles = theme => ({
     }
 });
 
-export default withStyles(styles)(Login);
+const mapStateToProps = ({}) => ({});
+
+export default connect(mapStateToProps)(withStyles(styles)(Login));
