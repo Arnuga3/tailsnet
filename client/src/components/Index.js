@@ -14,14 +14,10 @@ import UserProfile from './UserProfile';
 
 const drawerWidth = 256;
 
-const Index = ({ classes, dispatch }) => {
+const Index = ({ classes }) => {
 
     const [open, setOpen] = useState(false);
     const handleDrawer = () => setOpen(!open);
-
-    useEffect(() => {
-        // dispatch(retrievePetAccounts());
-    }, []);
 
     return (
         <div className={classes.root}>
@@ -58,8 +54,6 @@ const styles = theme => ({
     }
 });
 
-const mapStateToProps = ({ pets }) => ({
-    petAccounts: pets ? pets.accounts : []
-});
+const mapStateToProps = ({}) => ({});
 
 export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Index));

@@ -7,7 +7,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
-const UserService = require('./../services/UserService');
+const UserService = require('../app_layers/services/UserService');
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({
@@ -68,7 +68,7 @@ router.post('/local/register', async (req, res) => {
 
 	} catch(err) {
 		res.status(500)
-			.send(`There was a problem registering a user. Error: ${error}`);
+			.send(`There was a problem registering a user. Error: ${err}`);
 	}
 });
 

@@ -4,12 +4,12 @@ const bodyParser = require('body-parser');
 const AuthToken = require('../auth/AuthToken');
 const auth = AuthToken.vaidateToken;
 
-const PetService = require('./../services/PetService');
+const PetService = require('./../app_layers/services/PetService');
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-// TODO: Need to retrieve all pet profiles for the pet owner
+// TODO: Need to retrieve all pet profiles for the pet owner, use transactions
 // Get all pet profiles
 router.get('/', auth, async (req, res) => {
   try {
@@ -20,7 +20,7 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
-// TODO: Need to create pet profile for the pet owner
+// TODO: Need to create pet profile for the pet owner, use transactions
 // Create a pet profile
 router.post('/create', auth, async (req, res) => {
     const petDTO = req.body;

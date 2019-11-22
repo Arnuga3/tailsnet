@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
-const AuthToken = require('./../auth/AuthToken');
-const User = require('./../database/models/User');
+const AuthToken = require('./../../auth/AuthToken');
+const UserDataAccess = require('./../data_access/UserDataAccess');
 
 const getUserDTO = user => {
     const { _id, password, ...theRest } = user._doc;
@@ -10,7 +10,7 @@ const getUserDTO = user => {
 module.exports = {
 
     async login(email, password) {
-        const user = await User.findOne(email)
+        const user = await UserDataAccess.getUserByEmail(email)
             .catch(error => error);
 
         if (!user) return null;
@@ -25,19 +25,22 @@ module.exports = {
     },
     
     async getUser(id) {
-        const user = await User.findById(id)
+        const user = await UserDataAccess.getUserById(id)
             .catch(error => error);
         return getUserDTO(user)
     },
 
     async createUser(data) {
-        const { password } = data;
+        const { email, password } = data;
+
+        const user = await UserDataAccess.getUserByEmail(email);
+        if (user) throw new Error('Email is already registered');
+
         const hashedPassword = bcrypt.hashSync(password, 8);
-        // TODO: Check email if it registered already
-        const user = await User.create({
+        const aUser = await UserDataAccess.createUser({
 			...data,
 			password: hashedPassword
         }).catch(error => error);
-        return getUserDTO(user);
+        return getUserDTO(aUser);
     }
 };

@@ -6,18 +6,16 @@ export function login(email, password) {
         .then(res => {
             const token = res.headers.tntoken;
             if (token) localStorage.setItem('tntoken', token);
-        })
-        .catch(err => console.log(err));
+        }).catch(err => err);
 }
 
-// TODO: test this
 export function register(data) {
     return PublicAPI.post('/auth/local/register', data)
-        .then(res => {
-            const token = res.headers.tntoken;
+        .then(({ data, headers }) => {
+            const token = headers.tntoken;
             if (token) localStorage.setItem('tntoken', token);
-        })
-        .catch(err => console.log(err));
+            return data;
+        }).catch(err => err);
 }
 
 export function getProfile() {

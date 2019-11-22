@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const AuthToken = require('./../auth/AuthToken');
 const auth = AuthToken.vaidateToken;
 
-const UserService = require('./../services/UserService');
+const UserService = require('../app_layers/services/UserService');
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
