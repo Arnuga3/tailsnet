@@ -2,12 +2,14 @@ import React from 'react';
 import { Box, Typography } from '@material-ui/core';
 import Image from '@material-ui/icons/Image';
 
-const ProfileImage = ({ image }) => {
+const ProfileImage = ({ image, description=true }) => {
     return (
         <React.Fragment>
-            <Typography variant='caption' gutterBottom>
-                Profile Image
-            </Typography>
+            { description &&
+                <Typography variant='caption' gutterBottom>
+                    Profile Image
+                </Typography>
+            }
             {
                 image
                 ?
