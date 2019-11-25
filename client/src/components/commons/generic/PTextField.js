@@ -2,7 +2,19 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { TextField } from '@material-ui/core';
 
-const PTextField = ({ classes, select=false, children, value, label, name, inputRef, type='text', error=false, onChange }) => {
+const PTextField = ({
+    classes,
+    select=false, 
+    children, 
+    value, 
+    label, 
+    name, 
+    inputRef, 
+    type='text', 
+    error=false, 
+    onChange, 
+    onBlur 
+}) => {
     return (
         <div className={classes.wrapper}>
             <TextField
@@ -16,6 +28,7 @@ const PTextField = ({ classes, select=false, children, value, label, name, input
                 type={type}
                 error={error}
                 onChange={onChange}
+                onBlur={onBlur}
                 value={value}
             >
                 {children}

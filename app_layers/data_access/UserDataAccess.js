@@ -3,7 +3,7 @@ const User = require('../../database/models/User');
 module.exports = {
 
     async getUserByEmail(email) {
-        return await User.findOne({email})
+        return await User.findOne(email)
             .catch(error => error);
     },
     

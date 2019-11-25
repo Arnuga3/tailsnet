@@ -14,7 +14,7 @@ class CreatePetProfile extends React.Component {
     constructor(props) {
         super(props);
         this.state = { 
-            petType: 'Cat',
+            petType: null,
             dob: null,
             errors: []
         };
@@ -23,6 +23,9 @@ class CreatePetProfile extends React.Component {
 
     handleDOBChange = dob =>
         this.setState({ dob });
+
+    handleTypeChange = type =>
+        this.setState({ petType: type });
 
     handleCreate = () => {
         const { dob, petType } = this.state;
@@ -46,6 +49,7 @@ class CreatePetProfile extends React.Component {
     validateForm = () => {
         let { petType } = this.state;
         let freshErrors = [];
+        this.setState({ errors: [] });
 
         if (petType === null)
             freshErrors.push({ name: 'petType' });
@@ -70,7 +74,7 @@ class CreatePetProfile extends React.Component {
                 <Paper className={classes.paper}>
                     <Grid container>
                         <Grid item xs={12} md={6} className={classes.grid}>
-                            <PetType/>
+                            <PetType onTypeChange={this.handleTypeChange}/>
                         </Grid>
                         <Grid item xs={12} md={6} className={classes.grid}>
                             <ProfileImage/>

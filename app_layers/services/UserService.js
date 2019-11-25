@@ -14,7 +14,7 @@ module.exports = {
             .catch(error => error);
 
         if (!user) return null;
-
+        
         const validPassword = bcrypt.compareSync(password, user.password);
         if (!validPassword) return null;
 

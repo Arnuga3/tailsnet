@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Box, Typography } from '@material-ui/core';
 
-const PetType = ({ classes }) => {
+const PetType = ({ classes, onTypeChange }) => {
 
     const types = [
         {
@@ -39,6 +39,14 @@ const PetType = ({ classes }) => {
         }
     ];
 
+    const [typeId, setTypeId] = useState(null);
+
+    const handleTypeClick = id => {
+        const type = types.filter(t => t.id === id)[0];
+        onTypeChange(type);
+        setTypeId(id);
+    };
+
     return (
         <React.Fragment>
             <Typography variant='caption' gutterBottom>
@@ -47,6 +55,8 @@ const PetType = ({ classes }) => {
             <div className={classes.wrapper}>
                 {types.map(({ id, type }) =>
                     <Box key={id} m={1}
+                        onClick={() => handleTypeClick(id)}
+                        bgcolor={id === typeId ? 'rgba(0,0,0,.1)' : 'transparent'}
                         display='flex'
                         alignItems='center'
                         justifyContent='center'

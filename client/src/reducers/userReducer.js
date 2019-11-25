@@ -1,7 +1,7 @@
 const SAVE_USER_ACCOUNT = 'SAVE_USER_ACCOUNT';
 
 const defaultState = {
-    account: {}
+    account: null
 };
 
 const userStore = (state = defaultState, { type, value }) => {
