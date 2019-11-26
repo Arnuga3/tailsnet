@@ -3,7 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 
-const BirthDatePicker = ({ classes, value, onFormItemChange, errors }) => {
+const BirthDatePicker = ({ classes, value, onFormItemChange, errors=[] }) => {
 
     const formError = field =>
         errors.filter(err => err.name === field);

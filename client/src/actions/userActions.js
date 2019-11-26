@@ -1,7 +1,8 @@
 import {
     login,
     register,
-    getProfile
+    getProfile,
+    updateProfile
 } from '../api/user';
   
 const SAVE_USER_ACCOUNT = 'SAVE_USER_ACCOUNT';
@@ -20,6 +21,14 @@ export const editUserAccount = value => ({
 export function retrieveAndStoreUserAccount() {
     return dispatch => {
         getProfile()
+            .then(data => dispatch(storeUserAccount(data)))
+            .catch(err => console.error(err));
+    }
+};
+
+export function updateAndStoreUserAccount(data) {
+    return dispatch => {
+        updateProfile(data)
             .then(data => dispatch(storeUserAccount(data)))
             .catch(err => console.error(err));
     }

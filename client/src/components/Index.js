@@ -19,6 +19,7 @@ const Index = ({ classes }) => {
     const [open, setOpen] = useState(false);
     const handleDrawer = () => setOpen(!open);
 
+    // TODO - Set navigation in the application after login, logout, etc.
     return (
         <div className={classes.root}>
             <CssBaseline />

@@ -9,7 +9,6 @@ import BasicDetails from './user/BasicDetails';
 import BirthDatePicker from './commons/BirthDatePicker';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import Validation from './../utils/Validation';
-import Configuration from './../utils/Configuration';
 import { registerAndStoreUserAccount } from '../actions/userActions';
 
 const Register = ({ classes, dispatch }) => {
@@ -57,17 +56,8 @@ const Register = ({ classes, dispatch }) => {
         if (dob === null)
             freshErrors.push({ name: 'dob' });
 
-        if (emailRef.value.trim() === '')
-            freshErrors.push({ name: emailRef.name });
-
-        else if (!Validation.validEmail(emailRef.value))
-            freshErrors.push({ error: Configuration.NOT_VALID, name: emailRef.name });
-
-        if (emailRepeatRef.value.trim() === '')
-            freshErrors.push({ name: emailRepeatRef.name });
-
-        else if (emailRef.value.trim() !== emailRepeatRef.value.trim())
-            freshErrors.push({ error: Configuration.NOT_MATCHING, name: emailRepeatRef.name });
+        const emailErrors = Validation.validateEmails(emailRef, emailRepeatRef);
+        freshErrors = [ ...freshErrors, ...emailErrors ];
 
         const passwordErrors = Validation.validatePasswords(passwordRef, passwordRepeatRef);
         freshErrors = [ ...freshErrors, ...passwordErrors ];

@@ -14,9 +14,7 @@ const Login = ({ classes, dispatch }) => {
 
     const handleSubmit = e => {
         e.preventDefault();
-        dispatch(
-            loginAndStoreUserAccount(emailRef.value, passwordRef.value)
-        );
+        dispatch(loginAndStoreUserAccount(emailRef.value, passwordRef.value));
     };
 
     return (

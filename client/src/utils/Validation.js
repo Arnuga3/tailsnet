@@ -15,6 +15,26 @@ export default class Validation {
         return 'Weak password';
     }
 
+    static validateEmails = (email, emailRep) => {
+        const errors = [];
+        const emailVal = email.value.trim();
+        const emailRepVal = emailRep.value.trim();
+
+        if (emailVal === '')
+            errors.push({ name: email.name });
+
+        else if (!Validation.validEmail(email.value))
+            errors.push({ error: Configuration.NOT_VALID, name: email.name });
+
+        if (emailRepVal === '')
+            errors.push({ name: emailRep.name });
+
+        else if (emailVal !== emailRepVal)
+            errors.push({ error: Configuration.NOT_MATCHING, name: emailRep.name });
+
+        return errors;
+    }
+
     static validatePasswords = (psswd, psswdRep) => {
         let errors = [];
         const psswdVal = psswd.value.trim();

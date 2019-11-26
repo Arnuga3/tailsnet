@@ -5,14 +5,20 @@ import { Paper, Grid } from '@material-ui/core';
 import PageWrapper from './commons/generic/PageWrapper';
 import PButton from './commons/generic/PButton';
 import ProfileImage from './commons/ProfileImage';
+import BirthDatePicker from './commons/BirthDatePicker';
 import BasicDetails from './user/BasicDetails';
-import { retrieveAndStoreUserAccount, editUserAccount } from './../actions/userActions';
+import {
+    retrieveAndStoreUserAccount,
+    editUserAccount,
+    updateAndStoreUserAccount
+} from './../actions/userActions';
 
 class UserProfile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            errors: []
+            errors: [],
+            touched: false
         };
     }
 
@@ -22,12 +28,16 @@ class UserProfile extends React.Component {
             dispatch(retrieveAndStoreUserAccount());
     }
 
+    // TODO - Save in a temp/local user object, update original after successful update on server.
+    // Needed to handle cancel updates
     handleFormItemChange = (item, value) => {
         const { dispatch } = this.props;
         dispatch(editUserAccount({ [item]: value }));
+        this.setState({ touched: true });
     }
 
-    validateForm = ({ title, name, surname }) => {
+    validateForm = () => {
+        const { title, name, surname, dob } = this.props.user;
         let freshErrors = [];
 
         if (title === 0)
@@ -39,8 +49,19 @@ class UserProfile extends React.Component {
         if (surname.trim() === '')
             freshErrors.push({ name: 'surname' });
 
+        if (dob === null)
+            freshErrors.push({ name: 'dob' });
+
         this.setState({ errors: freshErrors });
         return freshErrors.length === 0;
+    };
+
+    handleUpdate = () => {
+        const { dispatch, user } = this.props;
+        const isDataValid = this.validateForm();
+
+        if(isDataValid)
+            dispatch(updateAndStoreUserAccount(user));
     };
 
     formError = field =>
@@ -52,26 +73,32 @@ class UserProfile extends React.Component {
             <PageWrapper pageTitle='User Profile'>
                 <Paper className={classes.paper}>
                     { user &&
-                        <Grid container>
-                            <Grid item xs={12} md={6} className={classes.grid}>
-                                <ProfileImage/>
+                        <React.Fragment>
+                            <Grid container>
+                                <Grid item xs={12} md={6} className={classes.grid}>
+                                    <ProfileImage/>
+                                </Grid>
+                                <Grid item xs={12} md={6} className={classes.grid}>
+                                    <BasicDetails
+                                        title={user.title}
+                                        name={user.name}
+                                        surname={user.surname}
+                                        onFormItemChange={this.handleFormItemChange}
+                                        errors={this.state.errors}
+                                    />
+                                    <BirthDatePicker value={user.dob || null}
+                                        onFormItemChange={this.handleFormItemChange}
+                                        errors={this.state.errors}
+                                    />
+                                </Grid>
                             </Grid>
-                            <Grid item xs={12} md={6} className={classes.grid}>
-                                <BasicDetails
-                                    title={user.title}
-                                    name={user.name}
-                                    surname={user.surname}
-                                    onFormItemChange={this.handleFormItemChange}
-                                    errors={this.state.errors}
-                                />
+                            <Grid container justify='center'>
+                                <PButton disabled={!this.state.touched} onClick={this.handleUpdate}>
+                                    Save Changes
+                                </PButton>
                             </Grid>
-                        </Grid>
+                        </React.Fragment>
                     }
-                    <Grid container justify='center'>
-                        <PButton onClick={()=>{this.validateForm(user)}}>
-                            Button
-                        </PButton>
-                    </Grid>
                 </Paper>
             </PageWrapper> 
         )

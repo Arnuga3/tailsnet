@@ -20,4 +20,13 @@ export default class AuthAPI {
                 .catch(err => reject(handleError(err)));
         });
     }
+
+    static put(url, data) {
+        const options = getOptions();
+        return new Promise((resolve, reject) => {
+            axios.put(url, data, options)
+                .then(res => resolve(res))
+                .catch(err => reject(handleError(err)));
+        });
+    }
 }

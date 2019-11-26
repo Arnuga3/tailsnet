@@ -2,7 +2,7 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
 
-const PButton = ({ classes, children, type, onClick }) => {
+const PButton = ({ classes, children, type, onClick, disabled=false }) => {
     return (
         <div className={classes.wrapper}>
             <Button
@@ -11,6 +11,7 @@ const PButton = ({ classes, children, type, onClick }) => {
                 type={type}
                 variant='contained'
                 color='primary'
+                disabled={disabled}
                 className={classes.button}
                 onClick={onClick}
             >
