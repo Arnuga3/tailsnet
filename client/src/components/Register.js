@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
-import { Paper, Button, Typography, MenuItem, Grid } from '@material-ui/core';
+import { Paper, Button, Typography, Grid } from '@material-ui/core';
 import PTextField from './commons/generic/PTextField';
 import PButton from './commons/generic/PButton';
+import BasicDetails from './user/BasicDetails';
 import BirthDatePicker from './commons/BirthDatePicker';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import Validation from './../utils/Validation';
@@ -13,42 +14,48 @@ import { registerAndStoreUserAccount } from '../actions/userActions';
 
 const Register = ({ classes, dispatch }) => {
 
-    let nameRef = React.createRef();
-    let surnameRef = React.createRef();
     let emailRef = React.createRef();
     let emailRepeatRef = React.createRef();
     let passwordRef = React.createRef();
     let passwordRepeatRef = React.createRef();
 
-    const [title, setTitle] = React.useState(0);
-    const [DOB, handleDOBChange] = useState(null);
+    const [user, setUser] = useState({
+        title: 0,
+        name: '',
+        surname: '',
+        dob: null
+    });
+
     const [errors, setErrors] = useState([]);
     const [passwordStrength, setPasswordStrength] = useState('');
 
-    const handleTitleChange = event =>
-        setTitle(event.target.value);
+    const handleFormItemChange = (item, value) => {
+        const aUser = { ...user, [item]: value };
+        setUser(aUser);
+    };
 
-    const handlePasswordInput = event => {
-        const password = event.target.value;
-        setPasswordStrength(Validation.analysePassword(password));
+    const handlePasswordInput = e => {
+        const password = e.target.value;
+        setPasswordStrength(Validation.analysePasswordStrength(password));
         if (password === '')
             setPasswordStrength('');
     };
 
     const validateForm = () => {
+        const { title, name, surname, dob } = user;
         let freshErrors = [];
 
         if (title === 0)
             freshErrors.push({ name: 'title' });
 
-        if (nameRef.value.trim() === '')
-            freshErrors.push({ name: nameRef.name });
+        if (name.trim() === '')
+            freshErrors.push({ name: 'name' });
 
-        if (surnameRef.value.trim() === '')
-            freshErrors.push({ name: surnameRef.name });
+        if (surname.trim() === '')
+            freshErrors.push({ name: 'surname' });
 
-        if (DOB === null)
-            freshErrors.push({ name: 'DOB' });
+        if (dob === null)
+            freshErrors.push({ name: 'dob' });
 
         if (emailRef.value.trim() === '')
             freshErrors.push({ name: emailRef.name });
@@ -62,14 +69,8 @@ const Register = ({ classes, dispatch }) => {
         else if (emailRef.value.trim() !== emailRepeatRef.value.trim())
             freshErrors.push({ error: Configuration.NOT_MATCHING, name: emailRepeatRef.name });
 
-        if (passwordRef.value.trim() === '')
-            freshErrors.push({ name: passwordRef.name });
-
-        if (passwordRepeatRef.value.trim() === '')
-            freshErrors.push({ name: passwordRepeatRef.name });
-
-        if (passwordRef.value.trim() !== passwordRepeatRef.value.trim())
-            freshErrors.push({ error: Configuration.NOT_MATCHING, name: passwordRepeatRef.name });
+        const passwordErrors = Validation.validatePasswords(passwordRef, passwordRepeatRef);
+        freshErrors = [ ...freshErrors, ...passwordErrors ];
 
         setErrors(freshErrors);
         return freshErrors.length === 0;
@@ -77,19 +78,20 @@ const Register = ({ classes, dispatch }) => {
 
     const handleSubmit = e => {
         e.preventDefault();
-        const isDataValid = validateForm();
+        const isDataValid = validateForm(user);
 
-        if (isDataValid)
-            dispatch(
-                registerAndStoreUserAccount({
-                    title,
-                    name: nameRef.value,
-                    surname: surnameRef.value,
-                    DOB,
-                    email: emailRef.value,
-                    password: passwordRef.value
-                })
-            );
+        if (isDataValid) {
+            const { title, name, surname, dob } = user;
+            dispatch(registerAndStoreUserAccount({
+                title,
+                name,
+                surname,
+                dob,
+                email: emailRef.value,
+                password: passwordRef.value
+            }));
+        }
+        
     };
 
     const formError = field =>
@@ -114,27 +116,16 @@ const Register = ({ classes, dispatch }) => {
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <div className={classes.columnWrapper}>
-                                <PTextField select
-                                    label='Title'
-                                    name='title'
-                                    value={title}
-                                    onChange={handleTitleChange}
-                                    error={formError('title').length > 0} 
-                                >
-                                    <MenuItem value={0}>&nbsp;</MenuItem>
-                                    <MenuItem value={'Mr'}>Mr</MenuItem>
-                                    <MenuItem value={'Mrs'}>Mrs</MenuItem>
-                                    <MenuItem value={'Ms'}>Ms</MenuItem>
-                                </PTextField>
-                                <PTextField label='Name' name='name' inputRef={el => nameRef = el} error={formError('name').length > 0}>
-                                    Name
-                                </PTextField>
-                                <PTextField label='Surname' name='surname' inputRef={el => surnameRef = el} error={formError('surname').length > 0}>
-                                    Surname
-                                </PTextField>
-                                <BirthDatePicker value={DOB}
-                                    onChange={handleDOBChange}
-                                    error={formError('DOB').length > 0}
+                                <BasicDetails
+                                    title={user.title}
+                                    name={user.name}
+                                    surname={user.surname}
+                                    onFormItemChange={handleFormItemChange}
+                                    errors={errors}
+                                />
+                                <BirthDatePicker value={user.dob}
+                                    onFormItemChange={handleFormItemChange}
+                                    errors={errors}
                                 />
                             </div>
                         </Grid>

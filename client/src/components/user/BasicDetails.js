@@ -1,13 +1,9 @@
-import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { MenuItem } from '@material-ui/core';
 import PTextField from './../commons/generic/PTextField';
 
 const BasicDetails = ({ classes, title, name, surname, onFormItemChange, errors }) => {
-
-    let nameRef = React.createRef();
-    let surnameRef = React.createRef();
 
     const handleChange = ({ target }) =>
         onFormItemChange(target.name, target.value);
@@ -33,8 +29,7 @@ const BasicDetails = ({ classes, title, name, surname, onFormItemChange, errors 
                 label='Name'
                 name='name' 
                 value={name} 
-                onBlur={handleChange} 
-                inputRef={el => nameRef = el} 
+                onChange={handleChange}
                 error={formError('name').length > 0}
             >
                 Name
@@ -43,8 +38,7 @@ const BasicDetails = ({ classes, title, name, surname, onFormItemChange, errors 
                 label='Surname' 
                 name='surname'
                 value={surname}
-                onBlur={handleChange}
-                inputRef={el => surnameRef = el}
+                onChange={handleChange}
                 error={formError('surname').length > 0}
             >
                 Surname
@@ -56,11 +50,8 @@ const BasicDetails = ({ classes, title, name, surname, onFormItemChange, errors 
 const styles = theme => ({
     wrapper: {
         display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center'
+        flexDirection: 'column'
     }
 });
 
-const mapStateToProps = ({}) => ({});
-
-export default connect(mapStateToProps)(withStyles(styles)(BasicDetails));
+export default withStyles(styles)(BasicDetails);

@@ -5,9 +5,15 @@ import {
 } from '../api/user';
   
 const SAVE_USER_ACCOUNT = 'SAVE_USER_ACCOUNT';
+const EDIT_USER_ACCOUNT = 'EDIT_USER_ACCOUNT';
 
 export const storeUserAccount = value => ({
     type: SAVE_USER_ACCOUNT,
+    value
+});
+
+export const editUserAccount = value => ({
+    type: EDIT_USER_ACCOUNT,
     value
 });
 

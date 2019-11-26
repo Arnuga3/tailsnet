@@ -1,3 +1,5 @@
+import Configuration from './Configuration';
+
 export default class Validation {
 
     static validEmail(email) {
@@ -5,7 +7,7 @@ export default class Validation {
         return re.test(String(email).toLowerCase());
     }
 
-    static analysePassword(password) {
+    static analysePasswordStrength(password) {
         const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})");
         const mediumRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})");
         if (strongRegex.test(password)) return 'Strong password';
@@ -13,4 +15,20 @@ export default class Validation {
         return 'Weak password';
     }
 
+    static validatePasswords = (psswd, psswdRep) => {
+        let errors = [];
+        const psswdVal = psswd.value.trim();
+        const psswdRepVal = psswdRep.value.trim();
+
+        if (psswdVal === '')
+            errors.push({ name: psswd.name });
+
+        if (psswdRepVal === '')
+            errors.push({ name: psswdRep.name });
+
+        if (psswdVal !== psswdRepVal)
+            errors.push({ error: Configuration.NOT_MATCHING, name: psswdRep.name });
+        
+        return errors;
+    }
 }

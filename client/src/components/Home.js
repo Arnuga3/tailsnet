@@ -25,7 +25,7 @@ const Home = ({ classes }) => {
         <PageWrapper pageTitle='Your Pet Profiles'>
             <Paper className={classes.paper}>
                 {profiles.map(p =>
-                    <Paper className={classes.card} component={Link} to={`/pet/profile/${p.id}`}>
+                    <Paper key={p.id} className={classes.card} component={Link} to={`/pet/profile/${p.id}`}>
                         <ProfileImage description={false}/>
                         <Typography variant='subtitle1' color='primary'>
                             {p.name}
