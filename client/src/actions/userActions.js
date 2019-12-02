@@ -37,7 +37,10 @@ export function updateAndStoreUserAccount(data) {
 export function loginAndStoreUserAccount(email, password) {
     return dispatch => {
         login(email, password)
-            .then(data => dispatch(storeUserAccount(data)))
+            .then(data => {
+                debugger
+                dispatch(storeUserAccount(data))
+            })
             .catch(err => console.error(err));
     }
 };

@@ -1,33 +1,30 @@
 import AuthAPI from './utils/AuthAPI';
 import PublicAPI from './utils/PublicAPI';
-import { saveToken } from './utils/authUtils';
+import AuthUtils from './utils/AuthUtils';
 
 export function login(email, password) {
-    return new Promise((resolve, reject) => {
-        PublicAPI.post('/auth/local', { email, password })
-            .then(({ data, headers }) => {
-                saveToken(headers.tntoken);
-                return resolve(data);
-            }).catch(err => reject(err));
-    });
+        const request = PublicAPI.post('/auth/local', { email, password });
+        return AuthUtils.validateResponse(request);
+        
+            // .then(({ data, headers }) => {
+            //     AuthUtils.saveToken(headers.tntoken);
+            //     return resolve(data);
+            // }).catch(err => reject(err));
 }
 
 export function register(data) {
     return new Promise((resolve, reject) => {
         PublicAPI.post('/auth/local/register', data)
             .then(({ data, headers }) => {
-                saveToken(headers.tntoken);
+                AuthUtils.saveToken(headers.tntoken);
                 return resolve(data);
             }).catch(err => reject(err));
     });
 }
 
 export function getProfile() {
-    return new Promise((resolve, reject) => {
-        AuthAPI.get('/api/users/profile')
-            .then(({ data }) => resolve(data))
-            .catch(err => reject(err));
-    });
+    const response = AuthAPI.get('/api/users/profile');
+    return AuthUtils.validateResponse(response);
 }
 
 export function updateProfile(data) {

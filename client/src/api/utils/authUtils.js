@@ -1,28 +1,34 @@
 const TOKEN = 'tntoken';
 
-function getToken() {
-    return localStorage.getItem(TOKEN);
-}
+export default class AuthUtils {
 
-function removeToken() {
-    localStorage.removeItem(TOKEN);
-}
+    static validateResponse(response) {
+        return new Promise((resolve, reject) => {
+            response.then(res => {
+                debugger
+                resolve(res)
+            }).catch(err => {
+                debugger
+                reject(err);
+            });
+        });
+    }
 
-export function saveToken(token) {
-    if (token) localStorage.setItem(TOKEN, token);
-}
+    static getOptions() {
+        const token = this.getToken();
+        const options = {
+            headers: {
+                tntoken: `Bearer ${token}`
+            }
+        };
+        return options;
+    }
 
-export function getOptions() {
-    const token = getToken();
-    const options = {
-        headers: {
-            tntoken: `Bearer ${token}`
-        }
-    };
-    return options;
-}
+    getToken() {
+        return localStorage.getItem(TOKEN);
+    }
 
-export function handleError(err) {
-    removeToken();
-    return err;
+    removeToken() {
+        localStorage.removeItem(TOKEN);
+    }
 }
