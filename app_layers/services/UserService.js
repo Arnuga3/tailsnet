@@ -10,8 +10,7 @@ const getUserDTO = user => {
 module.exports = {
 
     async login(email, password) {
-        const user = await UserDataAccess.getUserByEmail(email)
-            .catch(error => error);
+        const user = await UserDataAccess.getUserByEmail(email);
 
         if (!user) return null;
         
@@ -27,13 +26,14 @@ module.exports = {
     async getUser(id) {
         const user = await UserDataAccess.getUserById(id)
             .catch(error => error);
+        if (!user) return null;
         return getUserDTO(user)
     },
 
     async createUser(data) {
         const { email, password } = data;
 
-        const user = await UserDataAccess.getUserByEmail(email);
+        const user = await UserDataAccess.getUserByEmail({email});
         if (user) throw new Error('Email is already registered');
 
         const hashedPassword = bcrypt.hashSync(password, 8);

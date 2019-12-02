@@ -1,35 +1,39 @@
 import AuthAPI from './utils/AuthAPI';
 import PublicAPI from './utils/PublicAPI';
-
-function saveToken(token) {
-    if (token) localStorage.setItem('tntoken', token);
-}
+import { saveToken } from './utils/authUtils';
 
 export function login(email, password) {
-    return PublicAPI.post('/auth/local', { email, password })
-        .then(({ data, headers }) => {
-            saveToken(headers.tntoken);
-            return data;
-        }).catch(err => err);
+    return new Promise((resolve, reject) => {
+        PublicAPI.post('/auth/local', { email, password })
+            .then(({ data, headers }) => {
+                saveToken(headers.tntoken);
+                return resolve(data);
+            }).catch(err => reject(err));
+    });
 }
 
 export function register(data) {
-    return PublicAPI.post('/auth/local/register', data)
-        .then(({ data, headers }) => {
-            saveToken(headers.tntoken);
-            return data;
-        }).catch(err => err);
+    return new Promise((resolve, reject) => {
+        PublicAPI.post('/auth/local/register', data)
+            .then(({ data, headers }) => {
+                saveToken(headers.tntoken);
+                return resolve(data);
+            }).catch(err => reject(err));
+    });
 }
 
-// TODO - Fix error handling as the error response is geting saved to redux store
 export function getProfile() {
-    return AuthAPI.get('/api/users/profile')
-        .then(({ data }) => data)
-        .catch(err => err);
+    return new Promise((resolve, reject) => {
+        AuthAPI.get('/api/users/profile')
+            .then(({ data }) => resolve(data))
+            .catch(err => reject(err));
+    });
 }
 
 export function updateProfile(data) {
-    return AuthAPI.put('/api/users/profile', data)
-        .then(({ data }) => data)
-        .catch(err => err);
+    return new Promise((resolve, reject) => {
+        AuthAPI.put('/api/users/profile', data)
+            .then(({ data }) => resolve(data))
+            .catch(err => reject(err));
+    });
 }

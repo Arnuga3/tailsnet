@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-// import { retrievePetAccounts } from './../actions/petActions';
+import ApplicationRedirect from './ApplicationRedirect';
 import ApplicationBar from './ApplicationBar';
 import ApplicationDrawer from './ApplicationDrawer';
 import Home from './Home';
-import CreatePetProfile from './CreatePetProfile';
+import CreatePetProfile from './pet/CreatePetProfile';
 import Login from './Login';
 import Register from './Register';
 import UserProfile from './UserProfile';
@@ -33,6 +32,7 @@ const Index = ({ classes }) => {
                     <Route path='/user/profile' component={UserProfile}/>
                     <Route path='/create/pet/profile' component={CreatePetProfile}/>
                 </Switch>
+                <ApplicationRedirect/>
 
             </main>
             <ApplicationDrawer open={open} handleDrawer={handleDrawer}/>
@@ -55,6 +55,4 @@ const styles = theme => ({
     }
 });
 
-const mapStateToProps = ({}) => ({});
-
-export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Index));
+export default withStyles(styles, { withTheme: true })(Index);

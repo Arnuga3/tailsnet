@@ -13,6 +13,7 @@ module.exports = {
     },
 
     async createUser(data) {
-        return await User.create(data).catch(error => error);
+        return await User.create(data)
+            .catch(error => error);
     }
 };

@@ -3,7 +3,9 @@ import { withStyles } from '@material-ui/core/styles';
 import { Paper, InputBase, IconButton } from '@material-ui/core';
 import { Search as SearchIcon } from '@material-ui/icons';
 
-const Search = ({ classes, light = false }) => {
+//TODO - Create end point for search
+
+const Search = ({ classes, light=false }) => {
     return (
         <Paper className={classes.paper} elevation={0}>
             <InputBase className={light ? classes.input : ''} placeholder='Search...'/>

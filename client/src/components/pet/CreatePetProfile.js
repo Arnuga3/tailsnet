@@ -2,13 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Paper } from '@material-ui/core';
-import PTextField from './commons/generic/PTextField';
-import PButton from './commons/generic/PButton';
-import ProfileImage from './commons/ProfileImage';
-import BirthDatePicker from './commons/BirthDatePicker';
-import PetType from './commons/PetType';
-import PageWrapper from './commons/generic/PageWrapper';
-import { createAndStorePetAccount } from './../actions/petActions';
+import PTextField from '../commons/generic/PTextField';
+import PButton from '../commons/generic/PButton';
+import ProfileImage from '../commons/ProfileImage';
+import BirthDatePicker from '../commons/BirthDatePicker';
+import PetType from '../commons/PetType';
+import PageWrapper from '../commons/generic/PageWrapper';
+import { createAndStorePetAccount } from './../../actions/petActions';
 
 class CreatePetProfile extends React.Component {
     constructor(props) {

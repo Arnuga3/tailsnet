@@ -1,11 +1,15 @@
-const tntoken = 'tntoken';
+const TOKEN = 'tntoken';
 
 function getToken() {
-    return localStorage.getItem(tntoken);
+    return localStorage.getItem(TOKEN);
 }
 
 function removeToken() {
-    localStorage.removeItem(tntoken);
+    localStorage.removeItem(TOKEN);
+}
+
+export function saveToken(token) {
+    if (token) localStorage.setItem(TOKEN, token);
 }
 
 export function getOptions() {

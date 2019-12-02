@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { Paper, Button, Typography, Grid } from '@material-ui/core';
@@ -11,7 +11,7 @@ import ArrowBack from '@material-ui/icons/ArrowBack';
 import Validation from './../utils/Validation';
 import { registerAndStoreUserAccount } from '../actions/userActions';
 
-const Register = ({ classes, dispatch }) => {
+const Register = ({ classes, dispatch, userData }) => {
 
     let emailRef = React.createRef();
     let emailRepeatRef = React.createRef();
@@ -81,14 +81,15 @@ const Register = ({ classes, dispatch }) => {
                 password: passwordRef.value
             }));
         }
-        
     };
 
     const formError = field =>
         errors.filter(err => err.name === field);
     
     return (
-        <div className={classes.wrapper}>
+        userData
+        ? <Redirect to='/' push />
+        : <div className={classes.wrapper}>
             <Paper className={classes.paper}>
                 <form onSubmit={handleSubmit}>
                     <Grid container>
@@ -215,6 +216,8 @@ const styles = theme => ({
     }
 });
 
-const mapStateToProps = ({}) => ({});
+const mapStateToProps = ({ userStore }) => ({
+    userData: userStore.account
+});
 
 export default connect(mapStateToProps)(withStyles(styles)(Register));
