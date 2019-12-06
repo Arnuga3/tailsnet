@@ -27,10 +27,10 @@ const Index = ({ classes }) => {
 
                 <Switch>
                     <Route exact path='/' component={Home}/>
-                    <Route path='/login' component={Login}/>
-                    <Route path='/register' component={Register}/>
-                    <Route path='/user/profile' component={UserProfile}/>
-                    <Route path='/create/pet/profile' component={CreatePetProfile}/>
+                    <Route exact path='/login' component={Login}/>
+                    <Route exact path='/register' component={Register}/>
+                    <Route exact path='/user/profile' component={UserProfile}/>
+                    <Route exact path='/create/pet/profile' component={CreatePetProfile}/>
                 </Switch>
                 <ApplicationRedirect/>
 

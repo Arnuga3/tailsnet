@@ -1,4 +1,4 @@
-import Configuration from './Configuration';
+import Constants from './Constants';
 
 export default class Validation {
 
@@ -24,13 +24,13 @@ export default class Validation {
             errors.push({ name: email.name });
 
         else if (!Validation.validEmail(email.value))
-            errors.push({ error: Configuration.NOT_VALID, name: email.name });
+            errors.push({ error: Constants.NOT_VALID, name: email.name });
 
         if (emailRepVal === '')
             errors.push({ name: emailRep.name });
 
         else if (emailVal !== emailRepVal)
-            errors.push({ error: Configuration.NOT_MATCHING, name: emailRep.name });
+            errors.push({ error: Constants.NOT_MATCHING, name: emailRep.name });
 
         return errors;
     }
@@ -47,7 +47,7 @@ export default class Validation {
             errors.push({ name: psswdRep.name });
 
         if (psswdVal !== psswdRepVal)
-            errors.push({ error: Configuration.NOT_MATCHING, name: psswdRep.name });
+            errors.push({ error: Constants.NOT_MATCHING, name: psswdRep.name });
         
         return errors;
     }

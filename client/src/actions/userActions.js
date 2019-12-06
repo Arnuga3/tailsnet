@@ -1,10 +1,9 @@
 import {
-    login,
     register,
     getProfile,
     updateProfile
 } from '../api/user';
-  
+//TODO REPLACE actions to use redux-axios middleware
 const SAVE_USER_ACCOUNT = 'SAVE_USER_ACCOUNT';
 const EDIT_USER_ACCOUNT = 'EDIT_USER_ACCOUNT';
 
@@ -20,35 +19,40 @@ export const editUserAccount = value => ({
 
 export function retrieveAndStoreUserAccount() {
     return dispatch => {
-        getProfile()
-            .then(data => dispatch(storeUserAccount(data)))
-            .catch(err => console.error(err));
+        getProfile(dispatch)
+            .then(data => data && dispatch(storeUserAccount(data)));
     }
 };
 
 export function updateAndStoreUserAccount(data) {
     return dispatch => {
-        updateProfile(data)
-            .then(data => dispatch(storeUserAccount(data)))
-            .catch(err => console.error(err));
-    }
-};
-
-export function loginAndStoreUserAccount(email, password) {
-    return dispatch => {
-        login(email, password)
-            .then(data => {
-                debugger
-                dispatch(storeUserAccount(data))
-            })
-            .catch(err => console.error(err));
+        updateProfile(dispatch, data)
+            .then(data => data && dispatch(storeUserAccount(data)));
     }
 };
 
 export function registerAndStoreUserAccount(data) {
     return dispatch => {
-        register(data)
-            .then(data => dispatch(storeUserAccount(data)))
-            .catch(err => console.error(err));
+        register(dispatch, data)
+            .then(data => data && dispatch(storeUserAccount(data)));
     }
 };
+
+export function loginAndStoreUserAccount(email, password) {
+    return {
+        type: 'LOGIN',
+        payload: {
+            request: {
+                method: 'post',
+                url: '/auth/local',
+                data: { email, password }
+            },
+            options: {
+                onSuccess({ dispatch, response }) {
+                    const { data } = response;
+                    dispatch(storeUserAccount(data));
+                }
+            }
+        }
+    }
+}

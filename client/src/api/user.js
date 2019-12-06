@@ -1,36 +1,32 @@
-import AuthAPI from './utils/AuthAPI';
-import PublicAPI from './utils/PublicAPI';
-import AuthUtils from './utils/AuthUtils';
+import API from './utils/API';
 
-export function login(email, password) {
-        const request = PublicAPI.post('/auth/local', { email, password });
-        return AuthUtils.validateResponse(request);
-        
-            // .then(({ data, headers }) => {
-            //     AuthUtils.saveToken(headers.tntoken);
-            //     return resolve(data);
-            // }).catch(err => reject(err));
-}
-
-export function register(data) {
-    return new Promise((resolve, reject) => {
-        PublicAPI.post('/auth/local/register', data)
-            .then(({ data, headers }) => {
-                AuthUtils.saveToken(headers.tntoken);
-                return resolve(data);
-            }).catch(err => reject(err));
+export function login(dispatch, email, password) {
+    return API.post({
+        url: '/auth/local',
+        data: { email, password },
+        dispatch
     });
 }
 
-export function getProfile() {
-    const response = AuthAPI.get('/api/users/profile');
-    return AuthUtils.validateResponse(response);
+export function register(dispatch, data) {
+    return API.post({
+        url: '/auth/local/register',
+        data,
+        dispatch
+    });
 }
 
-export function updateProfile(data) {
-    return new Promise((resolve, reject) => {
-        AuthAPI.put('/api/users/profile', data)
-            .then(({ data }) => resolve(data))
-            .catch(err => reject(err));
+export function getProfile(dispatch) {
+    return API.get({
+        url: '/api/users/profile',
+        dispatch
+    });
+}
+
+export function updateProfile(dispatch, data) {
+    return API.put({
+        url: '/api/users/profile',
+        data,
+        dispatch
     });
 }

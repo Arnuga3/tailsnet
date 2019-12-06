@@ -18,16 +18,14 @@ export const storePetAccounts = value => ({
 
 export function getAndStoreAllPetAccounts() {
 	return dispatch => {
-		getPetAccounts()
-			.then(data => dispatch(storePetAccounts(data)))
-			.catch(err => console.error(err));
+		getPetAccounts(dispatch)
+			.then(data => data && dispatch(storePetAccounts(data)));
 	}
 };
 
 export function createAndStorePetAccount(petAccount) {
 	return dispatch => {
 		createPetAccount(petAccount)
-			.then(data => dispatch(storeNewPetAccount(data)))
-			.catch(err => console.error(err));
+			.then(data => data && dispatch(storeNewPetAccount(data)));
 	}
 };

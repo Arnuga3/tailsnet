@@ -1,17 +1,16 @@
-import AuthAPI from './utils/AuthAPI';
+import API from './utils/API';
 
-export function getPetAccounts() {
-    return new Promise((resolve, reject) => {
-        AuthAPI.get('/api/pets')
-            .then(({ data }) => resolve(data))
-            .catch(err => reject(err));
+export function getPetAccounts(dispatch) {
+    return API.get({
+        url: '/api/pets',
+        dispatch
     });
 }
 
-export function createPetAccount(account) {
-    return new Promise((resolve, reject) => {
-        AuthAPI.post('/api/pets/create', account)
-            .then(({ data }) => resolve(data))
-            .catch(err => reject(err));
+export function createPetAccount(dispatch, data) {
+    return API.post({
+        url: '/api/pets/create',
+        data,
+        dispatch
     });
 }
