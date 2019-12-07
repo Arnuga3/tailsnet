@@ -1,11 +1,8 @@
-import {
-    register,
-    getProfile,
-    updateProfile
-} from '../api/user';
-//TODO REPLACE actions to use redux-axios middleware
+import { _get, _post, _put, _delete } from './../utils/ApiUtils';
+
 const SAVE_USER_ACCOUNT = 'SAVE_USER_ACCOUNT';
 const EDIT_USER_ACCOUNT = 'EDIT_USER_ACCOUNT';
+const LOGOUT = 'LOGOUT';
 
 export const storeUserAccount = value => ({
     type: SAVE_USER_ACCOUNT,
@@ -17,40 +14,62 @@ export const editUserAccount = value => ({
     value
 });
 
+export const logout = value => ({
+    type: LOGOUT,
+    value
+});
+
 export function retrieveAndStoreUserAccount() {
-    return dispatch => {
-        getProfile(dispatch)
-            .then(data => data && dispatch(storeUserAccount(data)));
+    return {
+        type: 'GET_USER_PROFILE',
+        payload: {
+            request: _get('/api/users/profile'),
+            options: {
+                onSuccess({ dispatch, response }) {
+                    dispatch(storeUserAccount(response.data));
+                }
+            }
+        }
     }
-};
+}
 
 export function updateAndStoreUserAccount(data) {
-    return dispatch => {
-        updateProfile(dispatch, data)
-            .then(data => data && dispatch(storeUserAccount(data)));
+    return {
+        type: 'UPDATE_USER_PROFILE',
+        payload: {
+            request: _put('/api/users/profile', data),
+            options: {
+                onSuccess({ dispatch, response }) {
+                    dispatch(storeUserAccount(response.data));
+                }
+            }
+        }
     }
-};
+}
 
 export function registerAndStoreUserAccount(data) {
-    return dispatch => {
-        register(dispatch, data)
-            .then(data => data && dispatch(storeUserAccount(data)));
+    return {
+        type: 'REGISTER',
+        payload: {
+            request: _post('/auth/local/register', data),
+            options: {
+                onSuccess({ dispatch, response }) {
+                    dispatch(storeUserAccount(response.data));
+
+                }
+            }
+        }
     }
-};
+}
 
 export function loginAndStoreUserAccount(email, password) {
     return {
         type: 'LOGIN',
         payload: {
-            request: {
-                method: 'post',
-                url: '/auth/local',
-                data: { email, password }
-            },
+            request: _post('/auth/local', { email, password }),
             options: {
                 onSuccess({ dispatch, response }) {
-                    const { data } = response;
-                    dispatch(storeUserAccount(data));
+                    dispatch(storeUserAccount(response.data));
                 }
             }
         }

@@ -1,5 +1,6 @@
 const SAVE_USER_ACCOUNT = 'SAVE_USER_ACCOUNT';
 const EDIT_USER_ACCOUNT = 'EDIT_USER_ACCOUNT';
+const LOGOUT = 'LOGOUT';
 
 const defaultState = {
     account: null
@@ -18,6 +19,12 @@ const userStore = (state = defaultState, { type, value }) => {
             return {
                 ...state,
                 account: {...state.account, ...value}
+            }
+        
+        case LOGOUT:
+            return {
+                ...state,
+                account: null
             }
         
         default:

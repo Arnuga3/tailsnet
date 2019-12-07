@@ -20,11 +20,13 @@ import SettingsApplications from '@material-ui/icons/SettingsApplications';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import Search from './Search';
+import { logout } from './../actions/authActions';
 
 const drawerWidth = 256;
 
-const ApplicationDrawer = ({ classes, open, handleDrawer }) => {
-
+const ApplicationDrawer = ({ classes, dispatch, open, handleDrawer, user }) => {
+    const loggedUser = user;
+    // TODO implement proper logout with token removal on server
     return (
         <Drawer
             className={classes.drawer}
@@ -42,38 +44,45 @@ const ApplicationDrawer = ({ classes, open, handleDrawer }) => {
             <Hidden smUp>
                 <Search/>
             </Hidden>
-            <List>
-                <ListItem button component={Link} to='/create/pet/profile' onClick={handleDrawer}>
-                    <ListItemIcon>
-                        <Add/>
-                    </ListItemIcon>
-                    <ListItemText primary='Pet Profile'/>
-                </ListItem>
-                <ListItem button component={Link} to='/user/profile' onClick={handleDrawer}>
-                    <ListItemIcon>
-                        <Person/>
-                    </ListItemIcon>
-                    <ListItemText primary='Pet Owner Profile'/>
-                </ListItem>
-            </List>
-            <Divider />
-            <List>
-                <ListItem button>
-                    <ListItemIcon>
-                        <SettingsApplications/>
-                    </ListItemIcon>
-                    <ListItemText primary='Settings'/>
-                </ListItem>
-            </List>
-            <Divider />
-            <List>
-                <ListItem  button component={Link} to='/login' onClick={()=>{}}>
-                    <ListItemIcon>
-                        <ExitToApp/>
-                    </ListItemIcon>
-                    <ListItemText primary='Logout'/>
-                </ListItem>
-            </List>
+            { loggedUser &&
+                <React.Fragment>
+                    <List>
+                        <ListItem button component={Link} to='/create/pet/profile' onClick={handleDrawer}>
+                            <ListItemIcon>
+                                <Add/>
+                            </ListItemIcon>
+                            <ListItemText primary='Pet Profile'/>
+                        </ListItem>
+                        <ListItem button component={Link} to='/user/profile' onClick={handleDrawer}>
+                            <ListItemIcon>
+                                <Person/>
+                            </ListItemIcon>
+                            <ListItemText primary='Pet Owner Profile'/>
+                        </ListItem>
+                    </List>
+                    <Divider />
+                    <List>
+                        <ListItem button>
+                            <ListItemIcon>
+                                <SettingsApplications/>
+                            </ListItemIcon>
+                            <ListItemText primary='Settings'/>
+                        </ListItem>
+                    </List>
+                    <Divider />
+                    <List>
+                        <ListItem  button component={Link} to='/login' onClick={() => {
+                                dispatch(logout());
+                                handleDrawer();
+                            }}>
+                            <ListItemIcon>
+                                <ExitToApp/>
+                            </ListItemIcon>
+                            <ListItemText primary='Logout'/>
+                        </ListItem>
+                    </List>
+                </React.Fragment>
+            }
         </Drawer>
     );
 }
@@ -95,4 +104,8 @@ const styles = theme => ({
     }
 });
 
-export default connect()(withStyles(styles, { withTheme: true })(ApplicationDrawer));
+const mapStateToProps = ({ userStore }) => ({
+    user: userStore.account
+});
+
+export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(ApplicationDrawer));

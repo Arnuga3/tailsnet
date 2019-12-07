@@ -3,7 +3,7 @@ const TOKEN = Constants.TOKEN;
 
 const CHECK_TOKEN = 'CHECK_TOKEN';
 const SAVE_TOKEN = 'SAVE_TOKEN';
-const REMOVE_TOKEN = 'REMOVE_TOKEN';
+const LOGOUT = 'LOGOUT';
 
 const defaultState = {
     token: localStorage.getItem(TOKEN)
@@ -25,7 +25,7 @@ const authStore = (state = defaultState, { type, value }) => {
                 token: value
             }
 
-        case REMOVE_TOKEN:
+        case LOGOUT:
             localStorage.removeItem(TOKEN);
             return {
                 ...state,
