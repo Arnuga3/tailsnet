@@ -1,9 +1,11 @@
 import Constants from './../utils/Constants';
-const TOKEN = Constants.TOKEN;
+import {
+    CHECK_TOKEN,
+    SAVE_TOKEN,
+    LOGOUT
+} from './../actions/authActions';
 
-const CHECK_TOKEN = 'CHECK_TOKEN';
-const SAVE_TOKEN = 'SAVE_TOKEN';
-const LOGOUT = 'LOGOUT';
+const TOKEN = Constants.TOKEN;
 
 const defaultState = {
     token: localStorage.getItem(TOKEN)

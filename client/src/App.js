@@ -1,38 +1,49 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import logger from 'redux-logger';
+import thunk from 'redux-thunk';
+import axiosMiddleware from 'redux-axios-middleware';
+import { ThemeProvider } from '@material-ui/core/styles';
+import { SnackbarProvider } from 'notistack';
+import { getThemeConfig } from './theme';
+import { 
+    getAxiosClient, 
+    getReduxAxiosMiddlewareConfig 
+} from './utils/AxiosMiddleware';
 import Index from './components/Index';
+import rootReducer from './reducers/rootReducer';
 
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: `rgb(90, 175, 90)`,
-      contrastText: 'rgb(255,255,255)'
-    },
-    text: {
-      primary: 'rgba(0,0,0,.75)',
-      secondary: 'rgba(0,0,0,.25)'
-    }
-  },
-  status: {
-    danger: 'orange'
-  },
-  typography: {
-    fontFamily:
-      'Comfortaa", cursive, "Roboto", "Helvetica", "Arial", sans-serif',
-    fontSize: 14,
-    fontWeightLight: 300,
-    fontWeightRegular: 400,
-    fontWeightMedium: 600
-  }
-});
+const themeConfig = getThemeConfig();
+const axiosClient = getAxiosClient();
+const axiosMiddlewareConfig = getReduxAxiosMiddlewareConfig();
+
+const store = createStore(
+    rootReducer,
+    applyMiddleware(
+        logger,
+        thunk,
+        axiosMiddleware(axiosClient, axiosMiddlewareConfig)
+    )
+);
 
 const App = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <Router>
-        <Index/>
-      </Router>
+    <ThemeProvider theme={themeConfig}>
+        <Provider store={store}>
+            <SnackbarProvider dense
+                maxSnack={3}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                }}
+            >
+                <Router>
+                   <Index/>
+                </Router>
+            </SnackbarProvider>
+        </Provider>
     </ThemeProvider>
   );
 };

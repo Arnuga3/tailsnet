@@ -1,5 +1,4 @@
-const SAVE_PET_ACCOUNT = 'SAVE_PET_ACCOUNT';
-const SAVE_PET_ACCOUNTS = 'SAVE_PET_ACCOUNTS';
+import { SAVE_PET_ACCOUNT, SAVE_PET_ACCOUNTS }  from './../actions/petActions';
 
 const defaultState = {
     accounts: []

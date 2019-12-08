@@ -12,7 +12,6 @@ const PButton = ({ classes, children, type, onClick, disabled=false }) => {
                 variant='contained'
                 color='primary'
                 disabled={disabled}
-                className={classes.button}
                 onClick={onClick}
             >
                 {children}

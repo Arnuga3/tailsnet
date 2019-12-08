@@ -1,7 +1,6 @@
-import { _get, _post, _put, _delete } from './../utils/ApiUtils';
-
-const SAVE_PET_ACCOUNT = 'SAVE_PET_ACCOUNT';
-const SAVE_PET_ACCOUNTS = 'SAVE_PET_ACCOUNTS';
+import { _get, _post } from './../utils/ApiUtils';
+export const SAVE_PET_ACCOUNT = 'SAVE_PET_ACCOUNT';
+export const SAVE_PET_ACCOUNTS = 'SAVE_PET_ACCOUNTS';
 
 export const storeNewPetAccount = value => ({
 	type: SAVE_PET_ACCOUNT,

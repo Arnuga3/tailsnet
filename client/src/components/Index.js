@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import ApplicationRedirect from './ApplicationRedirect';
+import ApplicationNotifier from './ApplicationNotifier';
 import ApplicationBar from './ApplicationBar';
 import ApplicationDrawer from './ApplicationDrawer';
 import Home from './Home';
@@ -32,6 +33,7 @@ const Index = ({ classes }) => {
                     <Route exact path='/user/profile' component={UserProfile}/>
                     <Route exact path='/create/pet/profile' component={CreatePetProfile}/>
                 </Switch>
+                <ApplicationNotifier/>
                 <ApplicationRedirect/>
 
             </main>

@@ -1,6 +1,8 @@
-const SAVE_USER_ACCOUNT = 'SAVE_USER_ACCOUNT';
-const EDIT_USER_ACCOUNT = 'EDIT_USER_ACCOUNT';
-const LOGOUT = 'LOGOUT';
+import {
+    SAVE_USER_ACCOUNT,
+    EDIT_USER_ACCOUNT,
+    LOGOUT
+} from './../actions/userActions';
 
 const defaultState = {
     account: null

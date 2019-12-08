@@ -1,8 +1,7 @@
-import { _get, _post, _put, _delete } from './../utils/ApiUtils';
-
-const SAVE_USER_ACCOUNT = 'SAVE_USER_ACCOUNT';
-const EDIT_USER_ACCOUNT = 'EDIT_USER_ACCOUNT';
-const LOGOUT = 'LOGOUT';
+import { _get, _post, _put } from './../utils/ApiUtils';
+export const SAVE_USER_ACCOUNT = 'SAVE_USER_ACCOUNT';
+export const EDIT_USER_ACCOUNT = 'EDIT_USER_ACCOUNT';
+export const LOGOUT = 'LOGOUT';
 
 export const storeUserAccount = value => ({
     type: SAVE_USER_ACCOUNT,
