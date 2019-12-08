@@ -22,7 +22,7 @@ const notificationStore = (state = defaultState, action) => {
             return {
                 ...state,
                 notifications: state.notifications.map(notification => (
-                    (action.dismissAll || notification.key === action.key)
+                    notification.key === action.key
                         ? { ...notification, dismissed: true }
                         : { ...notification }
                 )),

@@ -16,6 +16,7 @@ class Notifier extends React.Component {
 
     componentDidUpdate() {
         const { dispatch, enqueueSnackbar, closeSnackbar, notifications } = this.props;
+        
         notifications.forEach(({ key, message, options = {}, dismissed = false }) => {
             if (dismissed)
                 return closeSnackbar(key);

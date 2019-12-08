@@ -28,24 +28,25 @@ const store = createStore(
     )
 );
 
+
 const App = () => {
-  return (
-    <ThemeProvider theme={themeConfig}>
-        <Provider store={store}>
-            <SnackbarProvider dense
-                maxSnack={3}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                }}
-            >
-                <Router>
-                   <Index/>
-                </Router>
-            </SnackbarProvider>
-        </Provider>
-    </ThemeProvider>
-  );
+    return (
+        <ThemeProvider theme={themeConfig}>
+            <Provider store={store}>
+                <SnackbarProvider dense
+                    maxSnack={3}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                >
+                    <Router>
+                        <Index/>
+                    </Router>
+                </SnackbarProvider>
+            </Provider>
+        </ThemeProvider>
+    );
 };
 
 export default App;
