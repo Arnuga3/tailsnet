@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { Paper, Typography, Button, Grid } from '@material-ui/core';
@@ -7,7 +8,7 @@ import PTextField from './commons/generic/PTextField';
 import ArrowForward from '@material-ui/icons/ArrowForward';
 import { loginAndStoreUserAccount } from '../actions/userActions';
 
-const Login = ({ classes, dispatch, userData }) => {
+const Login = ({ classes, history, dispatch }) => {
 
     let emailRef = React.createRef();
     let passwordRef = React.createRef();
@@ -15,12 +16,11 @@ const Login = ({ classes, dispatch, userData }) => {
     const handleSubmit = e => {
         e.preventDefault();
         dispatch(loginAndStoreUserAccount(emailRef.value, passwordRef.value));
+        history.push('/');
     };
 
     return (
-        userData
-        ? <Redirect to='/' push />
-        : <div className={classes.wrapper}>
+        <div className={classes.wrapper}>
             <Paper className={classes.paper}>
                 <Grid item xs={12} className={classes.logoWrapper}>
                     <img className={classes.logoImg} src='/TAILSNET.png' alt=''/>
@@ -114,8 +114,6 @@ const styles = theme => ({
     }
 });
 
-const mapStateToProps = ({ userStore }) => ({
-    userData: userStore.account
-});
+const mapStateToProps = () => ({});
 
-export default connect(mapStateToProps)(withStyles(styles)(Login));
+export default connect(mapStateToProps)(withRouter(withStyles(styles)(Login)));

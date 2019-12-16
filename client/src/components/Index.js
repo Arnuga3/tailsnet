@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import React from 'react';
+import { Route, Switch, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import ApplicationRedirect from './ApplicationRedirect';
 import ApplicationNotifier from './ApplicationNotifier';
 import ApplicationBar from './ApplicationBar';
 import ApplicationDrawer from './ApplicationDrawer';
@@ -11,35 +11,63 @@ import CreatePetProfile from './pet/CreatePetProfile';
 import Login from './Login';
 import Register from './Register';
 import UserProfile from './UserProfile';
+import { retrieveAndStoreUserAccount } from './../actions/userActions';
 
 const drawerWidth = 256;
 
-const Index = ({ classes }) => {
-
-    const [open, setOpen] = useState(false);
-    const handleDrawer = () => setOpen(!open);
-
-    // TODO - Set navigation in the application after login, logout, etc.
+const AuthRoute = ({ component: Component, auth, ...restProp }) => {
     return (
-        <div className={classes.root}>
-            <CssBaseline />
-            <ApplicationBar open={open} handleDrawer={handleDrawer}/>
-            <main className={classes.content}>
-
-                <Switch>
-                    <Route exact path='/' component={Home}/>
-                    <Route exact path='/login' component={Login}/>
-                    <Route exact path='/register' component={Register}/>
-                    <Route exact path='/user/profile' component={UserProfile}/>
-                    <Route exact path='/create/pet/profile' component={CreatePetProfile}/>
-                </Switch>
-                <ApplicationNotifier/>
-                <ApplicationRedirect/>
-
-            </main>
-            <ApplicationDrawer open={open} handleDrawer={handleDrawer}/>
-        </div>
+        <Route {...restProp} render={props =>
+            auth
+            ? <Component {...props}/>
+            : <Redirect to='/login' push/>
+        }/>
     );
+};
+
+class Index extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { 
+            open: false
+        };
+    }
+
+    componentDidMount() {
+        const { auth } = this.props;
+        if (auth)
+            this.props.dispatch(retrieveAndStoreUserAccount());
+    }
+
+    handleDrawer = () => {
+        this.setState({
+            open: !this.state.open
+        });
+    }
+
+    render() {
+        const { classes, auth } = this.props;
+        const { open } = this.state;
+        return (
+            <div className={classes.root}>
+                <CssBaseline />
+                <ApplicationBar open={open} handleDrawer={this.handleDrawer}/>
+                <main className={classes.content}>
+    
+                    <Switch>
+                        <Route exact path='/' component={Home}/>
+                        <Route path='/login' component={Login}/>
+                        <Route path='/register' component={Register}/>
+                        <AuthRoute auth={auth} path='/user/profile' component={UserProfile}/>
+                        <AuthRoute auth={auth} path='/create/pet/profile' component={CreatePetProfile}/>
+                    </Switch>
+                    <ApplicationNotifier/>
+    
+                </main>
+                <ApplicationDrawer open={open} handleDrawer={this.handleDrawer}/>
+            </div>
+        );
+    }
 }
 
 const styles = theme => ({
@@ -57,4 +85,8 @@ const styles = theme => ({
     }
 });
 
-export default withStyles(styles, { withTheme: true })(Index);
+const mapStateToProps = ({ userStore }) => ({
+    auth: userStore.authenticated
+});
+
+export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Index));

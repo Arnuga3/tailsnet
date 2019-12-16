@@ -10,8 +10,9 @@ import BirthDatePicker from './commons/BirthDatePicker';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import Validation from './../utils/Validation';
 import { registerAndStoreUserAccount } from '../actions/userActions';
+import AuthUtils from './../utils/AuthUtils';
 
-const Register = ({ classes, dispatch, userData }) => {
+const Register = ({ classes, history, dispatch }) => {
 
     let emailRef = React.createRef();
     let emailRepeatRef = React.createRef();
@@ -80,16 +81,15 @@ const Register = ({ classes, dispatch, userData }) => {
                 email: emailRef.value,
                 password: passwordRef.value
             }));
+            history.push('/');
         }
     };
 
     const formError = field =>
         errors.filter(err => err.name === field);
-    
+
     return (
-        userData
-        ? <Redirect to='/' push />
-        : <div className={classes.wrapper}>
+        <div className={classes.wrapper}>
             <Paper className={classes.paper}>
                 <form onSubmit={handleSubmit}>
                     <Grid container>
@@ -216,8 +216,6 @@ const styles = theme => ({
     }
 });
 
-const mapStateToProps = ({ userStore }) => ({
-    userData: userStore.account
-});
+const mapStateToProps = () => ({});
 
 export default connect(mapStateToProps)(withStyles(styles)(Register));

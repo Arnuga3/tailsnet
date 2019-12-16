@@ -28,12 +28,12 @@ const store = createStore(
     )
 );
 
-
 const App = () => {
     return (
         <ThemeProvider theme={themeConfig}>
             <Provider store={store}>
-                <SnackbarProvider dense
+                <SnackbarProvider
+                    dense
                     maxSnack={3}
                     anchorOrigin={{
                         vertical: 'bottom',

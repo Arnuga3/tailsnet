@@ -12,20 +12,23 @@ import {
     ListItemIcon,
     ListItemText
 } from '@material-ui/core';
-
-// Icons
 import Add from '@material-ui/icons/Add';
-import Person from '@material-ui/icons/Person';
+import EmojiPeopleIcon from '@material-ui/icons/Person';
 import SettingsApplications from '@material-ui/icons/SettingsApplications';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import Search from './Search';
-import { logout } from './../actions/authActions';
+import { logout } from './../utils/ApiUtils';
 
 const drawerWidth = 256;
 
-const ApplicationDrawer = ({ classes, dispatch, open, handleDrawer, user }) => {
-    const loggedUser = user;
+const ApplicationDrawer = ({ classes, dispatch, open, handleDrawer, authenticated }) => {
+
+    const handleLogout = () => {
+        logout(dispatch);
+        handleDrawer();
+    };
+
     // TODO implement proper logout with token removal on server
     return (
         <Drawer
@@ -44,7 +47,8 @@ const ApplicationDrawer = ({ classes, dispatch, open, handleDrawer, user }) => {
             <Hidden smUp>
                 <Search/>
             </Hidden>
-            { loggedUser &&
+            {
+                authenticated &&
                 <React.Fragment>
                     <List>
                         <ListItem button component={Link} to='/create/pet/profile' onClick={handleDrawer}>
@@ -55,7 +59,7 @@ const ApplicationDrawer = ({ classes, dispatch, open, handleDrawer, user }) => {
                         </ListItem>
                         <ListItem button component={Link} to='/user/profile' onClick={handleDrawer}>
                             <ListItemIcon>
-                                <Person/>
+                                <EmojiPeopleIcon/>
                             </ListItemIcon>
                             <ListItemText primary='Pet Owner Profile'/>
                         </ListItem>
@@ -71,10 +75,7 @@ const ApplicationDrawer = ({ classes, dispatch, open, handleDrawer, user }) => {
                     </List>
                     <Divider />
                     <List>
-                        <ListItem  button component={Link} to='/login' onClick={() => {
-                                dispatch(logout());
-                                handleDrawer();
-                            }}>
+                        <ListItem button component={Link} to='/login' onClick={handleLogout}>
                             <ListItemIcon>
                                 <ExitToApp/>
                             </ListItemIcon>
@@ -83,6 +84,13 @@ const ApplicationDrawer = ({ classes, dispatch, open, handleDrawer, user }) => {
                     </List>
                 </React.Fragment>
             }
+            <React.Fragment>
+                <List>
+                    <ListItem>
+                        <ListItemText primary='Public link'/>
+                    </ListItem>
+                </List>
+            </React.Fragment>
         </Drawer>
     );
 }
@@ -105,7 +113,7 @@ const styles = theme => ({
 });
 
 const mapStateToProps = ({ userStore }) => ({
-    user: userStore.account
+    authenticated: userStore.authenticated
 });
 
-export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(ApplicationDrawer));
+export default connect(mapStateToProps)(withStyles(styles,{withTheme: true})(ApplicationDrawer));

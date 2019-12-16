@@ -1,13 +1,17 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import { AppBar, Toolbar, Hidden, IconButton } from '@material-ui/core';
+import { AppBar, Toolbar, Hidden, IconButton, Button } from '@material-ui/core';
 import clsx from 'clsx';
 import MenuIcon from '@material-ui/icons/Menu';
 import Search from './Search';
+import AuthUtils from './../utils/AuthUtils';
 
 const drawerWidth = 256;
 
-const ApplicationBar = ({ classes, open, handleDrawer }) => {
+const ApplicationBar = ({ classes, open, handleDrawer, authenticated }) => {
+    const isLoginScreen = window.location.pathname === '/login';
     return (
         <AppBar position='fixed'
             className={clsx(classes.appBar, {
@@ -19,14 +23,22 @@ const ApplicationBar = ({ classes, open, handleDrawer }) => {
                 <Hidden xsDown>
                     <Search light/>
                 </Hidden>
-                <IconButton
-                    color='inherit'
-                    aria-label='open drawer'
-                    edge='end'
-                    onClick={handleDrawer}
-                >
-                    <MenuIcon />
-                </IconButton>
+                <div>
+                    {
+                        (!authenticated && !isLoginScreen) &&
+                        <Button component={Link} to='/login' color='secondary'>
+                            Login
+                        </Button>
+                    }
+                    <IconButton
+                        color='inherit'
+                        aria-label='open drawer'
+                        edge='end'
+                        onClick={handleDrawer}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                </div>
             </Toolbar>
         </AppBar>
     );
@@ -58,4 +70,8 @@ const styles = theme => ({
     }
 });
 
-export default withStyles(styles, { withTheme: true })(ApplicationBar);
+const mapStateToProps = ({ userStore }) => ({
+    authenticated: userStore.authenticated
+});
+
+export default connect(mapStateToProps)(withStyles(styles,{withTheme:true})(ApplicationBar));

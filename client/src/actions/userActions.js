@@ -1,6 +1,8 @@
 import { _get, _post, _put } from './../utils/ApiUtils';
+
 export const SAVE_USER_ACCOUNT = 'SAVE_USER_ACCOUNT';
 export const EDIT_USER_ACCOUNT = 'EDIT_USER_ACCOUNT';
+export const SET_AUTH = 'SET_AUTH';
 export const LOGOUT = 'LOGOUT';
 
 export const storeUserAccount = value => ({
@@ -10,6 +12,11 @@ export const storeUserAccount = value => ({
 
 export const editUserAccount = value => ({
     type: EDIT_USER_ACCOUNT,
+    value
+});
+
+export const setAuthencated = value => ({
+    type: SET_AUTH,
     value
 });
 
@@ -54,7 +61,6 @@ export function registerAndStoreUserAccount(data) {
             options: {
                 onSuccess({ dispatch, response }) {
                     dispatch(storeUserAccount(response.data));
-
                 }
             }
         }

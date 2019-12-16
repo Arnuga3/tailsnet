@@ -23,13 +23,9 @@ class UserProfile extends React.Component {
     }
 
     componentDidMount() {
-        const { dispatch, user } = this.props;
-        if (!user)
-            dispatch(retrieveAndStoreUserAccount());
+        this.props.dispatch(retrieveAndStoreUserAccount());
     }
 
-    // TODO - Save in a temp/local user object, update original after successful update on server.
-    // Needed to handle cancel updates
     handleFormItemChange = (item, value) => {
         const { dispatch } = this.props;
         dispatch(editUserAccount({ [item]: value }));
@@ -68,11 +64,11 @@ class UserProfile extends React.Component {
         this.state.errors.filter(err => err.name === field);
 
     render() {
-        const { classes, user } = this.props;
+        const { classes, user, authenticated } = this.props;
         return (
             <PageWrapper pageTitle='User Profile'>
                 <Paper className={classes.paper}>
-                    { user &&
+                    { authenticated &&
                         <React.Fragment>
                             <Grid container>
                                 <Grid item xs={12} md={6} className={classes.grid}>
@@ -115,7 +111,8 @@ const styles = theme => ({
 });
 
 const mapStateToProps = ({ userStore }) => ({
-    user: userStore.account
+    user: userStore.account,
+    authenticated: userStore.authenticated
 });
 
 export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(UserProfile));
