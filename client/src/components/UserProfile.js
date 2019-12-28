@@ -64,37 +64,33 @@ class UserProfile extends React.Component {
         this.state.errors.filter(err => err.name === field);
 
     render() {
-        const { classes, user, authenticated } = this.props;
+        const { classes, user } = this.props;
         return (
             <PageWrapper pageTitle='User Profile'>
                 <Paper className={classes.paper}>
-                    { authenticated &&
-                        <React.Fragment>
-                            <Grid container>
-                                <Grid item xs={12} md={6} className={classes.grid}>
-                                    <ProfileImage/>
-                                </Grid>
-                                <Grid item xs={12} md={6} className={classes.grid}>
-                                    <BasicDetails
-                                        title={user.title}
-                                        name={user.name}
-                                        surname={user.surname}
-                                        onFormItemChange={this.handleFormItemChange}
-                                        errors={this.state.errors}
-                                    />
-                                    <BirthDatePicker value={user.dob || null}
-                                        onFormItemChange={this.handleFormItemChange}
-                                        errors={this.state.errors}
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Grid container justify='center'>
-                                <PButton disabled={!this.state.touched} onClick={this.handleUpdate}>
-                                    Save Changes
-                                </PButton>
-                            </Grid>
-                        </React.Fragment>
-                    }
+                    <Grid container>
+                        <Grid item xs={12} md={6} className={classes.grid}>
+                            <ProfileImage/>
+                        </Grid>
+                        <Grid item xs={12} md={6} className={classes.grid}>
+                            <BasicDetails
+                                title={user.title}
+                                name={user.name}
+                                surname={user.surname}
+                                onFormItemChange={this.handleFormItemChange}
+                                errors={this.state.errors}
+                            />
+                            <BirthDatePicker value={user.dob || null}
+                                onFormItemChange={this.handleFormItemChange}
+                                errors={this.state.errors}
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid container justify='center'>
+                        <PButton disabled={!this.state.touched} onClick={this.handleUpdate}>
+                            Save Changes
+                        </PButton>
+                    </Grid>
                 </Paper>
             </PageWrapper> 
         )
@@ -111,8 +107,7 @@ const styles = theme => ({
 });
 
 const mapStateToProps = ({ userStore }) => ({
-    user: userStore.account,
-    authenticated: userStore.authenticated
+    user: userStore.account
 });
 
 export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(UserProfile));

@@ -15,8 +15,9 @@ export const getReduxAxiosMiddlewareConfig = () => {
             request: [{
                 success: function ({}, req) {
                     const token = AuthUtils.getToken();
+                    const tntoken = token ? `Bearer ${token.replace('Bearer ', '')}` : '';
                     req.headers = {
-                        tntoken: `Bearer ${token}`,
+                        tntoken,
                         xsrfCookieName: 'XSRF-TOKEN',
                         xsrfHeaderName: 'X-XSRF-TOKEN'
                     }

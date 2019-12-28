@@ -20,7 +20,7 @@ class CreatePetProfile extends React.Component {
         };
         this.petNameRef = React.createRef();
     }
-
+// TODO - FIX date selection in date picker
     handleDOBChange = dob =>
         this.setState({ dob });
 
@@ -35,7 +35,7 @@ class CreatePetProfile extends React.Component {
             dispatch(createAndStorePetAccount({
                 petName: this.petNameRef.value,
                 dob,
-                petType
+                petType: petType.type
             }));
             this.cleanForm();
         } else console.error('Not all data provided');
@@ -89,7 +89,7 @@ class CreatePetProfile extends React.Component {
                                 </PTextField>
                             </div>
                             <div className={classes.fieldWrapper}>
-                                <BirthDatePicker value={dob} onChange={this.handleDOBChange}/>
+                                <BirthDatePicker value={dob} onFormItemChange={this.handleDOBChange}/>
                             </div>
                         </Grid>
                     </Grid>

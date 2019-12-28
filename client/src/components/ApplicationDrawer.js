@@ -51,29 +51,29 @@ const ApplicationDrawer = ({ classes, dispatch, open, handleDrawer, authenticate
                 authenticated &&
                 <React.Fragment>
                     <List>
-                        <ListItem button component={Link} to='/create/pet/profile' onClick={handleDrawer}>
+                        <ListItem dense button component={Link} to='/create/pet/profile' onClick={handleDrawer}>
                             <ListItemIcon>
                                 <Add/>
                             </ListItemIcon>
                             <ListItemText primary='Pet Profile'/>
                         </ListItem>
-                        <ListItem button component={Link} to='/user/profile' onClick={handleDrawer}>
+                        <ListItem dense button component={Link} to='/user/profile' onClick={handleDrawer}>
                             <ListItemIcon>
                                 <EmojiPeopleIcon/>
                             </ListItemIcon>
                             <ListItemText primary='Pet Owner Profile'/>
                         </ListItem>
                     </List>
-                    <Divider />
+                    <Divider dense light/>
                     <List>
-                        <ListItem button>
+                        <ListItem dense button>
                             <ListItemIcon>
                                 <SettingsApplications/>
                             </ListItemIcon>
                             <ListItemText primary='Settings'/>
                         </ListItem>
                     </List>
-                    <Divider />
+                    <Divider dense light/>
                     <List>
                         <ListItem button component={Link} to='/login' onClick={handleLogout}>
                             <ListItemIcon>
