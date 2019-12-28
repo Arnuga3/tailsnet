@@ -3,44 +3,33 @@ const AuthToken = require('./../../auth/AuthToken');
 const UserDataAccess = require('./../data_access/UserDataAccess');
 
 const getUserDTO = user => {
-    const { _id, password, ...theRest } = user._doc;
-    return theRest;
+    delete user.id;
+    delete user.password;
+    return user;
 };
 
 module.exports = {
 
-    async login(email, password) {
-        const user = await UserDataAccess.getUserByEmail(email);
+    login(email, password) {
+        return UserDataAccess.getUserByEmail(email)
+            .then(user => {
+                const validPassword = bcrypt.compareSync(password, user.password);
+                if (!validPassword) return null;
 
-        if (!user) return null;
-        
-        const validPassword = bcrypt.compareSync(password, user.password);
-        if (!validPassword) return null;
-
-        const token = AuthToken.createToken(user.id);
-        const userDTO = getUserDTO(user);
-        userDTO.token = token;
-        return userDTO;
+                const token = AuthToken.createToken(user.id);
+                user.token = token;
+                return getUserDTO(user);
+            })
+            .catch(error => error);
     },
     
-    async getUser(id) {
-        const user = await UserDataAccess.getUserById(id)
-            .catch(error => error);
-        if (!user) return null;
-        return getUserDTO(user)
+    getUser(id) {
+        return UserDataAccess.getUserById(id);
     },
 
-    async createUser(data) {
-        const { email, password } = data;
-
-        const user = await UserDataAccess.getUserByEmail({email});
-        if (user) throw new Error('Email is already registered');
-
+    createUser(data) {
+        const { password } = data;
         const hashedPassword = bcrypt.hashSync(password, 8);
-        const aUser = await UserDataAccess.createUser({
-			...data,
-			password: hashedPassword
-        }).catch(error => error);
-        return getUserDTO(aUser);
+        return UserDataAccess.createUser({ ...data, password: hashedPassword });
     }
 };

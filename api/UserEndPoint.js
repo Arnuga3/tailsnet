@@ -9,14 +9,14 @@ const UserService = require('../app_layers/services/UserService');
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-// Get pet owner profile
-router.get('/profile', auth, async (req, res) => {
-  try {
-    const user = await UserService.getUser(req.userId);
-    res.status(200).send(user);
-  } catch(error) {
-    res.status(400).send(`There was a problem retrieving user profile. Error: ${error}`)
-  }
+router.get('/profile', auth, (req, res) => {
+    UserService.getUser(req.userId)
+      .then(user => {
+        res.header('tntoken', req.get('tntoken'));
+        res.status(200).send(user);
+      })
+      .catch(error => res.status(400)
+        .send(`There was a problem retrieving user profile. ${error}`));
 });
 
 module.exports = router;

@@ -20,7 +20,7 @@ passport.use(new LocalStrategy({
 	},
 	async (username, password, done) => {
 		try {
-			const user = await UserService.login({ email: username }, password );
+			const user = await UserService.login(username, password );	// username = email
 			if (!user) {
 				return done(null, false, { message: 'Incorrect email or password' });
 			}
@@ -56,20 +56,19 @@ passport.use(new GoogleStrategy({
 		done();
 	}));
 
-router.post('/local/register', async (req, res) => {
-	try {
-		const user = await UserService.createUser(req.body);
-		const token = jwt.sign({ id: user._id },
-			process.env.JWT_SECRET, {
-				expiresIn: 86400
-			});
-		res.setHeader('tntoken', token);
-		res.status(200).send(user);
-
-	} catch(err) {
-		res.status(500)
-			.send(`There was a problem registering a user. Error: ${err}`);
-	}
+router.post('/local/register', (req, res) => {
+	UserService.createUser(req.body)
+		.then(user => {
+			const token = jwt.sign(
+				{ id: user.id },
+				process.env.JWT_SECRET,
+				{ expiresIn: 86400 }
+			);
+			res.setHeader('tntoken', token);
+			res.status(200).send(user);
+		})
+		.catch(error => res.status(500)
+			.send(`There was a problem registering a user. ${error}`));
 });
 
 router.post('/local', (req, res, next) => {
