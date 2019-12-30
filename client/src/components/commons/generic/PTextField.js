@@ -15,8 +15,8 @@ const PTextField = ({
     onChange, 
     onBlur 
 }) => {
+    // TODO - Fix height of title field
     return (
-        <div className={classes.wrapper}>
             <TextField
                 fullWidth
                 select={select}
@@ -33,14 +33,9 @@ const PTextField = ({
             >
                 {children}
             </TextField>
-        </div>
     );
 }
 
-const styles = theme => ({
-    wrapper: {
-        maxWidth: 350
-    }
-});
+const styles = theme => ({});
 
 export default withStyles(styles, { withTheme: true })(PTextField);

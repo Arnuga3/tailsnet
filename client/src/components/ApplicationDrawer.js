@@ -44,7 +44,7 @@ const ApplicationDrawer = ({ classes, dispatch, open, handleDrawer, authenticate
                 </IconButton>
             </div>
             <Divider />
-            <Hidden smUp>
+            <Hidden mdUp>
                 <Search/>
             </Hidden>
             {

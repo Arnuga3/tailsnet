@@ -10,7 +10,6 @@ import BirthDatePicker from './commons/BirthDatePicker';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import Validation from './../utils/Validation';
 import { registerAndStoreUserAccount } from '../actions/userActions';
-import AuthUtils from './../utils/AuthUtils';
 
 const Register = ({ classes, history, dispatch }) => {
 
@@ -93,7 +92,7 @@ const Register = ({ classes, history, dispatch }) => {
             <Paper className={classes.paper}>
                 <form onSubmit={handleSubmit}>
                     <Grid container>
-                        <Grid item xs={2} className={classes.columnWrapper}>
+                        <Grid item className={classes.columnWrapper}>
                             <Typography variant='caption' align='center'>
                                 Have an account?
                             </Typography>

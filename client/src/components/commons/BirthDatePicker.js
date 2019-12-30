@@ -9,7 +9,6 @@ const BirthDatePicker = ({ classes, value, onFormItemChange, errors=[] }) => {
         errors.filter(err => err.name === field);
 
     return (
-        <div className={classes.wrapper}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DatePicker inputVariant='outlined' margin='dense'
                     fullWidth
@@ -24,14 +23,9 @@ const BirthDatePicker = ({ classes, value, onFormItemChange, errors=[] }) => {
                     error={formError('dob').length > 0}
                 />
             </MuiPickersUtilsProvider>
-        </div>
     );
 }
 
-const styles = theme => ({
-    wrapper: {
-        maxWidth: 350
-    }
-});
+const styles = theme => ({});
 
 export default withStyles(styles, { withTheme: true })(BirthDatePicker);

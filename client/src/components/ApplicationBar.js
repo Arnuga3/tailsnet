@@ -20,7 +20,7 @@ const ApplicationBar = ({ classes, open, handleDrawer, authenticated }) => {
         >
             <Toolbar className={classes.toolbar}>
                 <img className={classes.logoImg} src='/TAILSNETW.png' alt='logo'/>
-                <Hidden xsDown>
+                <Hidden smDown>
                     <Search light/>
                 </Hidden>
                 <div>
