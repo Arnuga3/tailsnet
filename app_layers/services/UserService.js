@@ -13,12 +13,13 @@ module.exports = {
     login(email, password) {
         return UserDataAccess.getUserByEmail(email)
             .then(user => {
-                const validPassword = bcrypt.compareSync(password, user.password);
+                const aUser = user[0];  // postgresql single result row
+                const validPassword = bcrypt.compareSync(password, aUser.password);
                 if (!validPassword) return null;
 
-                const token = AuthToken.createToken(user.id);
-                user.token = token;
-                return getUserDTO(user);
+                const token = AuthToken.createToken(aUser.id);
+                aUser.token = token;
+                return getUserDTO(aUser);
             })
             .catch(error => error);
     },
@@ -31,5 +32,9 @@ module.exports = {
         const { password } = data;
         const hashedPassword = bcrypt.hashSync(password, 8);
         return UserDataAccess.createUser({ ...data, password: hashedPassword });
+    },
+
+    getUserPets(userId) {
+        return UserDataAccess.getUserPets(userId);
     }
 };

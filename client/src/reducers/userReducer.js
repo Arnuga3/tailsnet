@@ -2,12 +2,14 @@ import {
     SAVE_USER_ACCOUNT,
     EDIT_USER_ACCOUNT,
     SET_AUTH,
-    LOGOUT
+    LOGOUT,
+    SAVE_USER_PETS
 } from './../actions/userActions';
 
 const defaultState = {
     account: null,
-    authenticated: false
+    authenticated: false,
+    pets: []
 };
 
 const userStore = (state = defaultState, { type, value }) => {
@@ -35,6 +37,12 @@ const userStore = (state = defaultState, { type, value }) => {
             return {
                 ...state,
                 account: null
+            }
+        
+        case SAVE_USER_PETS:
+            return {
+                ...state,
+                pets: value
             }
         
         default:

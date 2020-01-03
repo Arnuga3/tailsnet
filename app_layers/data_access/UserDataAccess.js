@@ -6,7 +6,8 @@ module.exports = {
         return pg.query({
             text: `
                 SELECT id, title, name, surname, dob, email, password
-                FROM users WHERE email = $1
+                FROM users
+                WHERE email = $1
             `,
             values: [email]
         });
@@ -16,7 +17,8 @@ module.exports = {
         return pg.query({
             text: `
                 SELECT title, name, surname, dob, email
-                FROM users WHERE id = $1
+                FROM users
+                WHERE id = $1
             `,
             values: [id]
         });
@@ -31,5 +33,16 @@ module.exports = {
             `,
             values: [title, name, surname, dob, email, password]
         });
-    }
+    },
+
+    getUserPets(userId) {
+        return pg.query({
+            text: `
+                SELECT id, type, name, dob, profile_image
+                FROM pets
+                WHERE user_id = $1
+            `,
+            values: [userId]
+        });
+    },
 };

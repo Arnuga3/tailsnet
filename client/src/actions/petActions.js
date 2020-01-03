@@ -12,20 +12,6 @@ export const storePetAccounts = value => ({
 	value
 });
 
-export function getAndStoreAllPetAccounts() {
-	return {
-        type: 'GET_PET_PROFILES',
-        payload: {
-            request: _get('/api/pets'),
-            options: {
-                onSuccess({ dispatch, response }) {
-                    dispatch(storePetAccounts(response.data));
-                }
-            }
-        }
-    }
-};
-
 export function createAndStorePetAccount(data) {
 	return {
 		type: 'CREATE_PET_PROFILE',

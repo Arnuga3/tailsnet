@@ -8,8 +8,6 @@ const pool = new Pool({
     ssl: true
 });
 
-// TODO - Add db migrations .. https://db-migrate.readthedocs.io/en/latest/Getting%20Started/installation/
-
 module.exports = {
     query: q => {
         const start = Date.now();
@@ -17,7 +15,7 @@ module.exports = {
             .then(res => {
                 const duration = Date.now() - start;
                 console.log('executed query', { query: q, duration, rows: res.rowCount });
-                return res.rows[0];
+                return res.rows;
             }).catch(error => {
                 console.log(error);
                 throw new Error(error);

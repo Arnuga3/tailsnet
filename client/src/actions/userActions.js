@@ -4,6 +4,7 @@ export const SAVE_USER_ACCOUNT = 'SAVE_USER_ACCOUNT';
 export const EDIT_USER_ACCOUNT = 'EDIT_USER_ACCOUNT';
 export const SET_AUTH = 'SET_AUTH';
 export const LOGOUT = 'LOGOUT';
+export const SAVE_USER_PETS = 'SAVE_USER_PETS';
 
 export const storeUserAccount = value => ({
     type: SAVE_USER_ACCOUNT,
@@ -22,6 +23,11 @@ export const setAuthencated = value => ({
 
 export const logout = value => ({
     type: LOGOUT,
+    value
+});
+
+export const storeUserPets = value => ({
+    type: SAVE_USER_PETS,
     value
 });
 
@@ -75,6 +81,20 @@ export function loginAndStoreUserAccount(email, password) {
             options: {
                 onSuccess({ dispatch, response }) {
                     dispatch(storeUserAccount(response.data));
+                }
+            }
+        }
+    }
+}
+
+export function retrieveAndStoreUserPets() {
+    return {
+        type: 'GET_USER_PETS',
+        payload: {
+            request: _get('/api/users/pets'),
+            options: {
+                onSuccess({ dispatch, response }) {
+                    dispatch(storeUserPets(response.data));
                 }
             }
         }

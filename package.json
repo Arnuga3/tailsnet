@@ -7,9 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "build": "npm install",
-    "heroku-prebuild": "cd client && npm install && npm run-script build",
-    "watch-server": "nodemon --watch auth --exec npm run-script start-server",
-    "watch-client": "nodemon --watch client --exec npm run-script start"
+    "heroku-prebuild": "cd client && npm install && npm run-script build"
   },
   "author": "arnuga3",
   "license": "ISC",
@@ -26,8 +24,5 @@
     "passport-google-oauth": "^2.0.0",
     "passport-local": "^1.0.0",
     "pg": "^7.15.1"
-  },
-  "devDependencies": {
-    "nodemon": "^1.19.4"
   }
 }

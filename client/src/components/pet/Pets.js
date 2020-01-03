@@ -8,9 +8,10 @@ import ProfileImage from '../commons/ProfileImage';
 import BirthDatePicker from '../commons/BirthDatePicker';
 import PetType from '../commons/PetType';
 import PageWrapper from '../commons/generic/PageWrapper';
-import { createAndStorePetAccount } from './../../actions/petActions';
+import { retrieveAndStoreUserPets } from '../../actions/userActions';
+import { createAndStorePetAccount } from '../../actions/petActions';
 
-class CreatePetProfile extends React.Component {
+class Pets extends React.Component {
     constructor(props) {
         super(props);
         this.state = { 
@@ -20,9 +21,14 @@ class CreatePetProfile extends React.Component {
         };
         this.petNameRef = React.createRef();
     }
-// TODO - FIX date selection in date picker
-    handleDOBChange = dob =>
-        this.setState({ dob });
+
+    componentDidMount() {
+        const { dispatch } = this.props;
+        dispatch(retrieveAndStoreUserPets());
+    }
+
+    handleDOBChange = (dob, date) =>
+        this.setState({ dob: date });
 
     handleTypeChange = type =>
         this.setState({ petType: type });
@@ -67,13 +73,18 @@ class CreatePetProfile extends React.Component {
     render() {
         
         let { dob } = this.state;
-        const { classes } = this.props;
+        const { classes, userStore } = this.props;
+        const pets = userStore.pets;
 
         return (
-            <PageWrapper pageTitle='Pet Profile'>
+            <PageWrapper pageTitle='Pets'>
                 <Paper className={classes.paper}>
                     <Grid container>
                         <Grid item xs={12} md={6} className={classes.grid}>
+                            {
+                                pets &&
+                                pets.map(pet => <div key={pet.id}>{pet.name}</div>)
+                            }
                             <PetType onTypeChange={this.handleTypeChange}/>
                         </Grid>
                         <Grid item xs={12} md={6} className={classes.grid}>
@@ -122,8 +133,9 @@ const styles = theme => ({
     }
 });
 
-const mapStateToProps = ({ petStore }) => ({
+const mapStateToProps = ({ userStore, petStore }) => ({
+    userStore,
     petStore
 });
 
-export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(CreatePetProfile));
+export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Pets));
