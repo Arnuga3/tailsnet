@@ -6,7 +6,6 @@ import { AppBar, Toolbar, Hidden, IconButton, Button } from '@material-ui/core';
 import clsx from 'clsx';
 import MenuIcon from '@material-ui/icons/Menu';
 import Search from './Search';
-import AuthUtils from './../utils/AuthUtils';
 
 const drawerWidth = 256;
 

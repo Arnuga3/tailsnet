@@ -8,6 +8,7 @@ import ApplicationBar from './ApplicationBar';
 import ApplicationDrawer from './ApplicationDrawer';
 import Home from './Home';
 import Pets from './pet/Pets';
+import CreatePet from './pet/CreatePet';
 import Login from './Login';
 import Register from './Register';
 import UserProfile from './UserProfile';
@@ -31,6 +32,7 @@ const Index = ({ classes }) => {
                     <Route path='/login' component={Login}/>
                     <Route path='/register' component={Register}/>
                     <AuthRoute path='/user/profile' component={UserProfile}/>
+                    <AuthRoute path='/user/pets/create' component={CreatePet}/>
                     <AuthRoute path='/user/pets' component={Pets}/>
                 </Switch>
             </main>

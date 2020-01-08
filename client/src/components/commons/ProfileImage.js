@@ -1,8 +1,9 @@
 import React from 'react';
+import { withStyles } from '@material-ui/core/styles';
 import { Box, Typography } from '@material-ui/core';
 import Image from '@material-ui/icons/Image';
 
-const ProfileImage = ({ image, description=true }) => {
+const ProfileImage = ({ classes, image, description=true }) => {
     return (
         <React.Fragment>
             { description &&
@@ -13,14 +14,14 @@ const ProfileImage = ({ image, description=true }) => {
             {
                 image
                 ?
-                    <img src={image} alt=''/>
+                    <img className={classes.image} src={image} alt=''/>
                 :
                     <Box display="flex" justifyContent="center" alignItems='center' m={1} p={2}
                         width={150}
                         height={150}
                         border={1}
                         borderRadius='50%'
-                        borderColor='text.secondary'
+                        borderColor='secondary.main'
                     >
                         <Image color='disabled' fontSize='large'/>
                     </Box>               
@@ -29,4 +30,12 @@ const ProfileImage = ({ image, description=true }) => {
     );
 }
 
-export default ProfileImage;
+const styles = theme => ({
+    image: {
+        width: `${100}%`,
+        borderTopLeftRadius: 'inherit',
+        borderTopRightRadius: 'inherit',
+    }
+});
+
+export default withStyles(styles)(ProfileImage);

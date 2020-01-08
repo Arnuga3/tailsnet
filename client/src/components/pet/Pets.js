@@ -1,15 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
-import { Grid, Paper } from '@material-ui/core';
-import PTextField from '../commons/generic/PTextField';
-import PButton from '../commons/generic/PButton';
-import ProfileImage from '../commons/ProfileImage';
-import BirthDatePicker from '../commons/BirthDatePicker';
-import PetType from '../commons/PetType';
+import { Link } from 'react-router-dom';
+import { Grid, Paper, IconButton } from '@material-ui/core';
 import PageWrapper from '../commons/generic/PageWrapper';
+import PetCard from './PetCard';
+import Add from '@material-ui/icons/Add';
 import { retrieveAndStoreUserPets } from '../../actions/userActions';
-import { createAndStorePetAccount } from '../../actions/petActions';
 
 class Pets extends React.Component {
     constructor(props) {
@@ -27,52 +24,7 @@ class Pets extends React.Component {
         dispatch(retrieveAndStoreUserPets());
     }
 
-    handleDOBChange = (dob, date) =>
-        this.setState({ dob: date });
-
-    handleTypeChange = type =>
-        this.setState({ petType: type });
-
-    handleCreate = () => {
-        const { dob, petType } = this.state;
-        const { dispatch } = this.props;
-        const isDataValid = this.validateForm();
-        if (isDataValid) {
-            dispatch(createAndStorePetAccount({
-                petName: this.petNameRef.value,
-                dob,
-                petType: petType.type
-            }));
-            this.cleanForm();
-        } else console.error('Not all data provided');
-    };
-
-    cleanForm = () => {
-        this.petNameRef.value = '';
-        this.setState({ dob: null });
-    }
-
-    validateForm = () => {
-        let { petType } = this.state;
-        let freshErrors = [];
-        this.setState({ errors: [] });
-
-        if (petType === null)
-            freshErrors.push({ name: 'petType' });
-
-        if (this.petNameRef.value.trim() === '')
-            freshErrors.push({ name: this.petNameRef.name });
-
-        this.setState({ errors: freshErrors })
-        return freshErrors.length === 0;
-    };
-
-    formError = field =>
-        this.state.errors.filter(err => err.name === field);
-
     render() {
-        
-        let { dob } = this.state;
         const { classes, userStore } = this.props;
         const pets = userStore.pets;
 
@@ -83,31 +35,12 @@ class Pets extends React.Component {
                         <Grid item xs={12} md={6} className={classes.grid}>
                             {
                                 pets &&
-                                pets.map(pet => <div key={pet.id}>{pet.name}</div>)
+                                pets.map(pet => <PetCard key={pet.id} pet={pet}/>)
                             }
-                            <PetType onTypeChange={this.handleTypeChange}/>
+                            <IconButton color='primary' component={Link} to='/user/pets/create' aria-label='add'>
+                                <Add/>
+                            </IconButton>
                         </Grid>
-                        <Grid item xs={12} md={6} className={classes.grid}>
-                            <ProfileImage/>
-                            <div className={classes.fieldWrapper}>
-                                <PTextField
-                                    label='Pet Name'
-                                    name='petName'
-                                    inputRef={el => this.petNameRef = el}
-                                    error={this.formError('petName').length > 0}
-                                >
-                                    Pet Name
-                                </PTextField>
-                            </div>
-                            <div className={classes.fieldWrapper}>
-                                <BirthDatePicker value={dob} onFormItemChange={this.handleDOBChange}/>
-                            </div>
-                        </Grid>
-                    </Grid>
-                    <Grid container justify='center'>
-                        <PButton onClick={this.handleCreate}>
-                            Create Pet Profile
-                        </PButton>
                     </Grid>
                 </Paper>
             </PageWrapper> 
@@ -125,7 +58,6 @@ const styles = theme => ({
     grid: {
         marginTop: theme.spacing(2),
         display: 'flex',
-        flexDirection: 'column',
         alignItems: 'center'
     },
     fieldWrapper: {
@@ -133,9 +65,8 @@ const styles = theme => ({
     }
 });
 
-const mapStateToProps = ({ userStore, petStore }) => ({
-    userStore,
-    petStore
+const mapStateToProps = ({ userStore }) => ({
+    userStore
 });
 
 export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Pets));

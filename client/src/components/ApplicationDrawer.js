@@ -12,7 +12,7 @@ import {
     ListItemIcon,
     ListItemText
 } from '@material-ui/core';
-import Add from '@material-ui/icons/Add';
+import Pets from '@material-ui/icons/Pets';
 import EmojiPeopleIcon from '@material-ui/icons/Person';
 import SettingsApplications from '@material-ui/icons/SettingsApplications';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -53,7 +53,7 @@ const ApplicationDrawer = ({ classes, dispatch, open, handleDrawer, authenticate
                     <List>
                         <ListItem dense button component={Link} to='/user/pets' onClick={handleDrawer}>
                             <ListItemIcon>
-                                <Add/>
+                                <Pets/>
                             </ListItemIcon>
                             <ListItemText primary='Pets'/>
                         </ListItem>
@@ -75,7 +75,7 @@ const ApplicationDrawer = ({ classes, dispatch, open, handleDrawer, authenticate
                     </List>
                     <Divider dense light/>
                     <List>
-                        <ListItem button component={Link} to='/login' onClick={handleLogout}>
+                        <ListItem button dense component={Link} to='/login' onClick={handleLogout}>
                             <ListItemIcon>
                                 <ExitToApp/>
                             </ListItemIcon>
@@ -86,7 +86,7 @@ const ApplicationDrawer = ({ classes, dispatch, open, handleDrawer, authenticate
             }
             <React.Fragment>
                 <List>
-                    <ListItem>
+                    <ListItem dense>
                         <ListItemText primary='Public link'/>
                     </ListItem>
                 </List>

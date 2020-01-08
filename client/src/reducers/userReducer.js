@@ -8,7 +8,7 @@ import {
 
 const defaultState = {
     account: null,
-    authenticated: false,
+    authenticated: null,
     pets: []
 };
 

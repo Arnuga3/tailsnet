@@ -64,7 +64,7 @@ const PetType = ({ classes, onTypeChange }) => {
                         width={80}
                         height={80}
                         border={1}
-                        borderColor='text.secondary'
+                        borderColor='secondary.main'
                     >
                         <Typography variant='overline' align='center'>
                             {type}
