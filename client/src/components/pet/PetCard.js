@@ -42,8 +42,8 @@ const PetCard = ({ classes, pet }) => {
                 <CardMedia
                     component='img'
                     className={classes.media}
-                    image={'/test.jpg'}
-                    title='test'
+                    image={pet.profile_image}
+                    title={pet.name}
                 />
                 <CardContent>
                     <Typography gutterBottom variant='h6' component='h2' color='secondary'>
