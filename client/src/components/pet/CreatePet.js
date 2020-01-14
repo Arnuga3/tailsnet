@@ -77,7 +77,7 @@ class CreatePet extends React.Component {
                             <PetType onTypeChange={this.handleTypeChange}/>
                         </Grid>
                         <Grid item xs={12} md={6} className={classes.grid}>
-                            <ProfileImage/>
+                            <ProfileImage dispatch={this.props.dispatch}/>
                             <div className={classes.fieldWrapper}>
                                 <PTextField
                                     label='Pet Name'

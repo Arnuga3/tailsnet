@@ -87,6 +87,15 @@ export function loginAndStoreUserAccount(email, password) {
     }
 }
 
+export function uploadUserProfileImage(data) {
+    return {
+        type: 'UPLOAD PROFILE IMAGE',
+        payload: {
+            request: _post('/api/users/upload-profile-image', data)
+        }
+    }
+}
+
 export function retrieveAndStoreUserPets() {
     return {
         type: 'GET_USER_PETS',

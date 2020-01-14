@@ -70,7 +70,7 @@ class UserProfile extends React.Component {
                 <Paper className={classes.paper}>
                     <Grid container>
                         <Grid item xs={12} md={6} className={classes.grid}>
-                            <ProfileImage/>
+                            <ProfileImage dispatch={this.props.dispatch} image={user.profile_image}/>
                         </Grid>
                         <Grid item xs={12} md={6} className={classes.grid}>
                             <BasicDetails

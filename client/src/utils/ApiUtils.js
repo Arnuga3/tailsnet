@@ -13,7 +13,10 @@ export const _get = (url) => ({
 export const _post = (url, data) => ({
     method: 'post',
     url,
-    data
+    data,
+    headers: {
+        'Content-Type': 'multipart/form-data'
+    }
 });
 
 export const _put = (url, data) => ({

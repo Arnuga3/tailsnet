@@ -4,13 +4,13 @@ import { IconButton } from '@material-ui/core';
 import ImageSearch from '@material-ui/icons/ImageSearch';
 import AddAPhoto from '@material-ui/icons/AddAPhotoOutlined';
 
-const ImageUpload = ({ classes, onUpload }) => {
+const ImageUpload = ({ classes, onSelect }) => {
 
     const handleChange = e => {
         if (e.target.files && e.target.files[0]) {
             let reader = new FileReader();
             reader.readAsDataURL(e.target.files[0]);
-            reader.onload = ev => onUpload(ev.target.result);
+            reader.onload = ev => onSelect(ev.target.result);
         }
     };
   

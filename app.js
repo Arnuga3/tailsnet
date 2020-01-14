@@ -3,12 +3,14 @@ const path = require('path');
 const UserEndPoint = require('./api/UserEndPoint');
 const PetEndPoint = require('./api/PetEndPoint');
 const AuthController = require('./auth/AuthController');
+const fileUpload = require('express-fileupload');
 const app = express();
 
 require('dotenv').config();
 require('./database/mongodb');
 
 app.use(express.static(path.join(__dirname, '/client/build')));
+app.use(fileUpload());
 
 app.use('/api/users', UserEndPoint);
 app.use('/api/pets', PetEndPoint);

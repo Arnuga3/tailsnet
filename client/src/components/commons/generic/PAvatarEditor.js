@@ -1,20 +1,42 @@
 import React, { useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Slider, IconButton } from '@material-ui/core';
+import { Slider, IconButton, Fab } from '@material-ui/core';
 import AvatarEditor from 'react-avatar-editor';
 import RotateLeft from '@material-ui/icons/RotateLeft';
 import RotateRight from '@material-ui/icons/RotateRight';
 import ZoomIn from '@material-ui/icons/ZoomIn';
 import ZoomOut from '@material-ui/icons/ZoomOut';
+import Save from '@material-ui/icons/SaveOutlined';
 import PImageUpload from './PImageUpload';
+import { uploadUserProfileImage } from './../../../actions/userActions';
 
-const PAvatarEditor = ({ classes, image }) => {
+const PAvatarEditor = ({ classes, dispatch, image }) => {
 
-    // Upload Image
-    const [uploadedImg, setUploadedImg] = useState(null);
-    const handleUpload = image => setUploadedImg(image);
+    // Icon svg, displayed when there is no image
+    const noImage = () => {
+        const iconColor = 'rgba(0,0,0,.1)';
+        const iconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path fill="${iconColor}" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5.04-6.71l-2.75 3.54-1.96-2.36L6.5 17h11l-3.54-4.71z"/></svg>`;
+        return `data:image/svg+xml;utf-8,${iconSVG}`;
+    };
 
-    // Edit Image
+    /* Preview Image */
+    const [selectedImg, setSelectedImg] = useState(null);
+    const handleSelect = image => setSelectedImg(image);
+
+    /* Upload/Save Image */
+    let avatarEditorRef = editor => avatarEditorRef = editor;
+    const handleUpload = () => {
+        if (avatarEditorRef) {
+            const avatarImage = avatarEditorRef.getImageScaledToCanvas();
+            avatarImage.toBlob(blob => {
+                var formData = new FormData();
+                formData.append('avatarImage', blob);
+                dispatch(uploadUserProfileImage(formData));
+            });
+        }
+    };
+
+    /* Edit Image */
     const [degree, setDegree] = useState(0);
     const [zoom, setZoom] = useState(1);        // value 1 - 2
 
@@ -41,23 +63,17 @@ const PAvatarEditor = ({ classes, image }) => {
     // Convert zoom value (1-2) to slider's value (0-100)
     const sliderValue = (zoom - 1) * 100;
 
-    const noImage = () => {
-        // Icon svg
-        const iconColor = 'rgba(0,0,0,.1)';
-        const iconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path fill="${iconColor}" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5.04-6.71l-2.75 3.54-1.96-2.36L6.5 17h11l-3.54-4.71z"/></svg>`;
-        return `data:image/svg+xml;utf-8,${iconSVG}`;
-    };
-
     return (
         <React.Fragment>
             <div className={classes.flexRow}>
                 <AvatarEditor
-                    image={image || uploadedImg || noImage()}
+                    ref={avatarEditorRef}
+                    image={image || selectedImg || noImage()}
                     borderRadius={200}
                     width={250}
                     height={250}
                     border={50}
-                    color={[255, 255, 255, 0.8]}
+                    color={[255, 255, 255, 0.9]}
                     scale={zoom}
                     rotate={degree}
                 />
@@ -65,7 +81,7 @@ const PAvatarEditor = ({ classes, image }) => {
             <div className={classes.flexRow}>
                 <div className={classes.flexColumn}>
 
-                    { image || uploadedImg &&
+                    { (image || selectedImg) &&
                         <div className={classes.zoomSlider}>
                             <IconButton
                                 onClick={() => handleZoom('out')}
@@ -90,7 +106,7 @@ const PAvatarEditor = ({ classes, image }) => {
                     }
                     
                     <div className={classes.flexRow}>
-                        { image || uploadedImg &&
+                        { (image || selectedImg) &&
                             <React.Fragment>
                                 <IconButton
                                     onClick={() => handleRotate('left')}
@@ -106,7 +122,17 @@ const PAvatarEditor = ({ classes, image }) => {
                                 </IconButton>
                             </React.Fragment>
                         }
-                        <PImageUpload onUpload={handleUpload}/>
+                        <PImageUpload onSelect={handleSelect}/>
+                        { (image || selectedImg) &&
+                            <Fab
+                                color='primary'
+                                onClick={handleUpload}
+                                size='medium'
+                                className={classes.iconButton}
+                            >
+                                <Save/>
+                            </Fab>
+                        }
                     </div>
                 </div>
             </div>
