@@ -20,5 +20,8 @@ module.exports = {
                 console.log(error);
                 throw new Error(error);
             });
+    },
+    pool() {
+        return pool;
     }
 }

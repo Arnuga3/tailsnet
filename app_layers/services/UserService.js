@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const AuthToken = require('./../../auth/AuthToken');
 const UserDataAccess = require('./../data_access/UserDataAccess');
+const Utils = require('./../../utils/Utils');
 
 const getUserDTO = user => {
     delete user.id;
@@ -36,5 +37,10 @@ module.exports = {
 
     getUserPets(userId) {
         return UserDataAccess.getUserPets(userId);
+    },
+
+    uploadUserProfileImage(userId, image) {
+        const uniqueImageName = Utils.uuid();
+        return UserDataAccess.uploadUserProfileImage(userId, image, uniqueImageName);
     }
 };

@@ -16,7 +16,10 @@ export function createAndStorePetAccount(data) {
 	return {
 		type: 'CREATE_PET_PROFILE',
 		payload: {
-			request: _post('/api/pets/create', data),
+			request: _post({
+				url: '/api/pets/create',
+				data
+			}),
 			options: {
 				onSuccess({ dispatch, response }) {
                     dispatch(storePetAccounts(response.data));

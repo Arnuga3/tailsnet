@@ -21,24 +21,18 @@ router.get('/profile', auth, (req, res) => {
 });
 
 router.post('/upload-profile-image', auth, (req, res) => {
-  console.log(req.files)
   if (!req.files || Object.keys(req.files).length === 0)
-    return res.status(400).send('File is not uploaded')
+    return res.status(400).send('File is not uploaded');
 
-  let avatarImage = req.files.avatarImage;
-
-  avatarImage.mv('temp/test.png', err => {
-    if (err) return res.status(500).send(err);
-    res.status(200).send();
-  });
-
-  // TODO - Link to the user, save path to an image, etc.
+  UserService.uploadUserProfileImage(req.userId, req.files)
+    .then(() => res.status(200).send())
+    .catch(error => res.status(400)
+      .send(`There was a problem uploading profile image. ${error}`));;
 });
 
 router.get('/pets', auth, (req, res) => {
   UserService.getUserPets(req.userId)
     .then(pets => {
-      console.log(pets)
       res.header('tntoken', req.get('tntoken'));
       res.status(200).send(pets);
     })

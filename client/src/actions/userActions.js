@@ -49,7 +49,10 @@ export function updateAndStoreUserAccount(data) {
     return {
         type: 'UPDATE_USER_PROFILE',
         payload: {
-            request: _put('/api/users/profile', data),
+            request: _put({
+                url: '/api/users/profile',
+                data
+            }),
             options: {
                 onSuccess({ dispatch, response }) {
                     dispatch(storeUserAccount(response.data));
@@ -63,7 +66,10 @@ export function registerAndStoreUserAccount(data) {
     return {
         type: 'REGISTER',
         payload: {
-            request: _post('/auth/local/register', data),
+            request: _post({
+                url: '/auth/local/register',
+                data
+            }),
             options: {
                 onSuccess({ dispatch, response }) {
                     dispatch(storeUserAccount(response.data));
@@ -77,7 +83,10 @@ export function loginAndStoreUserAccount(email, password) {
     return {
         type: 'LOGIN',
         payload: {
-            request: _post('/auth/local', { email, password }),
+            request: _post({
+                url: '/auth/local',
+                data: { email, password }
+            }),
             options: {
                 onSuccess({ dispatch, response }) {
                     dispatch(storeUserAccount(response.data));
@@ -91,7 +100,13 @@ export function uploadUserProfileImage(data) {
     return {
         type: 'UPLOAD PROFILE IMAGE',
         payload: {
-            request: _post('/api/users/upload-profile-image', data)
+            request: _post({
+                url: '/api/users/upload-profile-image',
+                data,
+                options: {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                }
+            })
         }
     }
 }

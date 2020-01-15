@@ -12,7 +12,7 @@ module.exports = {
             values: [email]
         });
     },
-    
+
     getUserById(id) {
         return pg.query({
             text: `
@@ -45,4 +45,42 @@ module.exports = {
             values: [userId]
         });
     },
+
+    uploadUserProfileImage(userId, image, uniqueImageName) {
+
+        const error = (err, client) => {
+            console.error('Error in transaction', err.stack);
+            client.query('ROLLBACK')
+                .catch(err => {
+                    console.error('Error rolling back client', err.stack);
+                    return Promise.reject(err);
+                });
+            return Promise.reject(err);
+        };
+
+        const updateProfileImage = (client, uniqueImageName, userId) => {
+            const updateProfileImageText = `
+                UPDATE users
+                SET profile_image = $1
+                WHERE id = $2
+            `;
+            const values = [uniqueImageName, userId];
+            return client.query(updateProfileImageText, values);
+        };
+
+        const uploadImage = (uniqueImageName) => {
+            image.avatarImage.mv(`temp/${uniqueImageName}.jpg`);
+        }
+
+        return pg.pool().connect()
+            .then(res => {
+                const client = res;
+                return client.query('BEGIN')
+                    .then(() => updateProfileImage(client, uniqueImageName, userId)).catch(err => error(err, client))
+                    .then(() => uploadImage(uniqueImageName)).catch(err => error(err, client))
+                    .then(() => client.query('COMMIT'))
+                    .catch(err => error(err, client));
+            })
+            .catch(err => error(err, client));
+    }
 };

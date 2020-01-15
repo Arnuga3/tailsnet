@@ -29,7 +29,7 @@ const ApplicationDrawer = ({ classes, dispatch, open, handleDrawer, authenticate
         handleDrawer();
     };
 
-    // TODO implement proper logout with token removal on server
+    // FIXME - implement proper logout with token removal on server
     return (
         <Drawer
             className={classes.drawer}

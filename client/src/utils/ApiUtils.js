@@ -10,19 +10,18 @@ export const _get = (url) => ({
     url
 });
 
-export const _post = (url, data) => ({
+export const _post = ({ url, data, options }) => ({
     method: 'post',
     url,
     data,
-    headers: {
-        'Content-Type': 'multipart/form-data'
-    }
+    options
 });
 
-export const _put = (url, data) => ({
+export const _put = ({ url, data, options }) => ({
     method: 'delete',
     url,
-    data
+    data,
+    options
 });
 
 export const _delete = (url, data) => ({
