@@ -20,6 +20,13 @@ router.get('/profile', auth, (req, res) => {
       .send(`There was a problem retrieving user profile. ${error}`));
 });
 
+/* TODO - Implement upload to aws s3:
+  1. Limit the max size can be uploaded
+  2. Implement additional security, monitoring, logging (nr of files/mb can be uploaded, frequency, etc.)
+  3. On request, create temp. access signature/token, allow uploading from client
+  4. Check the min size of file can be uploaded
+*/
+
 router.post('/upload-profile-image', auth, (req, res) => {
   if (!req.files || Object.keys(req.files).length === 0)
     return res.status(400).send('File is not uploaded');

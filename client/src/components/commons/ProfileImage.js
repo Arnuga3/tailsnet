@@ -1,15 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PAvatarEditor from './generic/PAvatarEditor';
-import { Button } from '@material-ui/core';
-// TODO - Add image preview on top of button
-const ProfileImage = ({ dispatch, image='test.jpg' }) => {
-    const [edit, setEdit] = useState(false);
+
+const ProfileImage = ({ dispatch, image }) => {
     return (
-        !image || edit
-        ?   <PAvatarEditor dispatch={dispatch} image={image}/>
-        :   <Button onClick={() => setEdit(true)}>
-                Edit Profile Image
-            </Button>
+        <PAvatarEditor dispatch={dispatch} image={image}/>
     );
 }
 

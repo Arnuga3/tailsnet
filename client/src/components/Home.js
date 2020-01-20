@@ -40,6 +40,7 @@ const Home = ({ classes }) => {
 const styles = theme => ({
     paper: {
         display: 'flex',
+        flexWrap: 'wrap',
         padding: theme.spacing(3)
     },
     card: {

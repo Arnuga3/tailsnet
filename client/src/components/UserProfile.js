@@ -65,14 +65,16 @@ class UserProfile extends React.Component {
 
     render() {
         const { classes, user } = this.props;
+        const profile_image = user && user.profile_image ? `/${user.profile_image}.jpg` : null;
+
         return (
             <PageWrapper pageTitle='User Profile'>
                 <Paper className={classes.paper}>
                     <Grid container>
-                        <Grid item xs={12} md={6} className={classes.grid}>
-                            <ProfileImage dispatch={this.props.dispatch} image={user.profile_image}/>
+                        <Grid item xs={12} md={6}>
+                            <ProfileImage dispatch={this.props.dispatch} image={profile_image}/>
                         </Grid>
-                        <Grid item xs={12} md={6} className={classes.grid}>
+                        <Grid item xs={12} md={6} className={classes.details}>
                             <BasicDetails
                                 title={user.title}
                                 name={user.name}
@@ -88,7 +90,7 @@ class UserProfile extends React.Component {
                     </Grid>
                     <Grid container justify='center'>
                         <PButton disabled={!this.state.touched} onClick={this.handleUpdate}>
-                            Save Changes
+                            Save Details
                         </PButton>
                     </Grid>
                 </Paper>
@@ -103,6 +105,9 @@ const styles = theme => ({
         flexDirection: 'column',
         justifyContent: 'center',
         padding: theme.spacing(3)
+    },
+    details: {
+        marginTop: theme.spacing(3)
     }
 });
 

@@ -16,7 +16,7 @@ module.exports = {
     getUserById(id) {
         return pg.query({
             text: `
-                SELECT title, name, surname, dob, email
+                SELECT title, name, surname, dob, email, profile_image
                 FROM users
                 WHERE id = $1
             `,
@@ -69,7 +69,8 @@ module.exports = {
         };
 
         const uploadImage = (uniqueImageName) => {
-            image.avatarImage.mv(`temp/${uniqueImageName}.jpg`);
+            // TODO - Delete the one that will be replaced if any
+            image.avatarImage.mv(`client/public/${uniqueImageName}.jpg`);
         }
 
         return pg.pool().connect()

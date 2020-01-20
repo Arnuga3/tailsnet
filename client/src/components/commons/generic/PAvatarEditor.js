@@ -21,7 +21,7 @@ const PAvatarEditor = ({ classes, dispatch, image }) => {
 
     /* Preview Image */
     const [selectedImg, setSelectedImg] = useState(null);
-    const handleSelect = image => setSelectedImg(image);
+    const handleSelect = selectedImg => setSelectedImg(selectedImg);
 
     /* Upload/Save Image */
     let avatarEditorRef = editor => avatarEditorRef = editor;
@@ -62,16 +62,19 @@ const PAvatarEditor = ({ classes, dispatch, image }) => {
 
     // Convert zoom value (1-2) to slider's value (0-100)
     const sliderValue = (zoom - 1) * 100;
+    let displayImage = selectedImg ? selectedImg : image;
+    displayImage = displayImage ? displayImage : noImage();
 
     return (
         <React.Fragment>
             <div className={classes.flexRow}>
+                <PImageUpload onSelect={handleSelect}/>
+            </div>
+            <div className={classes.flexRow}>
                 <AvatarEditor
                     ref={avatarEditorRef}
-                    image={image || selectedImg || noImage()}
+                    image={selectedImg || image || noImage()}
                     borderRadius={200}
-                    width={250}
-                    height={250}
                     border={50}
                     color={[255, 255, 255, 0.9]}
                     scale={zoom}
@@ -92,6 +95,8 @@ const PAvatarEditor = ({ classes, dispatch, image }) => {
                             <Slider
                                 min={0}
                                 max={100}
+                                width={250}
+                                height={250}
                                 step={20}
                                 value={sliderValue}
                                 onChange={handleZoomSlider}
@@ -120,18 +125,15 @@ const PAvatarEditor = ({ classes, dispatch, image }) => {
                                 >
                                     <RotateRight/>
                                 </IconButton>
+                                <Fab
+                                    color='primary'
+                                    onClick={handleUpload}
+                                    size='medium'
+                                    className={classes.iconButton}
+                                >
+                                    <Save/>
+                                </Fab>
                             </React.Fragment>
-                        }
-                        <PImageUpload onSelect={handleSelect}/>
-                        { (image || selectedImg) &&
-                            <Fab
-                                color='primary'
-                                onClick={handleUpload}
-                                size='medium'
-                                className={classes.iconButton}
-                            >
-                                <Save/>
-                            </Fab>
                         }
                     </div>
                 </div>
@@ -146,7 +148,8 @@ const styles = theme => ({
     },
     flexRow: {
         display: 'flex',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        flexWrap: 'wrap'
     },
     flexColumn: {
         display: 'flex',
