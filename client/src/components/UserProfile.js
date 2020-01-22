@@ -1,9 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
-import { Paper, Grid } from '@material-ui/core';
+import { Paper, Grid, Button, Box } from '@material-ui/core';
 import PageWrapper from './commons/generic/PageWrapper';
-import PButton from './commons/generic/PButton';
 import ProfileImage from './commons/ProfileImage';
 import BirthDatePicker from './commons/BirthDatePicker';
 import BasicDetails from './user/BasicDetails';
@@ -17,8 +16,7 @@ class UserProfile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            errors: [],
-            touched: false
+            errors: []
         };
     }
 
@@ -29,7 +27,6 @@ class UserProfile extends React.Component {
     handleFormItemChange = (item, value) => {
         const { dispatch } = this.props;
         dispatch(editUserAccount({ [item]: value }));
-        this.setState({ touched: true });
     }
 
     validateForm = () => {
@@ -70,29 +67,34 @@ class UserProfile extends React.Component {
         return (
             <PageWrapper pageTitle='User Profile'>
                 <Paper className={classes.paper}>
-                    <Grid container>
-                        <Grid item xs={12} md={6}>
-                            <ProfileImage dispatch={this.props.dispatch} image={profile_image}/>
+                    { user && 
+                        <Grid container>
+                            <Grid item xs={12} md={6}>
+                                <ProfileImage dispatch={this.props.dispatch} image={profile_image}/>
+                            </Grid>
+                            <Grid item xs={12} md={6}
+                                className={classes.details}
+                                justify='center'
+                            >
+                                <BasicDetails
+                                    title={user.title}
+                                    name={user.name}
+                                    surname={user.surname}
+                                    onFormItemChange={this.handleFormItemChange}
+                                    errors={this.state.errors}
+                                />
+                                <BirthDatePicker value={user.dob || null}
+                                    onFormItemChange={this.handleFormItemChange}
+                                    errors={this.state.errors}
+                                />
+                                <Box display='flex' justifyContent='flex-end' mt={2}>
+                                    <Button variant='contained' color='primary' onClick={this.handleUpdate}>
+                                        Save
+                                    </Button>
+                                </Box>
+                            </Grid>
                         </Grid>
-                        <Grid item xs={12} md={6} className={classes.details}>
-                            <BasicDetails
-                                title={user.title}
-                                name={user.name}
-                                surname={user.surname}
-                                onFormItemChange={this.handleFormItemChange}
-                                errors={this.state.errors}
-                            />
-                            <BirthDatePicker value={user.dob || null}
-                                onFormItemChange={this.handleFormItemChange}
-                                errors={this.state.errors}
-                            />
-                        </Grid>
-                    </Grid>
-                    <Grid container justify='center'>
-                        <PButton disabled={!this.state.touched} onClick={this.handleUpdate}>
-                            Save Details
-                        </PButton>
-                    </Grid>
+                    }
                 </Paper>
             </PageWrapper> 
         )

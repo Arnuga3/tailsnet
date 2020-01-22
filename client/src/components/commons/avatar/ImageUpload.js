@@ -1,8 +1,8 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
+import { Button, IconButton } from '@material-ui/core';
 import ImageSearch from '@material-ui/icons/ImageSearch';
 import AddAPhoto from '@material-ui/icons/AddAPhotoOutlined';
-import PIconButtonText from './PIconButtonText';
 
 const ImageUpload = ({ classes, onSelect }) => {
 
@@ -24,11 +24,17 @@ const ImageUpload = ({ classes, onSelect }) => {
                 onChange={handleChange}
             />
             <label htmlFor='upload-image-file'>
-                <PIconButtonText icon={<ImageSearch/>}>
-                    Select from Device
-                </PIconButtonText>
+                <Button
+                    className={classes.button}
+                    startIcon={<ImageSearch/>}
+                    component='span'
+                >
+                    Upload
+                </Button>
             </label>
-            <PIconButtonText disabled icon={<AddAPhoto/>}/>
+            <IconButton disabled component='span'>
+                <AddAPhoto/>
+            </IconButton>
         </React.Fragment>
     );
 }
@@ -37,7 +43,7 @@ const styles = theme => ({
     input: {
         display: 'none'
     },
-    iconButton: {
+    button: {
         margin: theme.spacing(1)
     }
 });

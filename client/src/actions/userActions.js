@@ -1,10 +1,12 @@
 import { _get, _post, _put } from './../utils/ApiUtils';
+import { sendNotification } from './../utils/notification';
 
 export const SAVE_USER_ACCOUNT = 'SAVE_USER_ACCOUNT';
 export const EDIT_USER_ACCOUNT = 'EDIT_USER_ACCOUNT';
 export const SET_AUTH = 'SET_AUTH';
 export const LOGOUT = 'LOGOUT';
 export const SAVE_USER_PETS = 'SAVE_USER_PETS';
+
 
 export const storeUserAccount = value => ({
     type: SAVE_USER_ACCOUNT,
@@ -21,9 +23,8 @@ export const setAuthencated = value => ({
     value
 });
 
-export const logout = value => ({
-    type: LOGOUT,
-    value
+export const logout = () => ({
+    type: LOGOUT
 });
 
 export const storeUserPets = value => ({
@@ -56,6 +57,7 @@ export function updateAndStoreUserAccount(data) {
             options: {
                 onSuccess({ dispatch, response }) {
                     dispatch(storeUserAccount(response.data));
+                    sendNotification({ dispatch, type: 'success' });
                 }
             }
         }
@@ -106,7 +108,12 @@ export function uploadUserProfileImage(data) {
                 options: {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 }
-            })
+            }),
+            options: {
+                onSuccess({ dispatch, response }) {
+                    sendNotification({ dispatch, type: 'success' });
+                }
+            }
         }
     }
 }

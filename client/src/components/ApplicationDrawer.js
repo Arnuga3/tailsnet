@@ -18,14 +18,16 @@ import SettingsApplications from '@material-ui/icons/SettingsApplications';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import Search from './Search';
-import { logout } from './../utils/ApiUtils';
+import { logout as tokenLogout } from './../utils/ApiUtils';
+import { logout } from './../actions/userActions';
 
 const drawerWidth = 256;
 
 const ApplicationDrawer = ({ classes, dispatch, open, handleDrawer, authenticated }) => {
 
     const handleLogout = () => {
-        logout(dispatch);
+        tokenLogout(dispatch);       // delete auth token
+        dispatch(logout());     // delete user from redux
         handleDrawer();
     };
 

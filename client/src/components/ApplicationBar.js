@@ -6,10 +6,11 @@ import { AppBar, Toolbar, Hidden, IconButton, Button } from '@material-ui/core';
 import clsx from 'clsx';
 import MenuIcon from '@material-ui/icons/Menu';
 import Search from './Search';
+import AvatarDisplay from './commons/avatar/AvatarDisplay';
 
 const drawerWidth = 256;
 
-const ApplicationBar = ({ classes, open, handleDrawer, authenticated }) => {
+const ApplicationBar = ({ classes, open, handleDrawer, authenticated, user }) => {
     const isLoginScreen = window.location.pathname === '/login';
     return (
         <AppBar position='fixed'
@@ -22,12 +23,13 @@ const ApplicationBar = ({ classes, open, handleDrawer, authenticated }) => {
                 <Hidden smDown>
                     <Search light/>
                 </Hidden>
-                <div>
+                <div className={classes.rightSide}>
                     {
-                        (!authenticated && !isLoginScreen) &&
-                        <Button component={Link} to='/login' color='secondary'>
-                            Login
-                        </Button>
+                        (!authenticated && !isLoginScreen)
+                        ? <Button component={Link} to='/login' color='secondary'>Login</Button>
+                        : user
+                            ? <AvatarDisplay user={user}/>
+                            : null
                     }
                     <IconButton
                         color='inherit'
@@ -66,11 +68,16 @@ const styles = theme => ({
     logoImg: {
         width: 45,
         marginRight: theme.spacing(1)
+    },
+    rightSide: {
+        display: 'flex',
+        alignItems: 'center'
     }
 });
 
 const mapStateToProps = ({ userStore }) => ({
-    authenticated: userStore.authenticated
+    authenticated: userStore.authenticated,
+    user: userStore.account
 });
 
 export default connect(mapStateToProps)(withStyles(styles,{withTheme:true})(ApplicationBar));

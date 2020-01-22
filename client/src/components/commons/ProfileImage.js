@@ -1,5 +1,5 @@
 import React from 'react';
-import PAvatarEditor from './generic/PAvatarEditor';
+import PAvatarEditor from './avatar/PAvatarEditor';
 
 const ProfileImage = ({ dispatch, image }) => {
     return (

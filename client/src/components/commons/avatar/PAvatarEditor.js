@@ -7,8 +7,8 @@ import RotateRight from '@material-ui/icons/RotateRight';
 import ZoomIn from '@material-ui/icons/ZoomIn';
 import ZoomOut from '@material-ui/icons/ZoomOut';
 import Save from '@material-ui/icons/SaveOutlined';
-import PImageUpload from './PImageUpload';
-import { uploadUserProfileImage } from './../../../actions/userActions';
+import ImageUpload from './ImageUpload';
+import { uploadUserProfileImage } from '../../../actions/userActions';
 
 const PAvatarEditor = ({ classes, dispatch, image }) => {
 
@@ -55,9 +55,8 @@ const PAvatarEditor = ({ classes, dispatch, image }) => {
     const handleZoom = level => {
         if (level === 'in' && zoom <= 1.8)
             setZoom(zoom + .2);
-        
         if (level === 'out' && zoom >= 1.2)
-            setZoom(zoom - .2);   
+            setZoom(zoom - .2);
     };
 
     // Convert zoom value (1-2) to slider's value (0-100)
@@ -68,7 +67,7 @@ const PAvatarEditor = ({ classes, dispatch, image }) => {
     return (
         <React.Fragment>
             <div className={classes.flexRow}>
-                <PImageUpload onSelect={handleSelect}/>
+                <ImageUpload onSelect={handleSelect}/>
             </div>
             <div className={classes.flexRow}>
                 <AvatarEditor
@@ -152,6 +151,8 @@ const styles = theme => ({
         flexWrap: 'wrap'
     },
     flexColumn: {
+        width: '100%',
+        maxWidth: 350,
         display: 'flex',
         alignItems: 'center',
         flexDirection: 'column'

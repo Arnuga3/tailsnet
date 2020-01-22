@@ -32,7 +32,7 @@ class Pets extends React.Component {
             <PageWrapper pageTitle='Pets'>
                 <Paper className={classes.paper}>
                     <Grid container>
-                        <Grid item xs={12} md={6} className={classes.grid}>
+                        <Grid item className={classes.grid}>
                             {
                                 pets &&
                                 pets.map(pet => <PetCard key={pet.id} pet={pet}/>)
@@ -56,9 +56,9 @@ const styles = theme => ({
         padding: theme.spacing(3)
     },
     grid: {
-        marginTop: theme.spacing(2),
         display: 'flex',
-        alignItems: 'center'
+        justifyContent: 'space-evenly',
+        flexWrap: 'wrap'
     },
     fieldWrapper: {
         margin: `0 ${theme.spacing(1)}px`

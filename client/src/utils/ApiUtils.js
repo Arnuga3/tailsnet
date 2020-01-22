@@ -1,9 +1,6 @@
-import React from 'react';
-import { enqueueSnackbar, closeSnackbar } from './../actions/notificationActions';
-import { IconButton } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
 import AuthUtils from './AuthUtils';
 import { setAuthencated } from './../actions/userActions';
+import { sendNotification } from './notification';
 
 export const _get = (url) => ({
     method: 'get',
@@ -18,7 +15,7 @@ export const _post = ({ url, data, options }) => ({
 });
 
 export const _put = ({ url, data, options }) => ({
-    method: 'delete',
+    method: 'put',
     url,
     data,
     options
@@ -50,17 +47,9 @@ export const handleFailedRequest = (dispatch, error) => {
             window.location.replace('/login');
         }
     }
-
-    dispatch(enqueueSnackbar({
-        message: `${error.response.status}: ${error.response.statusText}`,
-        options: {
-            key: new Date().getTime() + Math.random(),
-            variant: 'error',
-            autoHideDuration: 4000,
-            action: key =>
-                <IconButton onClick={() => dispatch(closeSnackbar(key))} size='small'>
-                    <CloseIcon/>
-                </IconButton>
-        }
-    }));
+    sendNotification({
+        dispatch,
+        type: 'error',
+        msg: `${error.response.status}: ${error.response.statusText}`
+    });
 }
