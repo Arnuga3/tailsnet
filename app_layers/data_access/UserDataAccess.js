@@ -5,7 +5,7 @@ module.exports = {
     getUserByEmail(email) {
         return pg.query({
             text: `
-                SELECT id, title, name, surname, dob, email, password
+                SELECT id, title, name, surname, dob, email, password, profile_image
                 FROM users
                 WHERE email = $1
             `,
@@ -32,6 +32,18 @@ module.exports = {
                 RETURNING title, name, surname, dob, email
             `,
             values: [title, name, surname, dob, email, password]
+        });
+    },
+
+    updateUser({ id, title, name, surname, dob }) {
+        return pg.query({
+            text: `
+                UPDATE users
+                SET title=$2, name=$3, surname=$4, dob=$5
+                WHERE id = $1
+                RETURNING title, name, surname, dob, email
+            `,
+            values: [id, title, name, surname, dob]
         });
     },
 

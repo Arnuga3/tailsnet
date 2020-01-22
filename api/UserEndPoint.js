@@ -20,6 +20,17 @@ router.get('/profile', auth, (req, res) => {
       .send(`There was a problem retrieving user profile. ${error}`));
 });
 
+router.put('/profile', auth, (req, res) => {
+  UserService.updateUser({ id: req.userId, ...req.body })
+    .then(user => {
+      const aUser = user[0];
+      res.header('tntoken', req.get('tntoken'));
+      res.status(200).send(aUser);
+    })
+    .catch(error => res.status(400)
+      .send(`There was a problem retrieving user profile. ${error}`));
+});
+
 /* TODO - Implement upload to aws s3:
   1. Limit the max size can be uploaded
   2. Implement additional security, monitoring, logging (nr of files/mb can be uploaded, frequency, etc.)

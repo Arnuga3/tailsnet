@@ -35,6 +35,10 @@ module.exports = {
         return UserDataAccess.createUser({ ...data, password: hashedPassword });
     },
 
+    updateUser(data) {
+        return UserDataAccess.updateUser(data);
+    },
+
     getUserPets(userId) {
         return UserDataAccess.getUserPets(userId);
     },
