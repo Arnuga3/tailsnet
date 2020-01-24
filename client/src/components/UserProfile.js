@@ -1,22 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
-import { Paper, Grid, Button, Box } from '@material-ui/core';
+import { Paper, Grid } from '@material-ui/core';
 import PageWrapper from './commons/generic/PageWrapper';
-import ProfileImage from './commons/ProfileImage';
-import BirthDatePicker from './commons/BirthDatePicker';
-import BasicDetails from './user/BasicDetails';
+import ProfAvatarEditor from './commons/avatar/ProfAvatarEditor';
+import ProfAvatar from './commons/avatar/ProfAvatar';
+import DetailsRead from './user/DetailsRead';
+import DetailsEdit from './user/DetailsEdit';
 import {
-    retrieveAndStoreUserAccount,
-    editUserAccount,
-    updateAndStoreUserAccount
+    retrieveAndStoreUserAccount
 } from './../actions/userActions';
 
 class UserProfile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            errors: []
+            editAvatar: false,
+            editDetails: false
         };
     }
 
@@ -24,44 +24,18 @@ class UserProfile extends React.Component {
         this.props.dispatch(retrieveAndStoreUserAccount());
     }
 
-    handleFormItemChange = (item, value) => {
-        const { dispatch } = this.props;
-        dispatch(editUserAccount({ [item]: value }));
+    handleAvatarEdit = () => {
+        this.setState({ editAvatar: !this.state.editAvatar });
     }
 
-    validateForm = () => {
-        const { title, name, surname, dob } = this.props.user;
-        let freshErrors = [];
-
-        if (title === 0)
-            freshErrors.push({ name: 'title' });
-
-        if (name.trim() === '')
-            freshErrors.push({ name: 'name' });
-
-        if (surname.trim() === '')
-            freshErrors.push({ name: 'surname' });
-
-        if (dob === null)
-            freshErrors.push({ name: 'dob' });
-
-        this.setState({ errors: freshErrors });
-        return freshErrors.length === 0;
-    };
-
-    handleUpdate = () => {
-        const { dispatch, user } = this.props;
-        const isDataValid = this.validateForm();
-
-        if(isDataValid)
-            dispatch(updateAndStoreUserAccount(user));
-    };
-
-    formError = field =>
-        this.state.errors.filter(err => err.name === field);
+    handleDetailsEdit = () => {
+        this.setState({ editDetails: !this.state.editDetails });
+    }
 
     render() {
-        const { classes, user } = this.props;
+        const { editAvatar, editDetails } = this.state;
+
+        const { dispatch, classes, user } = this.props;
         const profile_image = user && user.profile_image ? `/${user.profile_image}.jpg` : null;
 
         return (
@@ -70,28 +44,21 @@ class UserProfile extends React.Component {
                     { user && 
                         <Grid container>
                             <Grid item xs={12} md={6}>
-                                <ProfileImage dispatch={this.props.dispatch} image={profile_image}/>
+                                {
+                                    editAvatar
+                                    ? <ProfAvatarEditor dispatch={dispatch} image={profile_image} onUpdate={this.handleAvatarEdit}/>
+                                    : <ProfAvatar image={profile_image} user={user} onEdit={this.handleAvatarEdit}/>
+                                }
                             </Grid>
                             <Grid item xs={12} md={6}
                                 className={classes.details}
                                 justify='center'
                             >
-                                <BasicDetails
-                                    title={user.title}
-                                    name={user.name}
-                                    surname={user.surname}
-                                    onFormItemChange={this.handleFormItemChange}
-                                    errors={this.state.errors}
-                                />
-                                <BirthDatePicker value={user.dob || null}
-                                    onFormItemChange={this.handleFormItemChange}
-                                    errors={this.state.errors}
-                                />
-                                <Box display='flex' justifyContent='flex-end' mt={2}>
-                                    <Button variant='contained' color='primary' onClick={this.handleUpdate}>
-                                        Save
-                                    </Button>
-                                </Box>
+                                {
+                                    editDetails
+                                    ? <DetailsEdit user={user} onUpdate={this.handleDetailsEdit}/>
+                                    : <DetailsRead user={user} onEdit={this.handleDetailsEdit}/>
+                                }
                             </Grid>
                         </Grid>
                     }

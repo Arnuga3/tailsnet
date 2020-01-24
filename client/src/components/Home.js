@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { Paper, Typography } from '@material-ui/core';
 import PageWrapper from './commons/generic/PageWrapper';
-import ProfileImage from './commons/ProfileImage';
+// import ProfileImage from './commons/ProfileImage';
 
 const profiles = [
     {
@@ -26,7 +26,7 @@ const Home = ({ classes }) => {
             <Paper className={classes.paper}>
                 {profiles.map(p =>
                     <Paper key={p.id} className={classes.card} component={Link} to={`/pet/profile/${p.id}`}>
-                        <ProfileImage description={false}/>
+                        {/* <ProfileImage description={false}/> */}
                         <Typography variant='subtitle1' color='primary'>
                             {p.name}
                         </Typography>

@@ -10,7 +10,7 @@ import Save from '@material-ui/icons/SaveOutlined';
 import ImageUpload from './ImageUpload';
 import { uploadUserProfileImage } from '../../../actions/userActions';
 
-const PAvatarEditor = ({ classes, dispatch, image }) => {
+const ProfAvatarEditor = ({ classes, dispatch, image, onUpdate }) => {
 
     // Icon svg, displayed when there is no image
     const noImage = () => {
@@ -32,6 +32,7 @@ const PAvatarEditor = ({ classes, dispatch, image }) => {
                 var formData = new FormData();
                 formData.append('avatarImage', blob);
                 dispatch(uploadUserProfileImage(formData));
+                onUpdate();
             });
         }
     };
@@ -164,4 +165,4 @@ const styles = theme => ({
     }
 });
 
-export default withStyles(styles)(PAvatarEditor);
+export default withStyles(styles)(ProfAvatarEditor);

@@ -15,7 +15,10 @@ const AvatarDisplay = ({ classes, user }) => {
             />
         :
             <Avatar className={classes.avatarCaps}>
-                {user.name[0].toUpperCase() + user.surname[0].toUpperCase()}
+                {  
+                    (user.name && user.surname) &&
+                    `${user.name[0].toUpperCase()} ${user.surname[0].toUpperCase()}`
+                }
             </Avatar>
     );
 }

@@ -4,7 +4,6 @@ import { withStyles } from '@material-ui/core/styles';
 import { Grid, Paper } from '@material-ui/core';
 import PTextField from '../commons/generic/PTextField';
 import PButton from '../commons/generic/PButton';
-import ProfileImage from '../commons/ProfileImage';
 import BirthDatePicker from '../commons/BirthDatePicker';
 import PetType from '../commons/PetType';
 import PageWrapper from '../commons/generic/PageWrapper';
@@ -77,7 +76,7 @@ class CreatePet extends React.Component {
                             <PetType onTypeChange={this.handleTypeChange}/>
                         </Grid>
                         <Grid item xs={12} md={6} className={classes.grid}>
-                            <ProfileImage dispatch={this.props.dispatch}/>
+                            {/* <ProfileImage dispatch={this.props.dispatch}/> */}
                             <div className={classes.fieldWrapper}>
                                 <PTextField
                                     label='Pet Name'
