@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { Avatar, Tooltip, Card, CardActionArea, Typography, CardMedia, CardContent } from '@material-ui/core';
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
+import Helper from './../../utils/Helper';
 
 const PetCard = ({ classes, pet }) => {
+    const [imgLoadError, setImgLoadError] = useState(false);
+
     const calcAge = date => {
         const today = new Date();
         const dob = new Date(date);
@@ -34,28 +37,48 @@ const PetCard = ({ classes, pet }) => {
         return ageStr;
     };
 
-    const age = calcAge(pet.dob);
+    const firstTwoTypeCaps = type => {
+        const firstTwoLetters = `${type[0]}${type[1]}`;
+        return firstTwoLetters.toUpperCase();
+    };
+
+    const { id, name, type, dob, profile_image } = pet;
+    const age = calcAge(dob);
+    const profileImageLoaded = profile_image && !imgLoadError;
 
     return (
         <Card className={classes.card}>
-            <CardActionArea component={Link} to={`/user/pets/${pet.id}`}>
+            <CardActionArea component={Link} to={`/user/pets/${id}`}>
                 <CardMedia
                     component='img'
                     className={classes.media}
-                    image={pet.profile_image}
-                    title={pet.name}
+                    image={
+                        profileImageLoaded
+                        ? profile_image
+                        : Helper.NO_IMAGE()
+                    }
+                    title={name}
+                    onError={() => setImgLoadError(true)}
                 />
                 <CardContent>
-                    <Typography gutterBottom variant='h6' component='h2' color='secondary'>
-                        {pet.name}
+                    <Typography gutterBottom
+                        variant='h6'
+                        component='h2'
+                        color='secondary'
+                    >
+                        {name}
                     </Typography>
-                    <Typography gutterBottom variant='body2' component='p' color='textLight'>
-                        {pet.name}
+                    <Typography gutterBottom
+                        variant='body2'
+                        component='p'
+                        color='textLight'
+                    >
+                        {type}
                     </Typography>
                     <AvatarGroup>
-                        <Tooltip title={pet.type} placement='top'>
+                        <Tooltip title={type} placement='top'>
                             <Avatar className={classes.avatar}>
-                                {pet.type[0].toUpperCase() + pet.type[1].toUpperCase()}
+                                {firstTwoTypeCaps(type)}
                             </Avatar>
                         </Tooltip>
                         <Avatar className={classes.avatarAge}>{age}</Avatar>

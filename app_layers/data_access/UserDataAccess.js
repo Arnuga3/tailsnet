@@ -59,7 +59,6 @@ module.exports = {
     },
 
     uploadUserProfileImage(userId, image, uniqueImageName) {
-
         const error = (err, client) => {
             console.error('Error in transaction', err.stack);
             client.query('ROLLBACK')
@@ -72,7 +71,7 @@ module.exports = {
 
         const updateProfileImage = (client, uniqueImageName, userId) => {
             const updateProfileImageText = `
-                UPDATE users
+                UPDATE pets
                 SET profile_image = $1
                 WHERE id = $2
             `;

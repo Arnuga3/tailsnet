@@ -6,6 +6,7 @@ import Edit from '@material-ui/icons/EditOutlined';
 
 const DetailsRead = ({ user, onEdit }) => {
     const { title, name, surname, dob, email } = user;
+    
     const formatDate = dateStr => {
         const date = new Date(dateStr);
         return date.toDateString();

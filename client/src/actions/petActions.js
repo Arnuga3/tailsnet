@@ -1,4 +1,6 @@
 import { _get, _post } from './../utils/ApiUtils';
+import { sendNotification } from './../utils/notification';
+
 export const SAVE_PET_ACCOUNT = 'SAVE_PET_ACCOUNT';
 export const SAVE_PET_ACCOUNTS = 'SAVE_PET_ACCOUNTS';
 
@@ -27,4 +29,24 @@ export function createAndStorePetAccount(data) {
 			}
 		}
 	}
-};
+}
+
+export function uploadPetProfileImage(data) {
+    return {
+        type: 'UPLOAD PET PROFILE IMAGE',
+        payload: {
+            request: _post({
+                url: '/api/pets/upload-profile-image',
+                data,
+                options: {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                }
+            }),
+            options: {
+                onSuccess({ dispatch, response }) {
+                    sendNotification({ dispatch, type: 'success' });
+                }
+            }
+        }
+    }
+}

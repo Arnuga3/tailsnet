@@ -2,14 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { Paper, Grid } from '@material-ui/core';
-import PageWrapper from './commons/generic/PageWrapper';
-import ProfAvatarEditor from './commons/avatar/ProfAvatarEditor';
-import ProfAvatar from './commons/avatar/ProfAvatar';
-import DetailsRead from './user/DetailsRead';
-import DetailsEdit from './user/DetailsEdit';
+import PageWrapper from '../commons/generic/PageWrapper';
+import ProfAvatarEditor from '../commons/avatar/ProfAvatarEditor';
+import ProfAvatar from '../commons/avatar/ProfAvatar';
+import DetailsRead from './DetailsRead';
+import DetailsEdit from './DetailsEdit';
 import {
-    retrieveAndStoreUserAccount
-} from './../actions/userActions';
+    retrieveAndStoreUserAccount,
+    uploadUserProfileImage
+} from '../../actions/userActions';
 
 class UserProfile extends React.Component {
     constructor(props) {
@@ -46,8 +47,15 @@ class UserProfile extends React.Component {
                             <Grid item xs={12} md={6}>
                                 {
                                     editAvatar
-                                    ? <ProfAvatarEditor dispatch={dispatch} image={profile_image} onUpdate={this.handleAvatarEdit}/>
-                                    : <ProfAvatar image={profile_image} user={user} onEdit={this.handleAvatarEdit}/>
+                                    ?
+                                        <ProfAvatarEditor
+                                            dispatch={dispatch}
+                                            image={profile_image}
+                                            onUpdate={uploadUserProfileImage}
+                                            onUpdateFinish={this.handleAvatarEdit}
+                                        />
+                                    :
+                                        <ProfAvatar image={profile_image} user={user} onEdit={this.handleAvatarEdit}/>
                                 }
                             </Grid>
                             <Grid item xs={12} md={6}

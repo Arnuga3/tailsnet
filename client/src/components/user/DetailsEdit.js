@@ -44,11 +44,8 @@ const DetailsEdit = ({ classes, dispatch, user, onUpdate }) => {
         }
     };
 
-    const formError = field =>
-        errors.filter(err => err.name === field);
-
     return (
-        <div className={classes.wrapper}>
+        <React.Fragment>
             <BasicDetails
                 title={user.title}
                 name={user.name}
@@ -61,6 +58,9 @@ const DetailsEdit = ({ classes, dispatch, user, onUpdate }) => {
                 errors={errors}
             />
             <Box display='flex' justifyContent='flex-end' mt={2}>
+                <Button onClick={onUpdate} className={classes.cancelBtn}>
+                     Cancel
+                </Button>
                 <Button
                     variant='contained'
                     color='primary'
@@ -70,13 +70,13 @@ const DetailsEdit = ({ classes, dispatch, user, onUpdate }) => {
                     Save
                 </Button>
             </Box>
-        </div>
+        </React.Fragment>
     );
 };
 
 const styles = theme => ({
-    wrapper: {
-
+    cancelBtn: {
+        marginRight: theme.spacing(1)
     }
 });
 
@@ -84,4 +84,4 @@ const mapStateToProps = ({ userStore }) => ({
     user: userStore.account
 });
 
-export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(DetailsEdit));
+export default connect(mapStateToProps)(withStyles(styles,{withTheme: true})(DetailsEdit));
