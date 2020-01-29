@@ -10,6 +10,7 @@ require('dotenv').config();
 require('./database/mongodb');
 
 app.use(express.static(path.join(__dirname, '/client/build')));
+app.use('/category', express.static(path.join(__dirname, 'public/icons')))
 app.use(fileUpload());
 
 app.use('/api/users', UserEndPoint);
