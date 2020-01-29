@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { Avatar, Tooltip, Card, CardActionArea, Typography, CardMedia, CardContent } from '@material-ui/core';
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
-import Helper from './../../utils/Helper';
 
 const PetCard = ({ classes, pet }) => {
     const [imgLoadError, setImgLoadError] = useState(false);
@@ -42,6 +41,10 @@ const PetCard = ({ classes, pet }) => {
         return firstTwoLetters.toUpperCase();
     };
 
+    const getIcon = type => {
+        return `/category/${type.toLowerCase()}.png`;
+    };
+
     const { id, name, type, dob, profile_image } = pet;
     const age = calcAge(dob);
     const profileImageLoaded = profile_image && !imgLoadError;
@@ -51,11 +54,11 @@ const PetCard = ({ classes, pet }) => {
             <CardActionArea component={Link} to={`/user/pets/${id}`}>
                 <CardMedia
                     component='img'
-                    className={classes.media}
+                    className={profileImageLoaded ? classes.profileImage : classes.typeIcon}
                     image={
                         profileImageLoaded
                         ? profile_image
-                        : Helper.NO_IMAGE()
+                        : getIcon(type)
                     }
                     title={name}
                     onError={() => setImgLoadError(true)}
@@ -96,8 +99,15 @@ const styles = theme => ({
         textDecoration: 'none',
         margin: theme.spacing(2)
     },
-    media: {
+    profileImage: {
         height: 140
+    },
+    typeIcon: {
+        height: 100,
+        width: 100,
+        margin: '0 auto',
+        padding: 15,
+        opacity: .9
     },
     avatar: {
         color: theme.palette.primary.main,

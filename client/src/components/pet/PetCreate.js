@@ -7,6 +7,7 @@ import PageWrapper from '../commons/generic/PageWrapper';
 import PTextField from './../commons/generic/PTextField';
 import BirthDatePicker from './../commons/BirthDatePicker';
 import ProfAvatarEditor from './../commons/avatar/ProfAvatarEditor';
+import PetType from './PetType';
 
 const PetCreate = ({ dispatch, classes }) => {
     const [petType, setPetType] = useState(null);
@@ -25,14 +26,15 @@ const PetCreate = ({ dispatch, classes }) => {
     const handleTypeChange = type => setPetType(type);
 
     const handleCreate = () => {
-        const isDataValid = this.validateForm();
+        const isDataValid = validateForm();
         if (isDataValid) {
             dispatch(createAndStorePetAccount({
-                petName: this.petNameRef.value,
+                petName: petNameRef.value,
                 dob,
                 petType: petType.type
             }));
             clearForm();
+            handleNext();
         } else console.error('Not all data provided');
     };
 
@@ -62,6 +64,7 @@ const PetCreate = ({ dispatch, classes }) => {
         return (
             // TODO - Add type here
             <React.Fragment>
+                <PetType onTypeChange={handleTypeChange}/>
                 <PTextField
                     label='Pet Name'
                     name='petName'
@@ -136,7 +139,7 @@ const PetCreate = ({ dispatch, classes }) => {
                                         <Button
                                             variant='contained'
                                             color='primary'
-                                            onClick={handleNext}
+                                            onClick={handleCreate}
                                             className={classes.button}
                                         >
                                             Save Details

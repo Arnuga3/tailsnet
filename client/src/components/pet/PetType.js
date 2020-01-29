@@ -15,15 +15,11 @@ const PetType = ({ classes, onTypeChange }) => {
         },
         {
             id: '3',
-            type: 'Water animal'
-        },
-        {
-            id: '4',
-            type: 'Outdoor animal'
+            type: 'Fish'
         },
         {
             id: '5',
-            type: 'Reptile'
+            type: 'Lizard'
         },
         {
             id: '6',
@@ -31,11 +27,11 @@ const PetType = ({ classes, onTypeChange }) => {
         },
         {
             id: '7',
-            type: 'Roddent'
+            type: 'Rabbit'
         },
         {
             id: '8',
-            type: 'Other'
+            type: 'Bird'
         }
     ];
 
@@ -47,6 +43,10 @@ const PetType = ({ classes, onTypeChange }) => {
         setTypeId(id);
     };
 
+    const getIcon = type => {
+        return `/category/${type.toLowerCase()}.png`;
+    };
+
     return (
         <React.Fragment>
             <Typography variant='caption' gutterBottom>
@@ -54,21 +54,17 @@ const PetType = ({ classes, onTypeChange }) => {
             </Typography>
             <div className={classes.wrapper}>
                 {types.map(({ id, type }) =>
-                    <Box key={id} m={1}
+                    <Box key={id} m={1} bgcolor={id === typeId ? 'primary.main' : 'transparent'}
                         onClick={() => handleTypeClick(id)}
-                        bgcolor={id === typeId ? 'rgba(0,0,0,.1)' : 'transparent'}
                         display='flex'
                         alignItems='center'
                         justifyContent='center'
-                        flexDirection='row'
+                        flexDirection='column'
                         width={80}
                         height={80}
-                        border={1}
-                        borderColor='secondary.main'
                     >
-                        <Typography variant='overline' align='center'>
-                            {type}
-                        </Typography>
+                        {type && <img className={classes.categoryIcon} src={getIcon(type)} alt={type}/>}
+                        <Typography variant='caption'>{type}</Typography>
                     </Box>
                 )}
             </div>
@@ -81,6 +77,10 @@ const styles = theme => ({
         display: 'flex',
         flexWrap: 'wrap',
         justifyContent: 'space-evenly'
+    },
+    categoryIcon: {
+        width: '70%',
+        opacity: .9
     }
 });
 
