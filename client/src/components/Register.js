@@ -87,6 +87,11 @@ const Register = ({ classes, history, dispatch }) => {
     const formError = field =>
         errors.filter(err => err.name === field);
 
+    const hasError = field =>  {
+        const fieldErrorArr = formError(field);
+        return fieldErrorArr.length > 0;
+    };
+
     return (
         <div className={classes.wrapper}>
             <Paper className={classes.paper}>
@@ -115,7 +120,7 @@ const Register = ({ classes, history, dispatch }) => {
                                 />
                                 <BirthDatePicker value={user.dob}
                                     onFormItemChange={handleFormItemChange}
-                                    errors={errors}
+                                    errors={hasError('dob')}
                                 />
                             </div>
                         </Grid>
@@ -123,21 +128,21 @@ const Register = ({ classes, history, dispatch }) => {
                             <div className={classes.columnWrapper}>
                                 <PTextField name='email' inputRef={el => emailRef = el}
                                     label={
-                                        formError('email').length > 0 && formError('email')[0].error
+                                        hasError('email') && formError('email')[0].error
                                             ? `Email - ${formError('email')[0].error}`
                                             : 'Email'
                                     }
-                                    error={formError('email').length > 0}
+                                    error={hasError('email')}
                                 >
                                     Email
                                 </PTextField>
                                 <PTextField name='emailRepeat' inputRef={el => emailRepeatRef = el}
                                     label={
-                                        formError('emailRepeat').length > 0 && formError('emailRepeat')[0].error
+                                        hasError('emailRepeat') && formError('emailRepeat')[0].error
                                             ? `Repeat email - ${formError('emailRepeat')[0].error}`
                                             : 'Repeat email'
                                     }
-                                    error={formError('emailRepeat').length > 0}
+                                    error={hasError('emailRepeat')}
                                 >
                                     Repeat Email
                                 </PTextField>
@@ -147,17 +152,17 @@ const Register = ({ classes, history, dispatch }) => {
                                             ? `Password - ${passwordStrength}`
                                             : 'Passowrd'
                                     }
-                                    error={formError('password').length > 0}
+                                    error={hasError('password')}
                                 >
                                     Password
                                 </PTextField>
                                 <PTextField name='passwordRepeat' type='password' inputRef={el => passwordRepeatRef = el}
                                     label={
-                                        formError('passwordRepeat').length > 0 && formError('passwordRepeat')[0].error
+                                        hasError('passwordRepeat') && formError('passwordRepeat')[0].error
                                             ? `Repeat password - ${formError('passwordRepeat')[0].error}`
                                             : 'Repeat password'
                                     }
-                                    error={formError('passwordRepeat').length > 0}
+                                    error={hasError('passwordRepeat')}
                                 >
                                     Repeat Password
                                 </PTextField>

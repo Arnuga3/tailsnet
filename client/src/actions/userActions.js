@@ -36,7 +36,7 @@ export function retrieveAndStoreUserAccount() {
     return {
         type: 'GET_USER_PROFILE',
         payload: {
-            request: _get('/api/users/profile'),
+            request: _get('/api/user/profile'),
             options: {
                 onSuccess({ dispatch, response }) {
                     dispatch(storeUserAccount(response.data));
@@ -51,7 +51,7 @@ export function updateAndStoreUserAccount(data) {
         type: 'UPDATE_USER_PROFILE',
         payload: {
             request: _put({
-                url: '/api/users/profile',
+                url: '/api/user/profile',
                 data
             }),
             options: {
@@ -103,7 +103,7 @@ export function uploadUserProfileImage(data) {
         type: 'UPLOAD PROFILE IMAGE',
         payload: {
             request: _post({
-                url: '/api/users/upload-profile-image',
+                url: '/api/user/upload-profile-image',
                 data,
                 options: {
                     headers: { 'Content-Type': 'multipart/form-data' }
@@ -122,7 +122,7 @@ export function retrieveAndStoreUserPets() {
     return {
         type: 'GET_USER_PETS',
         payload: {
-            request: _get('/api/users/pets'),
+            request: _get('/api/user/pets'),
             options: {
                 onSuccess({ dispatch, response }) {
                     dispatch(storeUserPets(response.data));

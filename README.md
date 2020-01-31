@@ -1,5 +1,17 @@
 # Tailsnet
 
+## API
+
+### **User**
+
+GET /api/user/profile
+
+GET /api/user/pets
+
+### **Pet**
+
+GET /api/pet/create
+
 ## Database - PostgreSQL
 
 

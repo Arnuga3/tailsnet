@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Box, Typography } from '@material-ui/core';
 
-const PetType = ({ classes, onTypeChange }) => {
-
+const PetType = ({ classes, onTypeChange, errors }) => {
+// TODO - Add this to db
     const types = [
         {
             id: '1',
@@ -47,10 +47,16 @@ const PetType = ({ classes, onTypeChange }) => {
         return `/category/${type.toLowerCase()}.png`;
     };
 
+    const textColor = errors ? 'error' : '';
+
     return (
         <React.Fragment>
-            <Typography variant='caption' gutterBottom>
-                Pet Type
+            <Typography variant='caption' gutterBottom color={textColor}>
+                {
+                    errors
+                    ? 'Pet Type - *required'
+                    : 'Pet Type'
+                }
             </Typography>
             <div className={classes.wrapper}>
                 {types.map(({ id, type }) =>

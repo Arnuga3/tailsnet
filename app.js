@@ -13,8 +13,8 @@ app.use(express.static(path.join(__dirname, '/client/build')));
 app.use('/category', express.static(path.join(__dirname, 'public/icons')))
 app.use(fileUpload());
 
-app.use('/api/users', UserEndPoint);
-app.use('/api/pets', PetEndPoint);
+app.use('/api/user', UserEndPoint);
+app.use('/api/pet', PetEndPoint);
 app.use('/auth', AuthController);
 
 // Handle the rest endpoints

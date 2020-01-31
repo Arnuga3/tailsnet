@@ -44,6 +44,11 @@ const DetailsEdit = ({ classes, dispatch, user, onUpdate }) => {
         }
     };
 
+    const hasError = field =>  {
+        const fieldErrorArr = errors.filter(err => err.name === field);
+        return fieldErrorArr.length > 0;
+    }
+
     return (
         <React.Fragment>
             <BasicDetails
@@ -55,7 +60,7 @@ const DetailsEdit = ({ classes, dispatch, user, onUpdate }) => {
             />
             <BirthDatePicker value={user.dob || null}
                 onFormItemChange={handleFormItemChange}
-                errors={errors}
+                errors={hasError('dob')}
             />
             <Box display='flex' justifyContent='flex-end' mt={2}>
                 <Button onClick={onUpdate} className={classes.cancelBtn}>

@@ -1,13 +1,8 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 
-const BirthDatePicker = ({ classes, value, onFormItemChange, errors=[] }) => {
-
-    const formError = field =>
-        errors.filter(err => err.name === field);
-
+const BirthDatePicker = ({ value, onFormItemChange, errors=false }) => {
     return (
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <DatePicker inputVariant='outlined' margin='dense'
@@ -20,12 +15,10 @@ const BirthDatePicker = ({ classes, value, onFormItemChange, errors=[] }) => {
                     views={['year', 'month', 'date']}
                     value={value}
                     onChange={date => onFormItemChange('dob', date)}
-                    error={formError('dob').length > 0}
+                    error={errors}
                 />
             </MuiPickersUtilsProvider>
     );
 }
 
-const styles = theme => ({});
-
-export default withStyles(styles, { withTheme: true })(BirthDatePicker);
+export default BirthDatePicker;

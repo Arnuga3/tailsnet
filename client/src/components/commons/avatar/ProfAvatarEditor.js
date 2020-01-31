@@ -7,10 +7,11 @@ import RotateRight from '@material-ui/icons/RotateRight';
 import ZoomIn from '@material-ui/icons/ZoomIn';
 import ZoomOut from '@material-ui/icons/ZoomOut';
 import Save from '@material-ui/icons/SaveOutlined';
+import Clear from '@material-ui/icons/Clear';
 import ImageUpload from './ImageUpload';
 import Helper from './../../../utils/Helper';
 
-const ProfAvatarEditor = ({ classes, dispatch, image, onUpdate, onUpdateFinish }) => {
+const ProfAvatarEditor = ({ classes, dispatch, image, onUpdate, onUpdateFinish, onCancel }) => {
 
     /* Preview Image */
     const [selectedImg, setSelectedImg] = useState(null);
@@ -130,6 +131,13 @@ const ProfAvatarEditor = ({ classes, dispatch, image, onUpdate, onUpdateFinish }
                                     className={classes.iconButton}
                                 >
                                     <Save/>
+                                </Fab>
+                                <Fab
+                                    onClick={onCancel}
+                                    size='medium'
+                                    className={classes.iconButton}
+                                >
+                                    <Clear/>
                                 </Fab>
                             </React.Fragment>
                         }

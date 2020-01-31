@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
-import { Grid, Paper, IconButton } from '@material-ui/core';
+import { Paper, Card, CardActionArea } from '@material-ui/core';
 import PageWrapper from '../commons/generic/PageWrapper';
 import PetCard from './PetCard';
 import Add from '@material-ui/icons/Add';
@@ -31,17 +31,22 @@ class Pets extends React.Component {
         return (
             <PageWrapper pageTitle='Pets'>
                 <Paper className={classes.paper}>
-                    <Grid container>
-                        <Grid item className={classes.grid}>
-                            {
-                                pets &&
-                                pets.map(pet => <PetCard key={pet.id} pet={pet}/>)
-                            }
-                            <IconButton color='primary' component={Link} to='/user/pets/create' aria-label='add'>
+                    <div className={classes.wrapper}>
+                        {
+                            pets &&
+                            pets.map(pet => <PetCard key={pet.id} pet={pet}/>)
+                        }
+                        <Card className={classes.card}>
+                            <CardActionArea
+                                component={Link}
+                                to='/user/pets/create'
+                                aria-label='add'
+                                className={classes.cardContent}
+                            >
                                 <Add/>
-                            </IconButton>
-                        </Grid>
-                    </Grid>
+                            </CardActionArea>
+                        </Card>
+                    </div>
                 </Paper>
             </PageWrapper> 
         )
@@ -55,13 +60,22 @@ const styles = theme => ({
         justifyContent: 'center',
         padding: theme.spacing(3)
     },
-    grid: {
+    wrapper: {
         display: 'flex',
         justifyContent: 'space-evenly',
         flexWrap: 'wrap'
     },
-    fieldWrapper: {
-        margin: `0 ${theme.spacing(1)}px`
+    card: {
+        width: 280,
+        height: 240,
+        textDecoration: 'none',
+        margin: theme.spacing(1)
+    },
+    cardContent: {
+        display: 'flex',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });
 

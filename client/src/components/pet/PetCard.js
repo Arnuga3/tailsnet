@@ -64,7 +64,7 @@ const PetCard = ({ classes, pet }) => {
                     onError={() => setImgLoadError(true)}
                 />
                 <CardContent>
-                    <Typography gutterBottom
+                    <Typography gutterBottom noWrap
                         variant='h6'
                         component='h2'
                         color='secondary'
@@ -94,10 +94,10 @@ const PetCard = ({ classes, pet }) => {
 
 const styles = theme => ({
     card: {
-        maxWidth: 250,
-        minWidth: 200,
+        width: 280,
+        height: 235,
         textDecoration: 'none',
-        margin: theme.spacing(2)
+        margin: theme.spacing(1)
     },
     profileImage: {
         height: 140
@@ -107,7 +107,7 @@ const styles = theme => ({
         width: 100,
         margin: '0 auto',
         padding: 15,
-        opacity: .9
+        opacity: .3
     },
     avatar: {
         color: theme.palette.primary.main,

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
+import { Link } from 'react-router-dom';
 import { Paper, Grid, Stepper, Step, StepLabel, Button, Typography } from '@material-ui/core';
 import { createAndStorePetAccount } from '../../actions/petActions';
 import PageWrapper from '../commons/generic/PageWrapper';
@@ -17,10 +18,10 @@ const PetCreate = ({ dispatch, classes }) => {
     let petNameRef = React.createRef();
 
     const [activeStep, setActiveStep] = useState(0);
-    const steps = ['Details', 'Profile Image'];
+    const steps = ['Create', 'Add Profile Image'];
     const handleNext = () => setActiveStep(prevActiveStep => prevActiveStep + 1);
-    const handleBack = () => setActiveStep(prevActiveStep => prevActiveStep - 1);
-    const handleReset = () => setActiveStep(0);
+    // TODO - go to previous component
+    const handleCancel = () => {};
 
     const handleDOBChange = (dob, date) => setDob(date);
     const handleTypeChange = type => setPetType(type);
@@ -40,6 +41,7 @@ const PetCreate = ({ dispatch, classes }) => {
 
     const clearForm = () => {
         petNameRef.value = '';
+        setPetType(null);
         setDob(null);
     }
 
@@ -53,27 +55,34 @@ const PetCreate = ({ dispatch, classes }) => {
         if (petNameRef.value.trim() === '')
             freshErrors.push({ name: petNameRef.name });
 
+        if (dob === null)
+            freshErrors.push({ name: 'dob' });
+
         setErrors(freshErrors);
         return freshErrors.length === 0;
     };
 
-    const formError = field => errors
-        .filter(err => err.name === field);
+    const hasError = field =>  {
+        const fieldErrorArr = errors.filter(err => err.name === field);
+        return fieldErrorArr.length > 0;
+    };
 
     const getDetailsForm = () => {
         return (
-            // TODO - Add type here
             <React.Fragment>
-                <PetType onTypeChange={handleTypeChange}/>
-                <PTextField
+                <PetType onTypeChange={handleTypeChange} errors={hasError('petType')}/>
+                <PTextField inputRef={el => petNameRef = el}
                     label='Pet Name'
                     name='petName'
-                    inputRef={el => petNameRef = el}
-                    error={formError('petName').length > 0}
+                    error={hasError('petName')}
                 >
                     Pet Name
                 </PTextField>
-                <BirthDatePicker value={dob} onFormItemChange={handleDOBChange}/>
+                <BirthDatePicker
+                    value={dob}
+                    onFormItemChange={handleDOBChange} 
+                    errors={hasError('dob')}
+                />
             </React.Fragment>
         );
     };
@@ -109,44 +118,33 @@ const PetCreate = ({ dispatch, classes }) => {
                 </Stepper>
                 <div className={classes.wrapper}>
                     {
-                        activeStep === steps.length
-                        ?
-                            <div>
-                                <Typography className={classes.instructions}>
-                                    All steps completed - you&apos;re finished
-                                </Typography>
-                                <Button onClick={handleReset} className={classes.button}>
-                                    Reset
-                                </Button>
-                            </div>
-                        :
-                            <React.Fragment>
-                                <Grid container justify='center'>
-                                    <Grid item xs={12} md={6}>
-                                        {getStepContent(activeStep)}
-                                    </Grid>
+                        <React.Fragment>
+                            <Grid container justify='center'>
+                                <Grid item xs={12} md={6}>
+                                    {getStepContent(activeStep)}
                                 </Grid>
-                                <div className={classes.buttonsWrapper}>
-                                    <Button
-                                        disabled={activeStep === 0}
-                                        onClick={handleBack}
-                                        className={classes.button}
-                                    >
-                                        Back
-                                    </Button>
-                                    {
-                                        activeStep === 0 &&
-                                        <Button
-                                            variant='contained'
+                            </Grid>
+                            <div className={classes.buttonsWrapper}>
+                                {
+                                    activeStep === 0 &&
+                                    <React.Fragment>
+                                        <Button component={Link}
+                                            to='/user/pets'
+                                            className={classes.button}
+                                        >
+                                            Cancel
+                                        </Button>
+                                        <Button variant='contained'
                                             color='primary'
                                             onClick={handleCreate}
                                             className={classes.button}
                                         >
-                                            Save Details
+                                            Create
                                         </Button>
-                                    }
-                                </div>
-                            </React.Fragment>
+                                    </React.Fragment>
+                                }
+                            </div>
+                        </React.Fragment>
                     }
                 </div>
             </Paper>

@@ -19,7 +19,7 @@ export function createAndStorePetAccount(data) {
 		type: 'CREATE_PET_PROFILE',
 		payload: {
 			request: _post({
-				url: '/api/pets/create',
+				url: '/api/pet/create',
 				data
 			}),
 			options: {
@@ -36,7 +36,7 @@ export function uploadPetProfileImage(data) {
         type: 'UPLOAD PET PROFILE IMAGE',
         payload: {
             request: _post({
-                url: '/api/pets/upload-profile-image',
+                url: '/api/pet/upload-profile-image',
                 data,
                 options: {
                     headers: { 'Content-Type': 'multipart/form-data' }

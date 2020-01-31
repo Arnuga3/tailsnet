@@ -53,6 +53,7 @@ class UserProfile extends React.Component {
                                             image={profile_image}
                                             onUpdate={uploadUserProfileImage}
                                             onUpdateFinish={this.handleAvatarEdit}
+                                            onCancel={this.handleAvatarEdit}
                                         />
                                     :
                                         <ProfAvatar image={profile_image} user={user} onEdit={this.handleAvatarEdit}/>
