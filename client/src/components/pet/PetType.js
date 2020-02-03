@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Box, Typography } from '@material-ui/core';
 
-const PetType = ({ classes, onTypeChange, errors }) => {
+const PetType = ({ classes, onTypeChange, value={}, errors }) => {
 // TODO - Add this to db
     const types = [
         {
@@ -60,7 +60,7 @@ const PetType = ({ classes, onTypeChange, errors }) => {
             </Typography>
             <div className={classes.wrapper}>
                 {types.map(({ id, type }) =>
-                    <Box key={id} m={1} bgcolor={id === typeId ? 'primary.main' : 'transparent'}
+                    <Box key={id} m={1} bgcolor={id === typeId || (value && id === value.id) ? 'primary.main' : 'transparent'}
                         onClick={() => handleTypeClick(id)}
                         display='flex'
                         alignItems='center'

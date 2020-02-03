@@ -2,48 +2,83 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
-import { Paper, Grid, Stepper, Step, StepLabel, Button, Typography } from '@material-ui/core';
-import { createAndStorePetAccount } from '../../actions/petActions';
+import { Paper, Grid, Stepper, Step, StepLabel, Button } from '@material-ui/core';
 import PageWrapper from '../commons/generic/PageWrapper';
 import PTextField from './../commons/generic/PTextField';
 import BirthDatePicker from './../commons/BirthDatePicker';
 import ProfAvatarEditor from './../commons/avatar/ProfAvatarEditor';
 import PetType from './PetType';
+import {
+    createAndStorePetDetails,
+    createAndStorePetDetailsAndImage
+} from './../../actions/petActions';
 
 const PetCreate = ({ dispatch, classes }) => {
     const [petType, setPetType] = useState(null);
     const [dob, setDob] = useState(null);
     const [errors, setErrors] = useState([]);
-
-    let petNameRef = React.createRef();
+    const [editAvatar, setEditAvatar] = useState(false);
+    const [petName, setPetName] = useState('');
+    const [petImage, setPetImage] = useState(null);
+    const [skip, setSkip] = useState(false);
 
     const [activeStep, setActiveStep] = useState(0);
-    const steps = ['Create', 'Add Profile Image'];
-    const handleNext = () => setActiveStep(prevActiveStep => prevActiveStep + 1);
-    // TODO - go to previous component
-    const handleCancel = () => {};
+    const steps = ['Details', 'Add Profile Image'];
+
+    const handleBack = () => {
+        setActiveStep(prevActiveStep => prevActiveStep - 1);
+        setSkip(false);
+    };
+    const handleNext = () => {
+        const areDetailsValid = validateForm();
+        if (areDetailsValid) {
+            setActiveStep(prevActiveStep => prevActiveStep + 1);
+        } else console.error('Not all data provided');
+    };
 
     const handleDOBChange = (dob, date) => setDob(date);
     const handleTypeChange = type => setPetType(type);
 
     const handleCreate = () => {
-        const isDataValid = validateForm();
-        if (isDataValid) {
-            dispatch(createAndStorePetAccount({
-                petName: petNameRef.value,
-                dob,
-                petType: petType.type
-            }));
-            clearForm();
-            handleNext();
-        } else console.error('Not all data provided');
+        const petDetails = {
+            petName,
+            dob,
+            petType: petType.type
+        };
+
+        if (skip)
+            dispatch(
+                createAndStorePetDetails(petDetails)
+            );
+
+        else {
+            if (petImage) {
+                const avatarImage = petImage.getImageScaledToCanvas();
+                avatarImage.toBlob(blob => {
+                    var formData = new FormData();
+                    formData.append('avatarImage', blob);
+                    dispatch(
+                        createAndStorePetDetailsAndImage(petDetails, formData)
+                    );
+                });
+            }
+        }
+        clearForm();
     };
 
+    const handleSkip = () => {
+        setSkip(true);
+        handleNext();
+    };
+
+    const handleAvatarEdit = () =>
+        setEditAvatar(!editAvatar);
+
     const clearForm = () => {
-        petNameRef.value = '';
+        setPetType(null);
         setPetType(null);
         setDob(null);
-    }
+    };
 
     const validateForm = () => {
         let freshErrors = [];
@@ -52,8 +87,8 @@ const PetCreate = ({ dispatch, classes }) => {
         if (petType === null)
             freshErrors.push({ name: 'petType' });
 
-        if (petNameRef.value.trim() === '')
-            freshErrors.push({ name: petNameRef.name });
+        if (petName.trim() === '')
+            freshErrors.push({ name: 'petName' });
 
         if (dob === null)
             freshErrors.push({ name: 'dob' });
@@ -70,8 +105,13 @@ const PetCreate = ({ dispatch, classes }) => {
     const getDetailsForm = () => {
         return (
             <React.Fragment>
-                <PetType onTypeChange={handleTypeChange} errors={hasError('petType')}/>
-                <PTextField inputRef={el => petNameRef = el}
+                <PetType value={petType}
+                    onTypeChange={handleTypeChange}
+                    errors={hasError('petType')}
+                />
+                <PTextField
+                    onChange={({ target }) => setPetName(target.value)}
+                    value={petName}
                     label='Pet Name'
                     name='petName'
                     error={hasError('petName')}
@@ -89,7 +129,13 @@ const PetCreate = ({ dispatch, classes }) => {
 
     const getAvatarEditor = () => {
         return (
-            <ProfAvatarEditor dispatch={dispatch}/>
+            <ProfAvatarEditor dispatch={dispatch}
+                // onUpdateFinish={handleAvatarEdit}
+                onCancel={handleAvatarEdit}
+                onImgChange={img => setPetImage(img)}
+                clearButton={false}
+                saveBtn={false}
+            />
         );
     };
 
@@ -99,6 +145,8 @@ const PetCreate = ({ dispatch, classes }) => {
                 return getDetailsForm();
             case 1:
                 return getAvatarEditor();
+            case 2:
+                return 'Finish'
             default:
                 return 'Unknown step';
         }
@@ -125,23 +173,44 @@ const PetCreate = ({ dispatch, classes }) => {
                                 </Grid>
                             </Grid>
                             <div className={classes.buttonsWrapper}>
+                                <Button
+                                    onClick={handleBack}
+                                    className={classes.button}
+                                    disabled={activeStep === 0}
+                                >
+                                    Back
+                                </Button>
                                 {
                                     activeStep === 0 &&
-                                    <React.Fragment>
-                                        <Button component={Link}
-                                            to='/user/pets'
-                                            className={classes.button}
-                                        >
-                                            Cancel
-                                        </Button>
                                         <Button variant='contained'
                                             color='primary'
-                                            onClick={handleCreate}
+                                            onClick={handleNext}
                                             className={classes.button}
                                         >
-                                            Create
+                                            Next
                                         </Button>
-                                    </React.Fragment>
+                                }
+                                {
+                                    activeStep === 1 &&
+                                        <React.Fragment>
+                                            <Button
+                                                onClick={handleSkip}
+                                                className={classes.button}
+                                            >
+                                                Skip
+                                            </Button>
+                                            <Button variant='contained'
+                                                color='primary'
+                                                onClick={handleNext}
+                                                className={classes.button}
+                                            >
+                                                Next
+                                            </Button>
+                                        </React.Fragment>
+                                }
+                                {
+                                    activeStep === steps.length &&
+                                        <Button onClick={handleCreate}>Create</Button>
                                 }
                             </div>
                         </React.Fragment>

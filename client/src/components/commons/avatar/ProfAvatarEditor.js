@@ -11,7 +11,17 @@ import Clear from '@material-ui/icons/Clear';
 import ImageUpload from './ImageUpload';
 import Helper from './../../../utils/Helper';
 
-const ProfAvatarEditor = ({ classes, dispatch, image, onUpdate, onUpdateFinish, onCancel }) => {
+const ProfAvatarEditor = ({
+    classes,
+    dispatch,           //  Option 1: Pass redux dispatch
+    onUpdate,           //  Option 1: Pass action need to be dispatched
+    saveBtn=true,       //  Option 1: true - display Save button to trigger the action dispatch
+    clearButton=true,
+    onImgChange,      //  Option 2: Return canvas image (used to handle upload in parent component)
+    onUpdateFinish, 
+    onCancel,
+    image
+}) => {
 
     /* Preview Image */
     const [selectedImg, setSelectedImg] = useState(null);
@@ -78,6 +88,7 @@ const ProfAvatarEditor = ({ classes, dispatch, image, onUpdate, onUpdateFinish, 
                     color={[255, 255, 255, 0.9]}
                     scale={zoom}
                     rotate={degree}
+                    onImageChange={() => console.log('Yo')}
                 />
             </div>
             <div className={classes.flexRow}>
@@ -124,21 +135,29 @@ const ProfAvatarEditor = ({ classes, dispatch, image, onUpdate, onUpdateFinish, 
                                 >
                                     <RotateRight/>
                                 </IconButton>
-                                <Fab
-                                    color='primary'
-                                    onClick={handleUpload}
-                                    size='medium'
-                                    className={classes.iconButton}
-                                >
-                                    <Save/>
-                                </Fab>
-                                <Fab
-                                    onClick={onCancel}
-                                    size='medium'
-                                    className={classes.iconButton}
-                                >
-                                    <Clear/>
-                                </Fab>
+                                {
+                                    saveBtn &&
+                                        <Fab
+                                            color='primary'
+                                            onClick={handleUpload}
+                                            size='medium'
+                                            className={classes.iconButton}
+                                        >
+                                            <Save/>
+                                        </Fab>
+                                }
+                                {
+                                    clearButton
+                                    ?
+                                        <Fab
+                                        onClick={onCancel}
+                                        size='medium'
+                                        className={classes.iconButton}
+                                        >
+                                            <Clear/>
+                                        </Fab>
+                                    : null
+                                }
                             </React.Fragment>
                         }
                     </div>

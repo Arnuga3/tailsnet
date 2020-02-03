@@ -14,7 +14,7 @@ export const storePetAccounts = value => ({
 	value
 });
 
-export function createAndStorePetAccount(data) {
+export function createAndStorePetDetails(data) {
 	return {
 		type: 'CREATE_PET_PROFILE',
 		payload: {
@@ -33,7 +33,7 @@ export function createAndStorePetAccount(data) {
 
 export function uploadPetProfileImage(data) {
     return {
-        type: 'UPLOAD PET PROFILE IMAGE',
+        type: 'UPLOAD_PET_PROFILE_IMAGE',
         payload: {
             request: _post({
                 url: '/api/pet/upload-profile-image',
@@ -48,5 +48,14 @@ export function uploadPetProfileImage(data) {
                 }
             }
         }
+    }
+}
+
+export function createAndStorePetDetailsAndImage(data, image) {
+    return dispatch => {
+        dispatch(createAndStorePetDetails(data)
+            .then(() => dispatch(uploadPetProfileImage(image)))
+            .catch(() => {})
+        );
     }
 }
