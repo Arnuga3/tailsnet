@@ -7,8 +7,8 @@ module.exports = {
         return PetDataAccess.createPet(pet, userId);
     },
 
-    uploadPetProfileImage(userId, image) {
+    uploadPetProfileImage(userId, petId, image) {
         const uniqueImageName = Utils.uuid();
-        return PetDataAccess.uploadUserProfileImage(userId, image, uniqueImageName);
+        return PetDataAccess.uploadPetProfileImage(userId, petId, image, uniqueImageName);
     }
 }

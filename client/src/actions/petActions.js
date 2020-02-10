@@ -51,11 +51,21 @@ export function uploadPetProfileImage(data) {
     }
 }
 
-export function createAndStorePetDetailsAndImage(data, image) {
-    return dispatch => {
-        dispatch(createAndStorePetDetails(data)
-            .then(() => dispatch(uploadPetProfileImage(image)))
-            .catch(() => {})
-        );
-    }
+export function createAndStorePetDetailsAndImage(data, imageFormData) {
+    return {
+		type: 'CREATE_PET_PROFILE',
+		payload: {
+			request: _post({
+				url: '/api/pet/create',
+				data
+			}),
+			options: {
+				onSuccess({ dispatch, response }) {
+                    imageFormData.append('petId', response.data.id);
+                    dispatch(uploadPetProfileImage(imageFormData));
+                    dispatch(storePetAccounts(response.data));
+                }
+			}
+		}
+	}
 }

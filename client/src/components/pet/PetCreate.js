@@ -6,7 +6,7 @@ import { Paper, Grid, Stepper, Step, StepLabel, Button } from '@material-ui/core
 import PageWrapper from '../commons/generic/PageWrapper';
 import PTextField from './../commons/generic/PTextField';
 import BirthDatePicker from './../commons/BirthDatePicker';
-import ProfAvatarEditor from './../commons/avatar/ProfAvatarEditor';
+import AdvancedAvatarEditor from '../commons/avatarEditor/AdvancedAvatarEditor';
 import PetType from './PetType';
 import {
     createAndStorePetDetails,
@@ -20,14 +20,16 @@ const PetCreate = ({ dispatch, classes }) => {
     const [editAvatar, setEditAvatar] = useState(false);
     const [petName, setPetName] = useState('');
     const [petImage, setPetImage] = useState(null);
-    const [skip, setSkip] = useState(false);
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [petPreviewImage, setPetPreviewImage] = useState(null);
+    const [skipped, setSkipped] = useState(false);
 
     const [activeStep, setActiveStep] = useState(0);
-    const steps = ['Details', 'Add Profile Image'];
+    const steps = ['Details', 'Profile Image'];
 
     const handleBack = () => {
         setActiveStep(prevActiveStep => prevActiveStep - 1);
-        setSkip(false);
+        setSkipped(false);
     };
     const handleNext = () => {
         const areDetailsValid = validateForm();
@@ -46,28 +48,19 @@ const PetCreate = ({ dispatch, classes }) => {
             petType: petType.type
         };
 
-        if (skip)
-            dispatch(
-                createAndStorePetDetails(petDetails)
-            );
-
-        else {
-            if (petImage) {
-                const avatarImage = petImage.getImageScaledToCanvas();
-                avatarImage.toBlob(blob => {
-                    var formData = new FormData();
-                    formData.append('avatarImage', blob);
-                    dispatch(
-                        createAndStorePetDetailsAndImage(petDetails, formData)
-                    );
-                });
-            }
+        if (skipped) {
+            dispatch(createAndStorePetDetails(petDetails));
+        
+        } else if (petImage) {
+            var formData = new FormData();
+            formData.append('avatarImage', petImage);
+            dispatch(createAndStorePetDetailsAndImage(petDetails, formData));
         }
         clearForm();
     };
 
     const handleSkip = () => {
-        setSkip(true);
+        setSkipped(true);
         handleNext();
     };
 
@@ -75,7 +68,6 @@ const PetCreate = ({ dispatch, classes }) => {
         setEditAvatar(!editAvatar);
 
     const clearForm = () => {
-        setPetType(null);
         setPetType(null);
         setDob(null);
     };
@@ -126,15 +118,20 @@ const PetCreate = ({ dispatch, classes }) => {
             </React.Fragment>
         );
     };
-
+// TODO - On upload save image, use it in on edit. Try x,y to handle position. Use Props. Rename components and props
     const getAvatarEditor = () => {
         return (
-            <ProfAvatarEditor dispatch={dispatch}
-                // onUpdateFinish={handleAvatarEdit}
-                onCancel={handleAvatarEdit}
-                onImgChange={img => setPetImage(img)}
-                clearButton={false}
-                saveBtn={false}
+            <AdvancedAvatarEditor
+                image={selectedImage}
+                onImageSelected={image => setSelectedImage(image)}
+                onImageChange={imgData => {
+                    const { blob, image } = imgData;
+                    setPetImage(blob);
+                    setPetPreviewImage(image);
+                }}
+                onEditCancel={handleAvatarEdit}
+                actionButtons={false}
+                dispatch={dispatch}
             />
         );
     };
@@ -203,6 +200,7 @@ const PetCreate = ({ dispatch, classes }) => {
                                                 color='primary'
                                                 onClick={handleNext}
                                                 className={classes.button}
+                                                disabled={!petImage}
                                             >
                                                 Next
                                             </Button>
@@ -210,7 +208,13 @@ const PetCreate = ({ dispatch, classes }) => {
                                 }
                                 {
                                     activeStep === steps.length &&
-                                        <Button onClick={handleCreate}>Create</Button>
+                                        <Button variant='contained'
+                                            color='primary'
+                                            className={classes.button}
+                                            onClick={handleCreate}
+                                        >
+                                            Create
+                                        </Button>
                                 }
                             </div>
                         </React.Fragment>

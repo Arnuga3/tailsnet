@@ -1,10 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { Button, IconButton } from '@material-ui/core';
 import ImageSearch from '@material-ui/icons/ImageSearch';
 import AddAPhoto from '@material-ui/icons/AddAPhotoOutlined';
 
-const ImageUpload = ({ classes, onSelect }) => {
+ImageSelect.propTypes = {
+    classes: PropTypes.object,
+    onSelect: PropTypes.func.isRequired
+};
+
+const ImageSelect = ({ classes, onSelect }) => {
 
     const handleChange = e => {
         if (e.target.files && e.target.files[0]) {
@@ -16,16 +22,14 @@ const ImageUpload = ({ classes, onSelect }) => {
   
     return (
         <React.Fragment>
-            <input
-                className={classes.input}
+            <input className={classes.input}
                 id='upload-image-file'
                 accept='image/*'
                 type='file'
                 onChange={handleChange}
             />
             <label htmlFor='upload-image-file'>
-                <Button
-                    className={classes.button}
+                <Button className={classes.button}
                     startIcon={<ImageSearch/>}
                     component='span'
                 >
@@ -48,4 +52,4 @@ const styles = theme => ({
     }
 });
 
-export default withStyles(styles)(ImageUpload);
+export default withStyles(styles)(ImageSelect);

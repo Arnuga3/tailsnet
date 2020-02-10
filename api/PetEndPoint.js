@@ -32,20 +32,32 @@ router.post('/create', auth,
 			return res.status(422).json({ errors: errors.array() });
 		
 		PetService.createPet(req.body, req.userId)
-			.then(pet => res.status(200).send(pet))
+			.then(pet => res.status(200).send(pet[0]))
 			.catch(error => res.status(500).send(`There was a problem creating a pet profile. ${error}`));
 	}
 );
 
-// TODO - pass pet id as well
-router.post('/upload-profile-image', auth, (req, res) => {
-	if (!req.files || Object.keys(req.files).length === 0)
-		return res.status(400).send('File is not uploaded');
+router.post('/upload-profile-image', auth, 
+	[
+		check('petId', 'Pet id cannot be empty')
+			.isNumeric()
+			.notEmpty()
+			.trim(),
+			
+		check('files')
+			.notEmpty()
+	],
 
-	PetService.uploadPetProfileImage(req.userId, req.files)
-		.then(() => res.status(200).send())
-		.catch(error => res.status(400)
-			.send(`There was a problem uploading profile image. ${error}`));;
+	(req, res) => {
+		if (!req.files || Object.keys(req.files).length === 0)
+			return res.status(400).send('File is not uploaded');
+		
+		
+
+		PetService.uploadPetProfileImage(req.userId, req.body.petId, req.files)
+			.then(() => res.status(200).send())
+			.catch(error => res.status(400)
+				.send(`There was a problem uploading profile image. ${error}`));;
 });
 
 module.exports = router;

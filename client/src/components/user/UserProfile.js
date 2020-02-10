@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { Paper, Grid } from '@material-ui/core';
 import PageWrapper from '../commons/generic/PageWrapper';
-import ProfAvatarEditor from '../commons/avatar/ProfAvatarEditor';
-import ProfAvatar from '../commons/avatar/ProfAvatar';
+import AdvancedAvatarEditor from '../commons/avatarEditor/AdvancedAvatarEditor';
 import DetailsRead from './DetailsRead';
 import DetailsEdit from './DetailsEdit';
 import {
@@ -16,7 +15,7 @@ class UserProfile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            editAvatar: false,
+            avatarMode: true,  // create/preview
             editDetails: false
         };
     }
@@ -26,7 +25,7 @@ class UserProfile extends React.Component {
     }
 
     handleAvatarEdit = () => {
-        this.setState({ editAvatar: !this.state.editAvatar });
+        this.setState({ avatarMode: !this.state.avatarMode });
     }
 
     handleDetailsEdit = () => {
@@ -34,7 +33,7 @@ class UserProfile extends React.Component {
     }
 
     render() {
-        const { editAvatar, editDetails } = this.state;
+        const { avatarMode, editDetails } = this.state;
 
         const { dispatch, classes, user } = this.props;
         const profile_image = user && user.profile_image ? `/${user.profile_image}.jpg` : null;
@@ -45,19 +44,16 @@ class UserProfile extends React.Component {
                     { user && 
                         <Grid container>
                             <Grid item xs={12} md={6}>
-                                {
-                                    editAvatar
-                                    ?
-                                        <ProfAvatarEditor
-                                            dispatch={dispatch}
-                                            image={profile_image}
-                                            onUpdate={uploadUserProfileImage}
-                                            onUpdateFinish={this.handleAvatarEdit}
-                                            onCancel={this.handleAvatarEdit}
-                                        />
-                                    :
-                                        <ProfAvatar image={profile_image} user={user} onEdit={this.handleAvatarEdit}/>
-                                }
+                                <AdvancedAvatarEditor
+                                    label={user.name}
+                                    image={profile_image}
+                                    isPreview={avatarMode}
+                                    onEdit={this.handleAvatarEdit}
+                                    onCancelAction={this.handleAvatarEdit}
+                                    onUpdate={uploadUserProfileImage}
+                                    onUpdateEnd={this.handleAvatarEdit}
+                                    dispatch={dispatch}
+                                />
                             </Grid>
                             <Grid item xs={12} md={6}
                                 className={classes.details}

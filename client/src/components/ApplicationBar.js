@@ -6,7 +6,7 @@ import { AppBar, Toolbar, Hidden, IconButton, Button } from '@material-ui/core';
 import clsx from 'clsx';
 import MenuIcon from '@material-ui/icons/Menu';
 import Search from './Search';
-import AvatarDisplay from './commons/avatar/AvatarDisplay';
+import AvatarPreview from './commons/avatarEditor/AvatarPreview';
 
 const drawerWidth = 256;
 
@@ -28,7 +28,7 @@ const ApplicationBar = ({ classes, open, handleDrawer, authenticated, user }) =>
                         (!authenticated && !isLoginScreen)
                         ? <Button component={Link} to='/login' color='secondary'>Login</Button>
                         : user
-                            ? <AvatarDisplay user={user}/>
+                            ? <AvatarPreview image={user.profile_image} label={`${user.name[0]}${user.surname[0]}`}/>
                             : null
                     }
                     <IconButton

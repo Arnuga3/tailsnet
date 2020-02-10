@@ -8,13 +8,13 @@ module.exports = {
             text: `
                 INSERT INTO pets(type, name, dob, profile_image, user_id)
                 VALUES ($1, $2, $3, $4, $5)
-                RETURNING type, name, dob, profile_image
+                RETURNING id, type, name, dob, profile_image
             `,
             values: [petType, petName, dob, '', userId]
         });
     },
 
-    uploadPetProfileImage(userId, image, uniqueImageName) {
+    uploadPetProfileImage(userId, petId, image, uniqueImageName) {
 
         const error = (err, client) => {
             console.error('Error in transaction', err.stack);
@@ -29,10 +29,10 @@ module.exports = {
         const updateProfileImage = (client, uniqueImageName, userId) => {
             const updateProfileImageText = `
                 UPDATE pets
-                SET profile_image = $1
-                WHERE id = $2
+                SET profile_image = $1, user_id = $2 
+                WHERE id = $3
             `;
-            const values = [uniqueImageName, userId];
+            const values = [uniqueImageName, userId, petId];
             return client.query(updateProfileImageText, values);
         };
 

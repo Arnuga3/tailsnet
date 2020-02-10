@@ -34,7 +34,7 @@ const Login = ({ classes, history, dispatch }) => {
                             <PTextField inputRef={el => emailRef = el} label='Email'>
                                 Email
                             </PTextField>
-                            <PTextField inputRef={el => passwordRef = el} label='Password'>
+                            <PTextField inputRef={el => passwordRef = el} label='Password' type='password'>
                                 Password
                             </PTextField>
                             <Button type='submit' className={classes.loginBtn} variant='contained' color='primary'>
