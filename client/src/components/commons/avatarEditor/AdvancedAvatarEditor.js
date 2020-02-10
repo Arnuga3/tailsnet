@@ -37,9 +37,12 @@ const AdvancedAvatarEditor = ({
     onCancel,
     label,
     image,
+    imageState,
     onImageSelected,
     isPreview
 }) => {
+
+    const [_position, setPosition] = useState({ x: 0, y: 0 });
 
     /* Preview */
     const [selectedImg, setSelectedImg] = useState(null);
@@ -68,26 +71,36 @@ const AdvancedAvatarEditor = ({
         if (avatarEditor) {
             const isDefaultImage = !selectedImg || !image;
             if (!isDefaultImage) {
-                const imageDataURL = avatarEditor
-                    .getImage()
-                    .toDataURL('image/png');
+                const imageState = {
+                    _position,
+                    _zoom,
+                    _degree
+                };
+                // const imageDataURL = avatarEditor
+                //     .getImage()
+                //     .toDataURL('image/png');
                 const canvasImageScaled = avatarEditor
                     .getImageScaledToCanvas();
                 return canvasImageScaled
-                    .toBlob(blob => onChange({ blob, imageDataURL }));
+                    .toBlob(blob => onChange({ blob, imageState }));
             }   
         }
     };
 
+    const handlePositionChange = position => {
+        setPosition(position);
+        handleImageChange();
+    };
+
     /* Handle rotate change */
-    const [degree, setDegree] = useState(0);
+    const [_degree, setDegree] = useState(0);
     const handleRotate = degree => {
         setDegree(degree);
         handleImageChange();
     };
 
     /* Handle zoom change */
-    const [zoom, setZoom] = useState(1);
+    const [_zoom, setZoom] = useState(1);
     const handleZoom = zoom => {
         setZoom(zoom);
         handleImageChange();
@@ -97,7 +110,8 @@ const AdvancedAvatarEditor = ({
 
     const displayImage = selectedImg || image || Helper.NO_IMAGE();
     const hasImage = image || selectedImg;
-// FIXME - Fix delay on action
+    const { position, zoom, degree } = imageState;
+
     return (
         isPreview ?
         <AvatarPreviewEdit
@@ -122,10 +136,11 @@ const AdvancedAvatarEditor = ({
                     borderRadius={200}
                     border={50}
                     color={[255, 255, 255, 0.9]}
-                    scale={zoom}
-                    rotate={degree}
+                    scale={zoom || _zoom}
+                    rotate={degree || _degree}
+                    position={position || _position}
                     onImageChange={handleImageChange}
-                    onPositionChange={handleImageChange}
+                    onPositionChange={handlePositionChange}
                     onLoadSuccess={handleImageChange}
                 />
             </div>

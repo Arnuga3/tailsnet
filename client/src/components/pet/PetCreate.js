@@ -21,7 +21,7 @@ const PetCreate = ({ dispatch, classes }) => {
     const [petName, setPetName] = useState('');
     const [petImage, setPetImage] = useState(null);
     const [selectedImage, setSelectedImage] = useState(null);
-    const [petPreviewImage, setPetPreviewImage] = useState(null);
+    const [petImageState, setPetImageState] = useState({});
     const [skipped, setSkipped] = useState(false);
 
     const [activeStep, setActiveStep] = useState(0);
@@ -125,10 +125,11 @@ const PetCreate = ({ dispatch, classes }) => {
                 image={selectedImage}
                 onImageSelected={image => setSelectedImage(image)}
                 onImageChange={imgData => {
-                    const { blob, image } = imgData;
+                    const { blob, imageState } = imgData;
                     setPetImage(blob);
-                    setPetPreviewImage(image);
+                    setPetImageState(imageState);
                 }}
+                imageState={petImageState}
                 onEditCancel={handleAvatarEdit}
                 actionButtons={false}
                 dispatch={dispatch}

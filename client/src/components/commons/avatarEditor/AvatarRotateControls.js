@@ -14,10 +14,11 @@ const AvatarRotateControls = ({ classes, onRotateChange }) => {
     const [degree, setDegree] = useState(0);
 
     const handleRotate = side => {
-        if (side === 'left')
-            setDegree(degree + 270);
-        else setDegree(degree + 90);
-        onRotateChange(degree);
+        let aDegree = degree;
+        if (side === 'left') aDegree += 270;
+        if (side === 'right') aDegree += 90;
+        setDegree(aDegree);
+        onRotateChange(aDegree);
     };
     return (
         <React.Fragment>

@@ -22,11 +22,11 @@ const AvatarZoomControls = ({ classes, value, onZoomChange }) => {
     };
 
     const handleZoom = level => {
-        if (level === 'in' && zoom <= 1.8)
-            setZoom(zoom + .2);
-        if (level === 'out' && zoom >= 1.2)
-            setZoom(zoom - .2);
-        onZoomChange(zoom);
+        let aZoom = zoom;
+        if (level === 'in' && zoom <= 1.8) aZoom += .2;
+        if (level === 'out' && zoom >= 1.2) aZoom -= .2;
+        setZoom(aZoom);
+        onZoomChange(aZoom);
     };
 
     return (
