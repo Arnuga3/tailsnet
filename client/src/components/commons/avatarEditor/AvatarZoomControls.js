@@ -13,7 +13,7 @@ AvatarZoomControls.propTypes = {
 
 const AvatarZoomControls = ({ classes, value, onZoomChange }) => {
 
-    const [zoom, setZoom] = useState(1);    // value 1 - 2
+    const [zoom, setZoom] = useState(value || 1);    // value 1 - 2
 
     const handleZoomSlider = (event, newValue) => {
         const zoomValue = newValue / 100 + 1;   // Convert slider's value (0-100) to zoom value (1-2)
@@ -29,6 +29,9 @@ const AvatarZoomControls = ({ classes, value, onZoomChange }) => {
         onZoomChange(aZoom);
     };
 
+    // Convert zoom value (1-2) to slider's value (0-100)
+    const slidersValue = (value - 1) * 100;
+
     return (
         <div className={classes.zoomSlider}>
             <IconButton
@@ -43,7 +46,7 @@ const AvatarZoomControls = ({ classes, value, onZoomChange }) => {
                 width={250}
                 height={250}
                 step={20}
-                value={value}
+                value={slidersValue}
                 onChange={handleZoomSlider}
             />
             <IconButton

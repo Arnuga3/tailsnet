@@ -19,7 +19,6 @@ const PetCreate = ({ dispatch, classes }) => {
     const [errors, setErrors] = useState([]);
     const [editAvatar, setEditAvatar] = useState(false);
     const [petName, setPetName] = useState('');
-    const [petImage, setPetImage] = useState(null);
     const [selectedImage, setSelectedImage] = useState(null);
     const [petImageState, setPetImageState] = useState({});
     const [skipped, setSkipped] = useState(false);
@@ -51,9 +50,9 @@ const PetCreate = ({ dispatch, classes }) => {
         if (skipped) {
             dispatch(createAndStorePetDetails(petDetails));
         
-        } else if (petImage) {
+        } else if (petImageState.blob) {
             var formData = new FormData();
-            formData.append('avatarImage', petImage);
+            formData.append('avatarImage', petImageState.blob);
             dispatch(createAndStorePetDetailsAndImage(petDetails, formData));
         }
         clearForm();
@@ -118,7 +117,7 @@ const PetCreate = ({ dispatch, classes }) => {
             </React.Fragment>
         );
     };
-// TODO - On upload save image, use it in on edit. Try x,y to handle position. Use Props. Rename components and props
+
     const getAvatarEditor = () => {
         return (
             <AdvancedAvatarEditor
@@ -197,7 +196,7 @@ const PetCreate = ({ dispatch, classes }) => {
                                                 color='primary'
                                                 onClick={handleNext}
                                                 className={classes.button}
-                                                disabled={!petImage}
+                                                disabled={!petImageState.blob}
                                             >
                                                 Next
                                             </Button>

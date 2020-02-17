@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { Fab } from '@material-ui/core';
@@ -26,41 +26,30 @@ AdvancedAvatarEditor.propTypes = {
     isPreview: PropTypes.bool
 };
 
-const AdvancedAvatarEditor = ({
-    classes,
-    dispatch,               //  Option 1: Pass redux dispatch
-    onSave,                 //  Option 1: Pass action need to be dispatched
-    onSaveEnd,
-    actionButtons=true,     //  Option 1: true - display Save button to trigger the action dispatch
-    onChange,               //  Option 2: Return canvas image (used to handle upload in parent component)
-    onEdit,
-    onCancel,
-    label,
-    image,
-    imageState,
-    onImageSelected,
-    isPreview
-}) => {
+class AdvancedAvatarEditor extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            imgState: {
+                _position: props.imageState.position || { x: 0, y: 0 },
+                _degree: props.imageState.degree || 0,
+                _zoom: props.imageState.zoom || 1
+            },
+            selectedImg: null
+        };
+        this.ref = React.createRef();
+    }
 
-    const [imgState, setImgState] = useState({
-        _position: imageState.position || { x: 0, y: 0 },
-        _degree: imageState.degree || 0,
-        _zoom: imageState.zoom || 1
-    });
-    const ref = React.createRef();
-
-    /* Preview */
-    const [selectedImg, setSelectedImg] = useState(null);
-    const handleSelect = selectedImg => {
-        setSelectedImg(selectedImg);
+    handleSelect = selectedImg => {
+        const { onImageSelected } = this.props;
+        this.setState({ selectedImg });
         onImageSelected(selectedImg);
     };
 
-    /* Save */
-    
-    const handleSave = () => {
-        if (ref) {
-            const avatarImage = ref.getImageScaledToCanvas();
+    handleSave = () => {
+        if (this.ref) {
+            const { dispatch, onSave, onSaveEnd } = this.props;
+            const avatarImage = this.ref.getImageScaledToCanvas();
             avatarImage.toBlob(blob => {
                 var formData = new FormData();
                 formData.append('avatarImage', blob);
@@ -70,134 +59,133 @@ const AdvancedAvatarEditor = ({
         }
     };
 
-    useEffect(() => {
-        return () => {
-            const state = readFromSession();
-            console.log(state);
-            onChange({
-                position: state._position,
-                degree: state._degree,
-                zoom: state._zoom,
-            });
-        }
-    }, []);
+    componentWillUnmount() {
+        const { onChange } = this.props;
+        const { imgState } = this.state;
+        onChange({
+            position: imgState._position,
+            degree: imgState._degree,
+            zoom: imgState._zoom,
+        });
+    }
 
-    const writeToSession = state => {
-        const jsonState = JSON.stringify(state);
-        sessionStorage.setItem('imgState', jsonState);
-    };
-
-    const readFromSession = () => {
-        const jsonState = sessionStorage.getItem('state');
-        return JSON.parse(jsonState);
-    };
-
-    const handlePositionChange = _position => {
-        if (ref.current) return ref.current
+    handlePositionChange = _position => {
+        if (this.ref.current) return this.ref.current
             .getImageScaledToCanvas()
             .toBlob(blob => {
-                const state = { ...imgState, _position, blob };
-                setImgState(state);
-                writeToSession(state);
+                const { imgState } = this.state;
+                this.setState({ imgState: { ...imgState, _position, blob } });
             });
-    };
+    }
 
-    const handleRotate = _degree => {
-        if (ref.current) return ref.current
+    handleRotate = _degree => {
+        if (this.ref.current) return this.ref.current
             .getImageScaledToCanvas()
             .toBlob(blob => {
-                const state = { ...imgState, _degree, blob };
-                setImgState(state);
-                writeToSession(state);
+                const { imgState } = this.state;
+                this.setState({ imgState: { ...imgState, _degree, blob } });
             });
-    };
+    }
 
-    const handleZoom = _zoom => {
-        if (ref.current) return ref.current
+    handleZoom = _zoom => {
+        if (this.ref.current) return this.ref.current
             .getImageScaledToCanvas()
             .toBlob(blob => {
-                const state = { ...imgState, _zoom, blob };
-                setImgState(state);
-                writeToSession(state);
+                const { imgState } = this.state;
+                this.setState({ imgState: { ...imgState, _zoom, blob } });
             });
-    };
-    // Convert zoom value (1-2) to slider's value (0-100)
-    const slidersValue = (imgState._zoom - 1) * 100;
+    }
 
-    const displayImage = selectedImg || image || Helper.NO_IMAGE();
-    const hasImage = image || selectedImg;
-    const { _position, _zoom, _degree } = imgState;
+    render() {
+        const {
+            classes,
+            actionButtons=true,
+            onEdit,
+            onCancel,
+            label,
+            image,
+            isPreview
+        } = this.props;
 
-    return (
-        isPreview ?
-        <AvatarPreviewEdit
-            image={image}
-            label={label}
-            onEdit={onEdit}
-        />
-        :
-        <React.Fragment>
-            <div className={classes.flexRow}>
-                <ImageSelect onSelect={handleSelect}/>
-            </div>
-            <div className={classes.flexRow}>
-                <AvatarEditor
-                    style={{   // Canvas
-                        width: '100%', 
-                        height: 'auto',
-                        maxWidth: '250px'
-                    }}
-                    ref={ref}
-                    image={displayImage}
-                    borderRadius={200}
-                    border={50}
-                    color={[255, 255, 255, 0.9]}
-                    scale={_zoom}
-                    rotate={_degree}
-                    position={imageState.position}
-                    onPositionChange={handlePositionChange}
-                />
-            </div>
-            <div className={classes.flexRow}>
-                <div className={classes.flexColumn}>
-                    { 
-                        hasImage &&
-                        <AvatarZoomControls
-                            value={slidersValue}
-                            onZoomChange={handleZoom}
-                        />
-                    }
-                    <div className={classes.flexRow}>
-                        {
+        const { imgState, selectedImg } = this.state;
+        const displayImage = selectedImg || image || Helper.NO_IMAGE();
+        const hasImage = image || selectedImg;
+        const { _position, _zoom, _degree } = imgState;
+        
+        return (
+            isPreview ?
+            <AvatarPreviewEdit
+                image={image}
+                label={label}
+                onEdit={onEdit}
+            />
+            :
+            <React.Fragment>
+                <div className={classes.flexRow}>
+                    <ImageSelect onSelect={this.handleSelect}/>
+                </div>
+                <div className={classes.flexRow}>
+                    <AvatarEditor
+                        style={{   // Canvas
+                            width: '100%', 
+                            height: 'auto',
+                            maxWidth: '250px'
+                        }}
+                        ref={this.ref}
+                        image={displayImage}
+                        borderRadius={200}
+                        border={50}
+                        color={[255, 255, 255, 0.9]}
+                        scale={_zoom}
+                        rotate={_degree}
+                        position={_position}
+                        onPositionChange={this.handlePositionChange}
+                    />
+                </div>
+                <div className={classes.flexRow}>
+                    <div className={classes.flexColumn}>
+                        { 
                             hasImage &&
-                            <React.Fragment>
-                                <AvatarRotateControls onRotateChange={handleRotate}/>
-                                {
-                                    actionButtons ?
-                                    <React.Fragment>
-                                        <Fab className={classes.iconButton}
-                                            onClick={handleSave}
-                                            color='primary'
-                                            size='medium'
-                                        >
-                                            <Save/>
-                                        </Fab>
-                                        <Fab className={classes.iconButton}
-                                            onClick={onCancel}
-                                            size='medium'
-                                        >
-                                            <Clear/>
-                                        </Fab>
-                                    </React.Fragment>
-                                    : null
-                                }
-                            </React.Fragment>
+                            <AvatarZoomControls
+                                value={_zoom}
+                                onZoomChange={this.handleZoom}
+                            />
                         }
+                        <div className={classes.flexRow}>
+                            {
+                                hasImage &&
+                                <React.Fragment>
+                                    <AvatarRotateControls
+                                        value={_degree}
+                                        onRotateChange={this.handleRotate}
+                                    />
+                                    {
+                                        actionButtons ?
+                                        <React.Fragment>
+                                            <Fab className={classes.iconButton}
+                                                onClick={this.handleSave}
+                                                color='primary'
+                                                size='medium'
+                                            >
+                                                <Save/>
+                                            </Fab>
+                                            <Fab className={classes.iconButton}
+                                                onClick={onCancel}
+                                                size='medium'
+                                            >
+                                                <Clear/>
+                                            </Fab>
+                                        </React.Fragment>
+                                        : null
+                                    }
+                                </React.Fragment>
+                            }
+                        </div>
                     </div>
                 </div>
-            </div>
-        </React.Fragment>
-    );
+            </React.Fragment>
+        );
+    }
 }
 
 const styles = theme => ({

@@ -10,8 +10,8 @@ AvatarRotateControls.propTypes = {
     onRotateChange: PropTypes.func.isRequired
 };
 
-const AvatarRotateControls = ({ classes, onRotateChange }) => {
-    const [degree, setDegree] = useState(0);
+const AvatarRotateControls = ({ classes, value, onRotateChange }) => {
+    const [degree, setDegree] = useState(value || 0);
 
     const handleRotate = side => {
         let aDegree = degree;
