@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { Fab } from '@material-ui/core';
@@ -42,7 +42,12 @@ const AdvancedAvatarEditor = ({
     isPreview
 }) => {
 
-    const [_position, setPosition] = useState({ x: 0, y: 0 });
+    const [imgState, setImgState] = useState({
+        _position: imageState.position || { x: 0, y: 0 },
+        _degree: imageState.degree || 0,
+        _zoom: imageState.zoom || 1
+    });
+    const ref = React.createRef();
 
     /* Preview */
     const [selectedImg, setSelectedImg] = useState(null);
@@ -52,10 +57,10 @@ const AdvancedAvatarEditor = ({
     };
 
     /* Save */
-    let avatarEditorRef = React.createRef();
+    
     const handleSave = () => {
-        if (avatarEditorRef.current) {
-            const avatarImage = avatarEditorRef.current.getImageScaledToCanvas();
+        if (ref) {
+            const avatarImage = ref.getImageScaledToCanvas();
             avatarImage.toBlob(blob => {
                 var formData = new FormData();
                 formData.append('avatarImage', blob);
@@ -65,52 +70,63 @@ const AdvancedAvatarEditor = ({
         }
     };
 
-    /* Pass changed image to parent component */
-    const handleImageChange = () => {
-        const avatarEditor = avatarEditorRef.current;
-        if (avatarEditor) {
-            const isDefaultImage = !selectedImg || !image;
-            if (!isDefaultImage) {
-                const imageState = {
-                    _position,
-                    _zoom,
-                    _degree
-                };
-                // const imageDataURL = avatarEditor
-                //     .getImage()
-                //     .toDataURL('image/png');
-                const canvasImageScaled = avatarEditor
-                    .getImageScaledToCanvas();
-                return canvasImageScaled
-                    .toBlob(blob => onChange({ blob, imageState }));
-            }   
+    useEffect(() => {
+        return () => {
+            const state = readFromSession();
+            console.log(state);
+            onChange({
+                position: state._position,
+                degree: state._degree,
+                zoom: state._zoom,
+            });
         }
+    }, []);
+
+    const writeToSession = state => {
+        const jsonState = JSON.stringify(state);
+        sessionStorage.setItem('imgState', jsonState);
     };
 
-    const handlePositionChange = position => {
-        setPosition(position);
-        handleImageChange();
+    const readFromSession = () => {
+        const jsonState = sessionStorage.getItem('state');
+        return JSON.parse(jsonState);
     };
 
-    /* Handle rotate change */
-    const [_degree, setDegree] = useState(0);
-    const handleRotate = degree => {
-        setDegree(degree);
-        handleImageChange();
+    const handlePositionChange = _position => {
+        if (ref.current) return ref.current
+            .getImageScaledToCanvas()
+            .toBlob(blob => {
+                const state = { ...imgState, _position, blob };
+                setImgState(state);
+                writeToSession(state);
+            });
     };
 
-    /* Handle zoom change */
-    const [_zoom, setZoom] = useState(1);
-    const handleZoom = zoom => {
-        setZoom(zoom);
-        handleImageChange();
+    const handleRotate = _degree => {
+        if (ref.current) return ref.current
+            .getImageScaledToCanvas()
+            .toBlob(blob => {
+                const state = { ...imgState, _degree, blob };
+                setImgState(state);
+                writeToSession(state);
+            });
+    };
+
+    const handleZoom = _zoom => {
+        if (ref.current) return ref.current
+            .getImageScaledToCanvas()
+            .toBlob(blob => {
+                const state = { ...imgState, _zoom, blob };
+                setImgState(state);
+                writeToSession(state);
+            });
     };
     // Convert zoom value (1-2) to slider's value (0-100)
-    const slidersValue = (zoom - 1) * 100;
+    const slidersValue = (imgState._zoom - 1) * 100;
 
     const displayImage = selectedImg || image || Helper.NO_IMAGE();
     const hasImage = image || selectedImg;
-    const { position, zoom, degree } = imageState;
+    const { _position, _zoom, _degree } = imgState;
 
     return (
         isPreview ?
@@ -131,17 +147,15 @@ const AdvancedAvatarEditor = ({
                         height: 'auto',
                         maxWidth: '250px'
                     }}
-                    ref={avatarEditorRef}
+                    ref={ref}
                     image={displayImage}
                     borderRadius={200}
                     border={50}
                     color={[255, 255, 255, 0.9]}
-                    scale={zoom || _zoom}
-                    rotate={degree || _degree}
-                    position={position || _position}
-                    onImageChange={handleImageChange}
+                    scale={_zoom}
+                    rotate={_degree}
+                    position={imageState.position}
                     onPositionChange={handlePositionChange}
-                    onLoadSuccess={handleImageChange}
                 />
             </div>
             <div className={classes.flexRow}>

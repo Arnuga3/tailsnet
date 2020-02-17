@@ -51,4 +51,8 @@ export default class Validation {
         
         return errors;
     }
+
+    static isEmptyObject = object => {
+        return Object.entries(object).length === 0 && object.constructor === Object;
+    }
 }

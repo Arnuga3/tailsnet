@@ -124,11 +124,7 @@ const PetCreate = ({ dispatch, classes }) => {
             <AdvancedAvatarEditor
                 image={selectedImage}
                 onImageSelected={image => setSelectedImage(image)}
-                onImageChange={imgData => {
-                    const { blob, imageState } = imgData;
-                    setPetImage(blob);
-                    setPetImageState(imageState);
-                }}
+                onChange={imgState => setPetImageState(imgState)}
                 imageState={petImageState}
                 onEditCancel={handleAvatarEdit}
                 actionButtons={false}
