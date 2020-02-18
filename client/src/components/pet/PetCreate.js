@@ -7,6 +7,7 @@ import PageWrapper from '../commons/generic/PageWrapper';
 import PTextField from './../commons/generic/PTextField';
 import BirthDatePicker from './../commons/BirthDatePicker';
 import AdvancedAvatarEditor from '../commons/avatarEditor/AdvancedAvatarEditor';
+import PetCreatePreview from './PetCreatePreview';
 import PetType from './PetType';
 import {
     createAndStorePetDetails,
@@ -131,6 +132,19 @@ const PetCreate = ({ dispatch, classes }) => {
             />
         );
     };
+// TOOD: convert blob to img for preview
+    const getPreview = () => {
+        return (
+            <PetCreatePreview
+                details={{
+                    type: petType.type,
+                    name: petName,
+                    dob
+                }}
+                avatar={''}
+            />
+        );
+    };
 
     const getStepContent = step => {
         switch (step) {
@@ -139,7 +153,7 @@ const PetCreate = ({ dispatch, classes }) => {
             case 1:
                 return getAvatarEditor();
             case 2:
-                return 'Finish'
+                return getPreview();
             default:
                 return 'Unknown step';
         }

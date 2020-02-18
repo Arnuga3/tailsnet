@@ -61,39 +61,32 @@ class AdvancedAvatarEditor extends React.Component {
 
     componentWillUnmount() {
         const { onChange } = this.props;
-        const { imgState } = this.state;
-        onChange({
-            position: imgState._position,
-            degree: imgState._degree,
-            zoom: imgState._zoom,
-        });
+        if (this.ref.current) return this.ref.current
+            .getImageScaledToCanvas()
+            .toBlob(blob => {
+                const { imgState } = this.state;
+                onChange({
+                    position: imgState._position,
+                    degree: imgState._degree,
+                    zoom: imgState._zoom,
+                    blob
+                });
+            });
     }
 
     handlePositionChange = _position => {
-        if (this.ref.current) return this.ref.current
-            .getImageScaledToCanvas()
-            .toBlob(blob => {
-                const { imgState } = this.state;
-                this.setState({ imgState: { ...imgState, _position, blob } });
-            });
+        const { imgState } = this.state;
+        this.setState({ imgState: { ...imgState, _position } });
     }
 
     handleRotate = _degree => {
-        if (this.ref.current) return this.ref.current
-            .getImageScaledToCanvas()
-            .toBlob(blob => {
-                const { imgState } = this.state;
-                this.setState({ imgState: { ...imgState, _degree, blob } });
-            });
+        const { imgState } = this.state;
+        this.setState({ imgState: { ...imgState, _degree } });
     }
 
     handleZoom = _zoom => {
-        if (this.ref.current) return this.ref.current
-            .getImageScaledToCanvas()
-            .toBlob(blob => {
-                const { imgState } = this.state;
-                this.setState({ imgState: { ...imgState, _zoom, blob } });
-            });
+        const { imgState } = this.state;
+        this.setState({ imgState: { ...imgState, _zoom } });
     }
 
     render() {
