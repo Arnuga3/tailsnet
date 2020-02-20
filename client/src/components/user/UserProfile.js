@@ -32,11 +32,18 @@ class UserProfile extends React.Component {
         this.setState({ editDetails: !this.state.editDetails });
     }
 
+    getUserInitials = user => {
+        if (user && user.name && user.surname) {
+            return `${user.name[0]}${user.surname[0]}`;
+        } else return '##';
+    }
+
     render() {
         const { avatarMode, editDetails } = this.state;
 
         const { dispatch, classes, user } = this.props;
         const profile_image = user && user.profile_image ? `/${user.profile_image}.jpg` : null;
+        const userInitials = this.getUserInitials(user);
 
         return (
             <PageWrapper pageTitle='User Profile'>
@@ -45,13 +52,13 @@ class UserProfile extends React.Component {
                         <Grid container>
                             <Grid item xs={12} md={6}>
                                 <AdvancedAvatarEditor
-                                    label={user.name}
+                                    label={userInitials}
                                     image={profile_image}
                                     isPreview={avatarMode}
                                     onEdit={this.handleAvatarEdit}
-                                    onCancelAction={this.handleAvatarEdit}
-                                    onUpdate={uploadUserProfileImage}
-                                    onUpdateEnd={this.handleAvatarEdit}
+                                    onCancel={this.handleAvatarEdit}
+                                    onSave={uploadUserProfileImage}
+                                    onSaveEnd={this.handleAvatarEdit}
                                     dispatch={dispatch}
                                 />
                             </Grid>

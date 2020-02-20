@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
-const { check, validationResult } = require('express-validator');
+const { check, param, validationResult } = require('express-validator');
 const AuthToken = require('../auth/AuthToken');
 const auth = AuthToken.vaidateToken;
 
@@ -10,7 +10,23 @@ const PetService = require('./../app_layers/services/PetService');
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-// Create a pet profile
+router.get('/:petId', auth, 
+	[
+		param('petId', 'Pet id is missing')
+			.exists()
+			.isNumeric()
+	],
+	(req, res) => {
+		PetService.getPet(req.params.petId)
+		.then(pet => {
+			const aPet = pet[0];
+			res.status(200).send(aPet);
+		})
+		.catch(error => res.status(400)
+			.send(`There was a problem retrieving pet data. ${error}`));
+  	}
+);
+
 router.post('/create', auth,
 	[
 		check('petName', 'Pet name cannot be empty')

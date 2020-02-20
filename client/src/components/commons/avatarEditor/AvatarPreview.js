@@ -9,18 +9,22 @@ AvatarPreview.propTypes = {
     label: PropTypes.string.isRequired
 };
 
-const AvatarPreview = ({ classes, image, label }) => {
-    const avatar = image ? `/${image}.jpg` : null;
+const AvatarPreview = ({ classes, image, label, size='small' }) => {
     const [error, setError] = useState(false);
+    const aSize =
+        size === 'small' ? classes.sizeS :
+        size === 'medium' ? classes.sizeM :
+        size === 'large' ? classes.sizeL : null;
+
     return (
-        (avatar && !error) ?
-        <Avatar className={classes.avatar}
+        (image && !error) ?
+        <Avatar className={`${classes.avatar} ${aSize}`}
             imgProps={{onError: () => setError(true)}}
-            src={avatar}
+            src={image}
             alt={label}
         />
         :
-        <Avatar className={classes.avatarCaps}>
+        <Avatar className={`${classes.avatarCaps} ${aSize}`}>
             { label && `${label[0].toUpperCase()} ${label[1].toUpperCase()}` }
         </Avatar>
     );
@@ -35,8 +39,21 @@ const styles = theme => ({
         color: theme.palette.primary.main,
         backgroundColor: theme.palette.primary.contrastText,
         borderColor: theme.palette.primary.main,
-        fontSize: theme.spacing(2)
+        fontSize: theme.spacing(2),
+        letterSpacing: -1
     },
+    sizeS: {
+        width: theme.spacing(5),
+        height: theme.spacing(5)
+    },
+    sizeM: {
+        width: theme.spacing(10),
+        height: theme.spacing(10)
+    },
+    sizeL: {
+        width: theme.spacing(15),
+        height: theme.spacing(15)
+    }
 });
 
 export default withStyles(styles)(AvatarPreview);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { IconButton } from '@material-ui/core';
@@ -7,11 +7,15 @@ import RotateRight from '@material-ui/icons/RotateRight';
 
 AvatarRotateControls.propTypes = {
     classes: PropTypes.object,
+    value: PropTypes.number.isRequired,
     onRotateChange: PropTypes.func.isRequired
 };
 
 const AvatarRotateControls = ({ classes, value, onRotateChange }) => {
-    const [degree, setDegree] = useState(value || 0);
+    const [degree, setDegree] = useState(value);
+    useEffect(() => {
+        setDegree(value);
+    }, [value]);
 
     const handleRotate = side => {
         let aDegree = degree;

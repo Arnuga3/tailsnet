@@ -7,15 +7,16 @@ import ApplicationNotifier from './ApplicationNotifier';
 import ApplicationBar from './ApplicationBar';
 import ApplicationDrawer from './ApplicationDrawer';
 import Home from './Home';
-import Pets from './pet/Pets';
-import PetCreate from './pet/PetCreate';
+import PetRouter from './pet/PetRouter';
 import Login from './Login';
 import Register from './Register';
 import UserProfile from './user/UserProfile';
 import AuthRoute from './AuthRoute';
 
 const drawerWidth = 256;
-
+// TODO - Do regression testing to find issues with all the currentt implementation
+// TODO - Document avatar editor component (2 modes of usage)
+// TODO - Deside if loaders are needed, if not what about user interactions?
 const Index = ({ classes }) => {
 
     const [open, setOpen] = useState(false);
@@ -32,8 +33,7 @@ const Index = ({ classes }) => {
                     <Route path='/login' component={Login}/>
                     <Route path='/register' component={Register}/>
                     <AuthRoute path='/user/profile' component={UserProfile}/>
-                    <AuthRoute path='/user/pets/create' component={PetCreate}/>
-                    <AuthRoute path='/user/pets' component={Pets}/>
+                    <AuthRoute path='/user/pets' component={PetRouter}/>
                 </Switch>
             </main>
             <ApplicationDrawer open={open} handleDrawer={handleDrawer}/>

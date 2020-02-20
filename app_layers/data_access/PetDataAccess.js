@@ -1,6 +1,17 @@
 const pg = require('./../../database/postgresql');
 
 module.exports = {
+
+    getPetById(id) {
+        return pg.query({
+            text: `
+                SELECT id, type, name, dob, profile_image
+                FROM pets
+                WHERE id = $1
+            `,
+            values: [id]
+        });
+    },
     
     createPet(pet, userId) {
         const { petType, petName, dob, profile_image } = pet;
@@ -38,7 +49,7 @@ module.exports = {
 
         const uploadImage = (uniqueImageName) => {
             // TODO - Delete the one that will be replaced if any
-            image.avatarImage.mv(`client/public/${uniqueImageName}.jpg`);
+            image.avatarImage.mv(`temp/${uniqueImageName}.jpg`);
         }
 
         return pg.pool().connect()

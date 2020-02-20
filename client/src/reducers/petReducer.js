@@ -1,7 +1,8 @@
-import { SAVE_PET_ACCOUNT, SAVE_PET_ACCOUNTS }  from './../actions/petActions';
+import { SAVE_PET_ACCOUNT, STORE_PET_ACCOUNTS, STORE_PET_DATA }  from './../actions/petActions';
 
 const defaultState = {
-    accounts: []
+    accounts: [],
+    petsData: {}
 };
 
 const petStore = (state = defaultState, { type, value }) => {
@@ -13,10 +14,16 @@ const petStore = (state = defaultState, { type, value }) => {
                 accounts: [...state.accounts, value]
             }
 
-        case SAVE_PET_ACCOUNTS:
+        case STORE_PET_ACCOUNTS:
             return {
                 ...state,
                 accounts: value
+            }
+
+        case STORE_PET_DATA:
+            return {
+                ...state,
+                petsData: {...state.petsData, [value.id]: value}
             }
         
         default:

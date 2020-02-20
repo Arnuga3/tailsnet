@@ -7,6 +7,7 @@ import PageWrapper from '../commons/generic/PageWrapper';
 import PetCard from './PetCard';
 import Add from '@material-ui/icons/Add';
 import { retrieveAndStoreUserPets } from '../../actions/userActions';
+import AuthRoute from './../AuthRoute';
 
 class Pets extends React.Component {
     constructor(props) {
@@ -25,7 +26,7 @@ class Pets extends React.Component {
     }
 
     render() {
-        const { classes, userStore } = this.props;
+        const { match, classes, userStore } = this.props;
         const pets = userStore.pets;
 
         return (
@@ -34,12 +35,12 @@ class Pets extends React.Component {
                     <div className={classes.wrapper}>
                         {
                             pets &&
-                            pets.map(pet => <PetCard key={pet.id} pet={pet}/>)
+                            pets.map(pet => <PetCard key={pet.id} pet={pet} {...this.props} />)
                         }
                         <Card className={classes.card}>
                             <CardActionArea
                                 component={Link}
-                                to='/user/pets/create'
+                                to={`${match.url}/create`}
                                 aria-label='add'
                                 className={classes.cardContent}
                             >

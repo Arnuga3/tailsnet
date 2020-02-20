@@ -81,7 +81,7 @@ module.exports = {
 
         const uploadImage = (uniqueImageName) => {
             // TODO - Delete the one that will be replaced if any
-            image.avatarImage.mv(`client/public/${uniqueImageName}.jpg`);
+            image.avatarImage.mv(`temp/${uniqueImageName}.jpg`);
         }
 
         return pg.pool().connect()

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { Slider, IconButton } from '@material-ui/core';
@@ -7,13 +7,15 @@ import ZoomOut from '@material-ui/icons/ZoomOut';
 
 AvatarZoomControls.propTypes = {
     classes: PropTypes.object,
-    slider: PropTypes.number,
+    value: PropTypes.number.isRequired,
     onZoomChange: PropTypes.func.isRequired
 };
 
 const AvatarZoomControls = ({ classes, value, onZoomChange }) => {
-
-    const [zoom, setZoom] = useState(value || 1);    // value 1 - 2
+    const [zoom, setZoom] = useState(value);    // value 1 - 2
+    useEffect(() => {
+        setZoom(value);
+    }, [value]);
 
     const handleZoomSlider = (event, newValue) => {
         const zoomValue = newValue / 100 + 1;   // Convert slider's value (0-100) to zoom value (1-2)

@@ -2,7 +2,8 @@ import { _get, _post } from './../utils/ApiUtils';
 import { sendNotification } from './../utils/notification';
 
 export const SAVE_PET_ACCOUNT = 'SAVE_PET_ACCOUNT';
-export const SAVE_PET_ACCOUNTS = 'SAVE_PET_ACCOUNTS';
+export const STORE_PET_ACCOUNTS = 'SAVE_PET_ACCOUNTS';
+export const STORE_PET_DATA = 'STORE_PET_DATA';
 
 export const storeNewPetAccount = value => ({
 	type: SAVE_PET_ACCOUNT,
@@ -10,9 +11,28 @@ export const storeNewPetAccount = value => ({
 });
 
 export const storePetAccounts = value => ({
-	type: SAVE_PET_ACCOUNTS,
+	type: STORE_PET_ACCOUNTS,
 	value
 });
+
+export const storePetData = value => ({
+	type: STORE_PET_DATA,
+	value
+});
+
+export function retrieveAndStorePetData(id) {
+    return {
+        type: 'GET_PET_DATA',
+        payload: {
+            request: _get(`/api/pet/${id}`),
+            options: {
+                onSuccess({ dispatch, response }) {
+                    dispatch(storePetData(response.data));
+                }
+            }
+        }
+    }
+}
 
 export function createAndStorePetDetails(data) {
 	return {
@@ -31,7 +51,7 @@ export function createAndStorePetDetails(data) {
 	}
 }
 
-export function uploadPetProfileImage(data) {
+export function uploadPetProfileImage(data, history) {
     return {
         type: 'UPLOAD_PET_PROFILE_IMAGE',
         payload: {
@@ -44,14 +64,15 @@ export function uploadPetProfileImage(data) {
             }),
             options: {
                 onSuccess({ dispatch, response }) {
-                    sendNotification({ dispatch, type: 'success' });
+					sendNotification({ dispatch, type: 'success' });
+					history.push('/user/pets');
                 }
             }
         }
     }
 }
 
-export function createAndStorePetDetailsAndImage(data, imageFormData) {
+export function createAndStorePetDetailsAndImage(data, imageFormData, history) {
     return {
 		type: 'CREATE_PET_PROFILE',
 		payload: {
@@ -62,7 +83,7 @@ export function createAndStorePetDetailsAndImage(data, imageFormData) {
 			options: {
 				onSuccess({ dispatch, response }) {
                     imageFormData.append('petId', response.data.id);
-                    dispatch(uploadPetProfileImage(imageFormData));
+                    dispatch(uploadPetProfileImage(imageFormData, history));
                     dispatch(storePetAccounts(response.data));
                 }
 			}

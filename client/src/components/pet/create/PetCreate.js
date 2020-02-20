@@ -3,26 +3,31 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import { Paper, Grid, Stepper, Step, StepLabel, Button } from '@material-ui/core';
-import PageWrapper from '../commons/generic/PageWrapper';
-import PTextField from './../commons/generic/PTextField';
-import BirthDatePicker from './../commons/BirthDatePicker';
-import AdvancedAvatarEditor from '../commons/avatarEditor/AdvancedAvatarEditor';
+import PageWrapper from '../../commons/generic/PageWrapper';
+import PTextField from '../../commons/generic/PTextField';
+import BirthDatePicker from '../../commons/BirthDatePicker';
+import AdvancedAvatarEditor from '../../commons/avatarEditor/AdvancedAvatarEditor';
 import PetCreatePreview from './PetCreatePreview';
 import PetType from './PetType';
 import {
     createAndStorePetDetails,
     createAndStorePetDetailsAndImage
-} from './../../actions/petActions';
+} from '../../../actions/petActions';
+import { useHistory } from "react-router-dom";
 
+// TODO - navigate to pets screen or pet feed screen
 const PetCreate = ({ dispatch, classes }) => {
     const [petType, setPetType] = useState(null);
+    const [petName, setPetName] = useState('');
     const [dob, setDob] = useState(null);
     const [errors, setErrors] = useState([]);
     const [editAvatar, setEditAvatar] = useState(false);
-    const [petName, setPetName] = useState('');
     const [selectedImage, setSelectedImage] = useState(null);
+    const [petPreviewImage, setPetPreviewImage] = useState(null);
     const [petImageState, setPetImageState] = useState({});
     const [skipped, setSkipped] = useState(false);
+
+    const history = useHistory();
 
     const [activeStep, setActiveStep] = useState(0);
     const steps = ['Details', 'Profile Image'];
@@ -54,9 +59,8 @@ const PetCreate = ({ dispatch, classes }) => {
         } else if (petImageState.blob) {
             var formData = new FormData();
             formData.append('avatarImage', petImageState.blob);
-            dispatch(createAndStorePetDetailsAndImage(petDetails, formData));
+            dispatch(createAndStorePetDetailsAndImage(petDetails, formData, history));
         }
-        clearForm();
     };
 
     const handleSkip = () => {
@@ -67,11 +71,6 @@ const PetCreate = ({ dispatch, classes }) => {
     const handleAvatarEdit = () =>
         setEditAvatar(!editAvatar);
 
-    const clearForm = () => {
-        setPetType(null);
-        setDob(null);
-    };
-
     const validateForm = () => {
         let freshErrors = [];
         setErrors([]);
@@ -79,8 +78,8 @@ const PetCreate = ({ dispatch, classes }) => {
         if (petType === null)
             freshErrors.push({ name: 'petType' });
 
-        if (petName.trim() === '')
-            freshErrors.push({ name: 'petName' });
+        if (petName.trim().length < 2)
+            freshErrors.push({ error: 'minimum 2 characters', name: 'petName' });
 
         if (dob === null)
             freshErrors.push({ name: 'dob' });
@@ -89,8 +88,11 @@ const PetCreate = ({ dispatch, classes }) => {
         return freshErrors.length === 0;
     };
 
+    const formError = field =>
+        errors.filter(err => err.name === field);
+
     const hasError = field =>  {
-        const fieldErrorArr = errors.filter(err => err.name === field);
+        const fieldErrorArr = formError(field);
         return fieldErrorArr.length > 0;
     };
 
@@ -104,7 +106,11 @@ const PetCreate = ({ dispatch, classes }) => {
                 <PTextField
                     onChange={({ target }) => setPetName(target.value)}
                     value={petName}
-                    label='Pet Name'
+                    label={
+                        hasError('petName') && formError('petName')[0].error
+                            ? `Pet Name - ${formError('petName')[0].error}`
+                            : 'Pet Name'
+                    }
                     name='petName'
                     error={hasError('petName')}
                 >
@@ -123,8 +129,14 @@ const PetCreate = ({ dispatch, classes }) => {
         return (
             <AdvancedAvatarEditor
                 image={selectedImage}
-                onImageSelected={image => setSelectedImage(image)}
-                onChange={imgState => setPetImageState(imgState)}
+                onImageSelected={image => {
+                    setSelectedImage(image);
+                    setPetImageState({});
+                }}
+                onChange={imgState => {
+                    createPreviewImage(imgState.blob);
+                    setPetImageState(imgState);
+                }}
                 imageState={petImageState}
                 onEditCancel={handleAvatarEdit}
                 actionButtons={false}
@@ -132,7 +144,7 @@ const PetCreate = ({ dispatch, classes }) => {
             />
         );
     };
-// TOOD: convert blob to img for preview
+
     const getPreview = () => {
         return (
             <PetCreatePreview
@@ -141,10 +153,19 @@ const PetCreate = ({ dispatch, classes }) => {
                     name: petName,
                     dob
                 }}
-                avatar={''}
+                avatar={!skipped ? petPreviewImage : null}
+                size='large'
             />
         );
     };
+
+    const createPreviewImage = blob => {
+        if (blob) {
+            let reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onload = e => setPetPreviewImage(e.target.result);
+        }
+    }
 
     const getStepContent = step => {
         switch (step) {
@@ -210,7 +231,7 @@ const PetCreate = ({ dispatch, classes }) => {
                                                 color='primary'
                                                 onClick={handleNext}
                                                 className={classes.button}
-                                                disabled={!petImageState.blob}
+                                                disabled={!selectedImage}
                                             >
                                                 Next
                                             </Button>

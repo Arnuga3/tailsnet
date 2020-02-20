@@ -3,38 +3,10 @@ import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { Avatar, Tooltip, Card, CardActionArea, Typography, CardMedia, CardContent } from '@material-ui/core';
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
+import Helper from './../../utils/Helper';
 
-const PetCard = ({ classes, pet }) => {
+const PetCard = ({ match, classes, pet }) => {
     const [imgLoadError, setImgLoadError] = useState(false);
-
-    const calcAge = date => {
-        const today = new Date();
-        const dob = new Date(date);
-        const msDiff = today.getTime() - dob.getTime();
-        let ageStr = '';
-        
-        const msYear = 365 * 86400000;
-        
-        const years = msDiff / msYear;
-        const yearsRounded = Math.floor(years);
-
-        const months = (years - yearsRounded) * 12;
-        const monthsRounded = Math.floor(months);
-
-        const weeks = (months - monthsRounded) * 4.3;
-        const weeksRounded = Math.floor(weeks);
-
-        if (yearsRounded > 0)
-            ageStr += `${yearsRounded} y`;
-
-        else if (yearsRounded < 1 && monthsRounded > 0)
-            ageStr += `${monthsRounded} m`;
-
-        else if (yearsRounded < 1 && monthsRounded < 1 && weeksRounded > 0)
-            ageStr += `${weeksRounded} w`;
-
-        return ageStr;
-    };
 
     const firstTwoTypeCaps = type => {
         const firstTwoLetters = `${type[0]}${type[1]}`;
@@ -46,12 +18,12 @@ const PetCard = ({ classes, pet }) => {
     };
 
     const { id, name, type, dob, profile_image } = pet;
-    const age = calcAge(dob);
+    const age = Helper.getAgeString(dob);
     const profileImageLoaded = profile_image && !imgLoadError;
 
     return (
         <Card className={classes.card}>
-            <CardActionArea component={Link} to={`/user/pets/${id}`}>
+            <CardActionArea component={Link} to={`${match.url}/${id}/wall`}>
                 <CardMedia
                     component='img'
                     className={profileImageLoaded ? classes.profileImage : classes.typeIcon}

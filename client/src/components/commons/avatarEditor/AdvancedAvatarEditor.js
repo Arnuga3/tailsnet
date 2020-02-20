@@ -26,15 +26,17 @@ AdvancedAvatarEditor.propTypes = {
     isPreview: PropTypes.bool
 };
 
+const defaultImgState = {
+    position: { x: 0, y: 0 },
+    degree: 0,
+    zoom: 1
+}
+
 class AdvancedAvatarEditor extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            imgState: {
-                _position: props.imageState.position || { x: 0, y: 0 },
-                _degree: props.imageState.degree || 0,
-                _zoom: props.imageState.zoom || 1
-            },
+            imgState: { ...defaultImgState, ...this.props.imageState },
             selectedImg: null
         };
         this.ref = React.createRef();
@@ -42,14 +44,15 @@ class AdvancedAvatarEditor extends React.Component {
 
     handleSelect = selectedImg => {
         const { onImageSelected } = this.props;
-        this.setState({ selectedImg });
-        onImageSelected(selectedImg);
+        this.setState({ selectedImg, imgState: defaultImgState });
+        if (onImageSelected) onImageSelected(selectedImg);
     };
 
     handleSave = () => {
-        if (this.ref) {
+        const editor = this.ref.current;
+        if (editor) {
             const { dispatch, onSave, onSaveEnd } = this.props;
-            const avatarImage = this.ref.getImageScaledToCanvas();
+            const avatarImage = editor.getImageScaledToCanvas();
             avatarImage.toBlob(blob => {
                 var formData = new FormData();
                 formData.append('avatarImage', blob);
@@ -60,33 +63,35 @@ class AdvancedAvatarEditor extends React.Component {
     };
 
     componentWillUnmount() {
-        const { onChange } = this.props;
-        if (this.ref.current) return this.ref.current
-            .getImageScaledToCanvas()
-            .toBlob(blob => {
-                const { imgState } = this.state;
-                onChange({
-                    position: imgState._position,
-                    degree: imgState._degree,
-                    zoom: imgState._zoom,
-                    blob
+        if (this.ref.current) {
+            const { onChange } = this.props;
+            const { imgState } = this.state;
+            return this.ref.current
+                .getImageScaledToCanvas()
+                .toBlob(blob => {
+                    onChange({
+                        position: imgState.position,
+                        degree: imgState.degree,
+                        zoom: imgState.zoom,
+                        blob
+                    });
                 });
-            });
+        }
     }
 
-    handlePositionChange = _position => {
+    handlePositionChange = position => {
         const { imgState } = this.state;
-        this.setState({ imgState: { ...imgState, _position } });
+        this.setState({ imgState: { ...imgState, position } });
     }
 
-    handleRotate = _degree => {
+    handleRotate = degree => {
         const { imgState } = this.state;
-        this.setState({ imgState: { ...imgState, _degree } });
+        this.setState({ imgState: { ...imgState, degree } });
     }
 
-    handleZoom = _zoom => {
+    handleZoom = zoom => {
         const { imgState } = this.state;
-        this.setState({ imgState: { ...imgState, _zoom } });
+        this.setState({ imgState: { ...imgState, zoom } });
     }
 
     render() {
@@ -103,7 +108,7 @@ class AdvancedAvatarEditor extends React.Component {
         const { imgState, selectedImg } = this.state;
         const displayImage = selectedImg || image || Helper.NO_IMAGE();
         const hasImage = image || selectedImg;
-        const { _position, _zoom, _degree } = imgState;
+        const { position, zoom, degree } = imgState;
         
         return (
             isPreview ?
@@ -129,9 +134,9 @@ class AdvancedAvatarEditor extends React.Component {
                         borderRadius={200}
                         border={50}
                         color={[255, 255, 255, 0.9]}
-                        scale={_zoom}
-                        rotate={_degree}
-                        position={_position}
+                        scale={zoom}
+                        rotate={degree}
+                        position={position}
                         onPositionChange={this.handlePositionChange}
                     />
                 </div>
@@ -140,7 +145,7 @@ class AdvancedAvatarEditor extends React.Component {
                         { 
                             hasImage &&
                             <AvatarZoomControls
-                                value={_zoom}
+                                value={zoom}
                                 onZoomChange={this.handleZoom}
                             />
                         }
@@ -149,7 +154,7 @@ class AdvancedAvatarEditor extends React.Component {
                                 hasImage &&
                                 <React.Fragment>
                                     <AvatarRotateControls
-                                        value={_degree}
+                                        value={degree}
                                         onRotateChange={this.handleRotate}
                                     />
                                     {

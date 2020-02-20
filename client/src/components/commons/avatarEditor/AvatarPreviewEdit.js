@@ -5,7 +5,7 @@ import { IconButton } from '@material-ui/core';
 import Edit from '@material-ui/icons/EditOutlined';
 import AvatarPreview from './AvatarPreview';
 
-AvatarPreview.propTypes = {
+AvatarPreviewEdit.propTypes = {
     classes: PropTypes.object,
     image: PropTypes.string,
     label: PropTypes.string.isRequired,
