@@ -7,7 +7,7 @@ import PageWrapper from '../commons/generic/PageWrapper';
 import PetCard from './PetCard';
 import Add from '@material-ui/icons/Add';
 import { retrieveAndStoreUserPets } from '../../actions/userActions';
-import AuthRoute from './../AuthRoute';
+import Loader from './../commons/generic/Loader';
 
 class Pets extends React.Component {
     constructor(props) {
@@ -28,27 +28,30 @@ class Pets extends React.Component {
     render() {
         const { match, classes, userStore } = this.props;
         const pets = userStore.pets;
+        const arePets = pets && pets.length > 0;
 
         return (
             <PageWrapper pageTitle='Pets'>
-                <Paper className={classes.paper}>
-                    <div className={classes.wrapper}>
-                        {
-                            pets &&
-                            pets.map(pet => <PetCard key={pet.id} pet={pet} {...this.props} />)
-                        }
-                        <Card className={classes.card}>
-                            <CardActionArea
-                                component={Link}
-                                to={`${match.url}/create`}
-                                aria-label='add'
-                                className={classes.cardContent}
-                            >
-                                <Add/>
-                            </CardActionArea>
-                        </Card>
-                    </div>
-                </Paper>
+                {
+                    arePets ?
+                        <Paper className={classes.paper}>
+                            <div className={classes.wrapper}>
+                                { pets.map(pet => <PetCard key={pet.id} pet={pet} {...this.props} />) }
+                                <Card className={classes.card}>
+                                    <CardActionArea
+                                        component={Link}
+                                        to={`${match.url}/create`}
+                                        aria-label='add'
+                                        className={classes.cardContent}
+                                    >
+                                        <Add/>
+                                    </CardActionArea>
+                                </Card>
+                            </div>
+                        </Paper>
+                    :   <Loader/>
+                }
+                
             </PageWrapper> 
         )
     }

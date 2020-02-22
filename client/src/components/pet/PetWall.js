@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { Paper, Typography } from '@material-ui/core';
 import PageWrapper from './../commons/generic/PageWrapper';
 import { retrieveAndStorePetData } from './../../actions/petActions';
+import Loader from './../commons/generic/Loader';
 
 const PetWall = ({ classes, match, dispatch, petsData }) => {
 
@@ -22,11 +23,12 @@ const PetWall = ({ classes, match, dispatch, petsData }) => {
 
     return (
         <PageWrapper pageTitle={petData && petData.name || ''}>
-            <Paper className={classes.paper}>
-                { petData &&
-                    <img src={getImage(petData.profile_image)} alt={petData.name}/>
-                }
-            </Paper>
+            { petData ?
+                    <Paper className={classes.paper}>
+                        <img src={getImage(petData.profile_image)} alt={petData.name}/>
+                    </Paper>
+                :   <Loader/>
+            }
         </PageWrapper>
     );
 };

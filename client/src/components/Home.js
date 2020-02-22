@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { Paper, Typography } from '@material-ui/core';
 import PageWrapper from './commons/generic/PageWrapper';
-// import ProfileImage from './commons/ProfileImage';
 
 const profiles = [
     {

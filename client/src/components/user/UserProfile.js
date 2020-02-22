@@ -6,6 +6,7 @@ import PageWrapper from '../commons/generic/PageWrapper';
 import AdvancedAvatarEditor from '../commons/avatarEditor/AdvancedAvatarEditor';
 import DetailsRead from './DetailsRead';
 import DetailsEdit from './DetailsEdit';
+import Loader from './../commons/generic/Loader';
 import {
     retrieveAndStoreUserAccount,
     uploadUserProfileImage
@@ -47,34 +48,35 @@ class UserProfile extends React.Component {
 
         return (
             <PageWrapper pageTitle='User Profile'>
-                <Paper className={classes.paper}>
-                    { user && 
-                        <Grid container>
-                            <Grid item xs={12} md={6}>
-                                <AdvancedAvatarEditor
-                                    label={userInitials}
-                                    image={profile_image}
-                                    isPreview={avatarMode}
-                                    onEdit={this.handleAvatarEdit}
-                                    onCancel={this.handleAvatarEdit}
-                                    onSave={uploadUserProfileImage}
-                                    onSaveEnd={this.handleAvatarEdit}
-                                    dispatch={dispatch}
-                                />
-                            </Grid>
-                            <Grid item xs={12} md={6}
-                                className={classes.details}
-                                justify='center'
-                            >
-                                {
-                                    editDetails
-                                    ? <DetailsEdit user={user} onUpdate={this.handleDetailsEdit}/>
-                                    : <DetailsRead user={user} onEdit={this.handleDetailsEdit}/>
-                                }
-                            </Grid>
-                        </Grid>
+                    { user ? 
+                            <Paper className={classes.paper}>
+                                <Grid container>
+                                    <Grid item xs={12} md={6}>
+                                        <AdvancedAvatarEditor
+                                            label={userInitials}
+                                            image={profile_image}
+                                            isPreview={avatarMode}
+                                            onEdit={this.handleAvatarEdit}
+                                            onCancel={this.handleAvatarEdit}
+                                            onSave={uploadUserProfileImage}
+                                            onSaveEnd={this.handleAvatarEdit}
+                                            dispatch={dispatch}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} md={6}
+                                        className={classes.details}
+                                        justify='center'
+                                    >
+                                        {
+                                            editDetails
+                                            ? <DetailsEdit user={user} onUpdate={this.handleDetailsEdit}/>
+                                            : <DetailsRead user={user} onEdit={this.handleDetailsEdit}/>
+                                        }
+                                    </Grid>
+                                </Grid>
+                            </Paper>
+                        :   <Loader/>
                     }
-                </Paper>
             </PageWrapper> 
         )
     }

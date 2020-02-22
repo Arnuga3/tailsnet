@@ -16,7 +16,8 @@ import AuthRoute from './AuthRoute';
 const drawerWidth = 256;
 // TODO - Do regression testing to find issues with all the currentt implementation
 // TODO - Document avatar editor component (2 modes of usage)
-// TODO - Deside if loaders are needed, if not what about user interactions?
+// TODO - Decide if loaders are needed, if not what about user interactions?
+// TODO - Review performance optimisation (dynamic import, async components, etc.)
 const Index = ({ classes }) => {
 
     const [open, setOpen] = useState(false);
