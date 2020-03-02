@@ -17,6 +17,11 @@ const PetCard = ({ match, classes, pet }) => {
         return `/category/${type.toLowerCase()}.png`;
     };
 
+    
+    const getImage = str => {
+        return `/image/${str}.jpg`;
+    };
+
     const { id, name, type, dob, profile_image } = pet;
     const age = Helper.getAgeString(dob);
     const profileImageLoaded = profile_image && !imgLoadError;
@@ -24,12 +29,12 @@ const PetCard = ({ match, classes, pet }) => {
     return (
         <Card className={classes.card}>
             <CardActionArea component={Link} to={`${match.url}/${id}/wall`}>
-                <CardMedia
+                <CardMedia className={classes.media}
                     component='img'
                     className={profileImageLoaded ? classes.profileImage : classes.typeIcon}
                     image={
                         profileImageLoaded
-                        ? profile_image
+                        ? getImage(profile_image)
                         : getIcon(type)
                     }
                     title={name}
@@ -66,19 +71,22 @@ const PetCard = ({ match, classes, pet }) => {
 
 const styles = theme => ({
     card: {
-        width: 280,
-        height: 235,
+        minWidth: 200,
+        maxWidth: 400,
         textDecoration: 'none',
         margin: theme.spacing(1)
+    },
+    media: {
+        height: 0,
+        paddingTop: '56.25%', // 16:9
     },
     profileImage: {
         height: 140
     },
     typeIcon: {
-        height: 100,
-        width: 100,
+        height: 120,
+        width: 120,
         margin: '0 auto',
-        padding: 15,
         opacity: .3
     },
     avatar: {

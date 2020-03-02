@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
-import { Paper, Typography } from '@material-ui/core';
+import { Paper, Grid } from '@material-ui/core';
 import PageWrapper from './../commons/generic/PageWrapper';
 import { retrieveAndStorePetData } from './../../actions/petActions';
 import Loader from './../commons/generic/Loader';
+import AvatarPreview from './../commons/avatarEditor/AvatarPreview';
+import PostCreate from './../commons/PostCreate';
 
 const PetWall = ({ classes, match, dispatch, petsData }) => {
 
@@ -25,7 +27,17 @@ const PetWall = ({ classes, match, dispatch, petsData }) => {
         <PageWrapper pageTitle={petData && petData.name || ''}>
             { petData ?
                     <Paper className={classes.paper}>
-                        <img src={getImage(petData.profile_image)} alt={petData.name}/>
+                        <Grid container spacing={3}>
+                            <Grid item xs={12} md>
+                                <AvatarPreview image={getImage(petData.profile_image)} label={petData.name} size='small'/>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <PostCreate/>
+                            </Grid>
+                            <Grid item xs={12} md>
+                                <Paper className={classes.paper}>xs</Paper>
+                            </Grid>
+                        </Grid>
                     </Paper>
                 :   <Loader/>
             }

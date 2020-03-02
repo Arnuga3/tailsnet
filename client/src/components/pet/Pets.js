@@ -36,8 +36,7 @@ class Pets extends React.Component {
                     arePets ?
                         <Paper className={classes.paper}>
                             <div className={classes.wrapper}>
-                                { pets.map(pet => <PetCard key={pet.id} pet={pet} {...this.props} />) }
-                                <Card className={classes.card}>
+                                <Card className={classes.cardCreatePet}>
                                     <CardActionArea
                                         component={Link}
                                         to={`${match.url}/create`}
@@ -47,6 +46,7 @@ class Pets extends React.Component {
                                         <Add/>
                                     </CardActionArea>
                                 </Card>
+                                { pets.map(pet => <PetCard key={pet.id} pet={pet} {...this.props} />) }
                             </div>
                         </Paper>
                     :   <Loader/>
@@ -64,16 +64,16 @@ const styles = theme => ({
         justifyContent: 'center',
         padding: theme.spacing(3)
     },
+    cardCreatePet: {
+        minWidth: 200,
+        minHeight: 200,
+        textDecoration: 'none',
+        margin: theme.spacing(1)
+    },
     wrapper: {
         display: 'flex',
         justifyContent: 'space-evenly',
         flexWrap: 'wrap'
-    },
-    card: {
-        width: 280,
-        height: 240,
-        textDecoration: 'none',
-        margin: theme.spacing(1)
     },
     cardContent: {
         display: 'flex',
