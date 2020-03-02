@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
-import { Paper, Grid } from '@material-ui/core';
+import { Paper, Grid, Typography } from '@material-ui/core';
 import PageWrapper from './../commons/generic/PageWrapper';
 import { retrieveAndStorePetData } from './../../actions/petActions';
 import Loader from './../commons/generic/Loader';
-import AvatarPreview from './../commons/avatarEditor/AvatarPreview';
 import PostCreate from './../commons/PostCreate';
 
 const PetWall = ({ classes, match, dispatch, petsData }) => {
@@ -19,20 +18,16 @@ const PetWall = ({ classes, match, dispatch, petsData }) => {
         setPetData(petsData[match.params.petId]);
     }, [petsData]);
 
-    const getImage = str => {
-        return `/image/${str}.jpg`;
-    };
-
     return (
-        <PageWrapper pageTitle={petData && petData.name || ''}>
+        <PageWrapper>
             { petData ?
                     <Paper className={classes.paper}>
                         <Grid container spacing={3}>
                             <Grid item xs={12} md>
-                                <AvatarPreview image={getImage(petData.profile_image)} label={petData.name} size='small'/>
+                                {/* <Typography variant='h4'>{petData.name}</Typography> */}
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                <PostCreate/>
+                                <PostCreate petData={petData}/>
                             </Grid>
                             <Grid item xs={12} md>
                                 <Paper className={classes.paper}>xs</Paper>

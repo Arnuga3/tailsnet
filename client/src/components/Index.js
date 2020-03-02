@@ -47,6 +47,7 @@ const styles = theme => ({
         display: 'flex'
     },
     content: {
+        paddingTop: '65px',
         flexGrow: 1,
         transition: theme.transitions.create('margin', {
             easing: theme.transitions.easing.sharp,

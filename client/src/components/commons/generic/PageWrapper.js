@@ -2,7 +2,7 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
 
-const PageWrapper = ({ classes, children, pageTitle }) => {
+const PageWrapper = ({ classes, children, pageTitle='' }) => {
     return (
         <div className={classes.root}>
             <Grid container justify='center'>
