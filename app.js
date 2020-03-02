@@ -6,6 +6,8 @@ const AuthController = require('./auth/AuthController');
 const fileUpload = require('express-fileupload');
 const app = express();
 
+// TODO - Find about reboot option on server fail or alternative solutions
+
 require('dotenv').config();
 require('./database/mongodb');
 

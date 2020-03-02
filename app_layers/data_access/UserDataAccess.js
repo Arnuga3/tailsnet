@@ -6,7 +6,7 @@ module.exports = {
         return pg.query({
             text: `
                 SELECT id, title, name, surname, dob, email, password, profile_image
-                FROM users
+                FROM pet_owner
                 WHERE email = $1
             `,
             values: [email]
@@ -17,7 +17,7 @@ module.exports = {
         return pg.query({
             text: `
                 SELECT title, name, surname, dob, email, profile_image
-                FROM users
+                FROM pet_owner
                 WHERE id = $1
             `,
             values: [id]
@@ -27,7 +27,7 @@ module.exports = {
     createUser({ title, name, surname, dob, email, password }) {
         return pg.query({
             text: `
-                INSERT INTO users(title, name, surname, dob, email, password)
+                INSERT INTO pet_owner(title, name, surname, dob, email, password)
                 VALUES ($1, $2, $3, $4, $5, $6)
                 RETURNING title, name, surname, dob, email
             `,
@@ -38,7 +38,7 @@ module.exports = {
     updateUser({ id, title, name, surname, dob }) {
         return pg.query({
             text: `
-                UPDATE users
+                UPDATE pet_owner
                 SET title=$2, name=$3, surname=$4, dob=$5
                 WHERE id = $1
                 RETURNING title, name, surname, dob, email
@@ -51,8 +51,8 @@ module.exports = {
         return pg.query({
             text: `
                 SELECT id, type, name, dob, profile_image
-                FROM pets
-                WHERE user_id = $1
+                FROM pet
+                WHERE owner_id = $1
             `,
             values: [userId]
         });
@@ -71,7 +71,7 @@ module.exports = {
 
         const updateProfileImage = (client, uniqueImageName, userId) => {
             const updateProfileImageText = `
-                UPDATE pets
+                UPDATE pet_owner
                 SET profile_image = $1
                 WHERE id = $2
             `;

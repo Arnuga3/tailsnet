@@ -6,7 +6,7 @@ module.exports = {
         return pg.query({
             text: `
                 SELECT id, type, name, dob, profile_image
-                FROM pets
+                FROM pet
                 WHERE id = $1
             `,
             values: [id]
@@ -17,7 +17,7 @@ module.exports = {
         const { petType, petName, dob, profile_image } = pet;
         return pg.query({
             text: `
-                INSERT INTO pets(type, name, dob, profile_image, user_id)
+                INSERT INTO pet(type, name, dob, profile_image, owner_id)
                 VALUES ($1, $2, $3, $4, $5)
                 RETURNING id, type, name, dob, profile_image
             `,
@@ -39,8 +39,8 @@ module.exports = {
 
         const updateProfileImage = (client, uniqueImageName, userId) => {
             const updateProfileImageText = `
-                UPDATE pets
-                SET profile_image = $1, user_id = $2 
+                UPDATE pet
+                SET profile_image = $1, owner_id = $2 
                 WHERE id = $3
             `;
             const values = [uniqueImageName, userId, petId];
