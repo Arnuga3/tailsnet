@@ -1,33 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
-import { Paper, Grid, Typography } from '@material-ui/core';
+import { Paper, Grid } from '@material-ui/core';
 import PageWrapper from './../commons/generic/PageWrapper';
-import { retrieveAndStorePetData } from './../../actions/petActions';
 import Loader from './../commons/generic/Loader';
-import PostCreate from './../commons/PostCreate';
+import PostCreate from './posts/PostCreate';
+import Post from './posts/Post';
+import { retrieveAndStorePetData } from './../../actions/petActions';
+import { getAndStorePosts } from './../../actions/postActions';
 
-const PetWall = ({ classes, match, dispatch, petsData }) => {
+const PetWall = ({ classes, match, dispatch, petsData, petsPosts }) => {
 
+    const { petId } = match.params;
     const [petData, setPetData] = useState(null);
+    const [petPosts, setPetPosts] = useState(null);
+
     useEffect(() => {
-        dispatch(retrieveAndStorePetData(match.params.petId));
+        dispatch(retrieveAndStorePetData(petId));
+        dispatch(getAndStorePosts(petId));
     }, []);
 
     useEffect(() => {
-        setPetData(petsData[match.params.petId]);
+        setPetData(petsData[petId]);
     }, [petsData]);
+
+    useEffect(() => {
+        setPetPosts(petsPosts[petId]);
+    }, [petsPosts]);
 
     return (
         <PageWrapper>
             { petData ?
-                    <Paper className={classes.paper}>
+                    <Paper className={classes.paper} square>
                         <Grid container spacing={3}>
                             <Grid item xs={12} md>
-                                {/* <Typography variant='h4'>{petData.name}</Typography> */}
+                                
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <PostCreate petData={petData}/>
+                                {
+                                    petPosts ?
+                                        petPosts.map(post => <Post petData={petData} post={post}/>)
+                                        : <Loader/>
+                                }
                             </Grid>
                             <Grid item xs={12} md>
                                 <Paper className={classes.paper}>xs</Paper>
@@ -45,12 +60,13 @@ const styles = theme => ({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        padding: theme.spacing(3)
+        padding: theme.spacing(1.5)
     },
 });
 
 const mapStateToProps = ({ petStore }) => ({
-    petsData: petStore.petsData
+    petsData: petStore.petsData,
+    petsPosts: petStore.petsPosts
 });
 
 export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(PetWall));

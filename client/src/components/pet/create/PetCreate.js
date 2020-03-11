@@ -6,7 +6,7 @@ import { Paper, Grid, Stepper, Step, StepLabel, Button } from '@material-ui/core
 import PageWrapper from '../../commons/generic/PageWrapper';
 import PTextField from '../../commons/generic/PTextField';
 import BirthDatePicker from '../../commons/BirthDatePicker';
-import AdvancedAvatarEditor from '../../commons/avatarEditor/AdvancedAvatarEditor';
+import AdvancedAvatarEditor from '../../commons/avatar/avatarEditor/AdvancedAvatarEditor';
 import PetCreatePreview from './PetCreatePreview';
 import PetType from './PetType';
 import {

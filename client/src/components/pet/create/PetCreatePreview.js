@@ -3,7 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { List, ListItem, ListItemText, ListItemIcon } from '@material-ui/core';
 import Cake from '@material-ui/icons/CakeOutlined';
-import AvatarPreview from '../../commons/avatarEditor/AvatarPreview';
+import AvatarPreview from '../../commons/avatar/AvatarPreview';
 import Helper from '../../../utils/Helper';
 
 PetCreatePreview.propTypes = {

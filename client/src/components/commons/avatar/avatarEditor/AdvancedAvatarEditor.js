@@ -4,10 +4,10 @@ import { withStyles } from '@material-ui/core/styles';
 import { Fab } from '@material-ui/core';
 import Save from '@material-ui/icons/SaveOutlined';
 import Clear from '@material-ui/icons/Clear';
-import Helper from '../../../utils/Helper';
+import Helper from '../../../../utils/Helper';
 import AvatarEditor from 'react-avatar-editor';
-import ImageSelect from './ImageSelect';
-import AvatarPreviewEdit from './AvatarPreviewEdit';
+import ImageSelect from '../../ImageSelect';
+import AvatarPreviewEdit from '../AvatarPreviewEdit';
 import AvatarZoomControls from './AvatarZoomControls';
 import AvatarRotateControls from './AvatarRotateControls';
 

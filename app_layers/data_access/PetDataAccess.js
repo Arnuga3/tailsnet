@@ -62,5 +62,28 @@ module.exports = {
                     .catch(err => error(err, client));
             })
             .catch(err => error(err, client));
-    }
+    },
+
+    getPetPostsById(id) {
+        return pg.query({
+            text: `
+                SELECT id, description, date_created, created_by, pet_id
+                FROM post
+                WHERE pet_id = $1
+            `,
+            values: [id]
+        });
+    },
+
+    createPost(post, userId) {
+        const { petId, description, image } = post;
+        return pg.query({
+            text: `
+                INSERT INTO post(description, created_by, pet_id)
+                VALUES ($1, $2, $3)
+                RETURNING id, description, created_by, date_created, pet_id
+            `,
+            values: [description, userId, petId]
+        });
+    },
 };

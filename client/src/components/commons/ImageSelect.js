@@ -10,7 +10,7 @@ ImageSelect.propTypes = {
     onSelect: PropTypes.func.isRequired
 };
 
-const ImageSelect = ({ classes, onSelect }) => {
+const ImageSelect = ({ classes, onSelect, noText=false }) => {
 
     const handleChange = e => {
         if (e.target.files && e.target.files[0]) {
@@ -29,12 +29,16 @@ const ImageSelect = ({ classes, onSelect }) => {
                 onChange={handleChange}
             />
             <label htmlFor='upload-image-file'>
-                <Button className={classes.button}
-                    startIcon={<ImageSearch/>}
-                    component='span'
-                >
-                    Upload
-                </Button>
+                {
+                    noText ?
+                        <IconButton component='span'>
+                            <ImageSearch/>
+                        </IconButton>
+                    :   <Button className={classes.button} startIcon={<ImageSearch/>} component='span'>
+                            Upload
+                        </Button>
+                }
+                
             </label>
             <IconButton disabled component='span'>
                 <AddAPhoto/>

@@ -36,7 +36,7 @@ export function retrieveAndStoreUserAccount() {
     return {
         type: 'GET_USER_PROFILE',
         payload: {
-            request: _get('/api/user/profile'),
+            request: _get({ url: '/api/user/profile' }),
             options: {
                 onSuccess({ dispatch, response }) {
                     dispatch(storeUserAccount(response.data));
@@ -122,7 +122,7 @@ export function retrieveAndStoreUserPets() {
     return {
         type: 'GET_USER_PETS',
         payload: {
-            request: _get('/api/user/pets'),
+            request: _get({ url: '/api/user/pets' }),
             options: {
                 onSuccess({ dispatch, response }) {
                     dispatch(storeUserPets(response.data));

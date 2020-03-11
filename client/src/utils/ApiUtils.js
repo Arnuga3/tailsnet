@@ -2,7 +2,7 @@ import AuthUtils from './AuthUtils';
 import { setAuthencated } from './../actions/userActions';
 import { sendNotification } from './notification';
 
-export const _get = (url) => ({
+export const _get = ({ url }) => ({
     method: 'get',
     url
 });

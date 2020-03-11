@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const UserEndPoint = require('./api/UserEndPoint');
 const PetEndPoint = require('./api/PetEndPoint');
+const PostEndPoint = require('./api/PostEndPoint');
 const AuthController = require('./auth/AuthController');
 const fileUpload = require('express-fileupload');
 const app = express();
@@ -18,6 +19,7 @@ app.use(fileUpload());
 
 app.use('/api/user', UserEndPoint);
 app.use('/api/pet', PetEndPoint);
+app.use('/api/post', PostEndPoint);
 app.use('/auth', AuthController);
 
 // Handle the rest endpoints

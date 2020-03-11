@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { Paper, Grid } from '@material-ui/core';
 import PageWrapper from '../commons/generic/PageWrapper';
-import AdvancedAvatarEditor from '../commons/avatarEditor/AdvancedAvatarEditor';
+import AdvancedAvatarEditor from '../commons/avatar/avatarEditor/AdvancedAvatarEditor';
 import DetailsRead from './DetailsRead';
 import DetailsEdit from './DetailsEdit';
 import Loader from './../commons/generic/Loader';

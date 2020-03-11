@@ -24,7 +24,7 @@ export function retrieveAndStorePetData(id) {
     return {
         type: 'GET_PET_DATA',
         payload: {
-            request: _get(`/api/pet/${id}`),
+            request: _get({ url: `/api/pet/${id}` }),
             options: {
                 onSuccess({ dispatch, response }) {
                     dispatch(storePetData(response.data));
