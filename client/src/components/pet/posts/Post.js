@@ -1,8 +1,10 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Box, Typography } from '@material-ui/core';
+import { Box, Typography, Button, IconButton } from '@material-ui/core';
 import AvatarPreview from '../../commons/avatar/AvatarPreview';
 import Helper from './../../../utils/Helper';
+import ThumbUpAlt from '@material-ui/icons/ThumbUpAltOutlined';
+import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 
 const Post = ({ classes, petData, post='' }) => {
     const { name='', profile_image='' } = petData;
@@ -35,11 +37,16 @@ const Post = ({ classes, petData, post='' }) => {
                 { image && <img className={classes.image} src={image} alt='post image'/>}
                 <div className={classes.buttonWrapper}>
                     <div>
-                        Like
+                        <IconButton size='small' color='primary'>
+                            <ThumbUpAlt/>
+                        </IconButton>
+                        <IconButton size='small' color='secondary'>
+                            <FavoriteBorder/>
+                        </IconButton>
                     </div>
-                    <div>
+                    <Button size='small'>
                         Comments
-                    </div>
+                    </Button>
                 </div>
             </div>
         </Box>
