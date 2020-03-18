@@ -34,7 +34,7 @@ export function retrieveAndStorePetData(id) {
     }
 }
 
-export function createAndStorePetDetails(data) {
+export function createAndStorePetDetails(data, history) {
 	return {
 		type: 'CREATE_PET_PROFILE',
 		payload: {
@@ -45,6 +45,8 @@ export function createAndStorePetDetails(data) {
 			options: {
 				onSuccess({ dispatch, response }) {
                     dispatch(storePetAccounts(response.data));
+					sendNotification({ dispatch, type: 'success' });
+					history.push('/user/pets');
                 }
 			}
 		}

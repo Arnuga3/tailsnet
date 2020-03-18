@@ -70,6 +70,7 @@ module.exports = {
                 SELECT id, description, date_created, created_by, pet_id
                 FROM post
                 WHERE pet_id = $1
+                ORDER BY date_created DESC
             `,
             values: [id]
         });

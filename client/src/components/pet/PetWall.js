@@ -1,32 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { Switch } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import { Paper, Grid } from '@material-ui/core';
+import { Paper, Grid, Typography, Box } from '@material-ui/core';
 import PageWrapper from './../commons/generic/PageWrapper';
 import Loader from './../commons/generic/Loader';
-import PostCreate from './posts/PostCreate';
-import Post from './posts/Post';
+import Posts from './posts/Posts';
+import PetProfileProps from './PetProfileProps';
+import PetProfileSettings from './PetProfileSettings';
+import AuthRoute from './../AuthRoute';
 import { retrieveAndStorePetData } from './../../actions/petActions';
-import { getAndStorePosts } from './../../actions/postActions';
 
-const PetWall = ({ classes, match, dispatch, petsData, petsPosts }) => {
-
+const PetWall = ({ classes, match, dispatch, petsData }) => {
     const { petId } = match.params;
     const [petData, setPetData] = useState(null);
-    const [petPosts, setPetPosts] = useState(null);
 
     useEffect(() => {
         dispatch(retrieveAndStorePetData(petId));
-        dispatch(getAndStorePosts(petId));
     }, []);
 
     useEffect(() => {
         setPetData(petsData[petId]);
     }, [petsData]);
-
-    useEffect(() => {
-        setPetPosts(petsPosts[petId]);
-    }, [petsPosts]);
 
     return (
         <PageWrapper>
@@ -34,18 +29,16 @@ const PetWall = ({ classes, match, dispatch, petsData, petsPosts }) => {
                     <Paper className={classes.paper} square>
                         <Grid container spacing={3}>
                             <Grid item xs={12} md>
-                                
+                                <PetProfileProps petData={petData}/>
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                <PostCreate petData={petData}/>
-                                {
-                                    petPosts ?
-                                        petPosts.map(post => <Post petData={petData} post={post}/>)
-                                        : <Loader/>
-                                }
+                                <Switch>
+                                    <AuthRoute exact path={`${match.url}`} component={props => <Posts {...props} petData={petData}/>}/>
+                                    <AuthRoute exact path={`${match.url}/settings`} component={props => <PetProfileSettings {...props} petData={petData}/>}/>
+                                </Switch>
                             </Grid>
                             <Grid item xs={12} md>
-                                <Paper className={classes.paper}>xs</Paper>
+                                <Paper className={classes.paper}>Your advertisement can be here</Paper>
                             </Grid>
                         </Grid>
                     </Paper>
@@ -65,8 +58,7 @@ const styles = theme => ({
 });
 
 const mapStateToProps = ({ petStore }) => ({
-    petsData: petStore.petsData,
-    petsPosts: petStore.petsPosts
+    petsData: petStore.petsData
 });
 
 export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(PetWall));

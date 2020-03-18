@@ -2,9 +2,15 @@ import { _get, _post } from './../utils/ApiUtils';
 import { sendNotification } from './../utils/notification';
 
 export const STORE_POSTS = 'STORE_POSTS';
+export const STORE_NEW_POST = 'STORE_NEW_POST';
 
-export const storePost = value => ({
+export const storePosts = value => ({
 	type: STORE_POSTS,
+	value
+});
+
+export const storeNewPost = value => ({
+	type: STORE_NEW_POST,
 	value
 });
 
@@ -17,7 +23,7 @@ export function getAndStorePosts(petId) {
 			}),
 			options: {
 				onSuccess({ dispatch, response }) {
-                    dispatch(storePost({ id: petId, data: response.data }));
+                    dispatch(storePosts({ id: petId, data: response.data }));
                 }
 			}
 		}
@@ -34,7 +40,7 @@ export function createAndStorePost(data) {
 			}),
 			options: {
 				onSuccess({ dispatch, response }) {
-                    dispatch(storePost(response.data));
+                    dispatch(storeNewPost({id: response.data.pet_id, data: [response.data]}));
                     sendNotification({ dispatch, type: 'success' });
                 }
 			}

@@ -15,7 +15,6 @@ import {
 } from '../../../actions/petActions';
 import { useHistory } from "react-router-dom";
 
-// TODO - navigate to pets screen or pet feed screen
 const PetCreate = ({ dispatch, classes }) => {
     const [petType, setPetType] = useState(null);
     const [petName, setPetName] = useState('');
@@ -54,7 +53,7 @@ const PetCreate = ({ dispatch, classes }) => {
         };
 
         if (skipped) {
-            dispatch(createAndStorePetDetails(petDetails));
+            dispatch(createAndStorePetDetails(petDetails, history));
         
         } else if (petImageState.blob) {
             var formData = new FormData();
@@ -108,8 +107,8 @@ const PetCreate = ({ dispatch, classes }) => {
                     value={petName}
                     label={
                         hasError('petName') && formError('petName')[0].error
-                            ? `Pet Name - ${formError('petName')[0].error}`
-                            : 'Pet Name'
+                            ? `Name - ${formError('petName')[0].error}`
+                            : 'Name'
                     }
                     name='petName'
                     error={hasError('petName')}
@@ -181,7 +180,7 @@ const PetCreate = ({ dispatch, classes }) => {
     };
 
     return (
-        <PageWrapper pageTitle='Pets'>
+        <PageWrapper pageTitle='New Pet'>
             <Paper className={classes.paper}>
                 <Stepper activeStep={activeStep}>
                     {

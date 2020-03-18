@@ -15,7 +15,7 @@ const Post = ({ classes, petData, post='' }) => {
     }; 
 
     return (
-        <Box p={1} mt={1}
+        <Box p={1} mb={1}
             className={classes.post}
             border={1}
             borderColor='grey.300'
@@ -31,7 +31,7 @@ const Post = ({ classes, petData, post='' }) => {
                         {Helper.toLocalDateTimeString(date_created)}
                     </Typography>
                 </div>
-                <Typography>
+                <Typography className={classes.description}>
                     {description}
                 </Typography>
                 { image && <img className={classes.image} src={image} alt='post image'/>}
@@ -65,6 +65,9 @@ const styles = theme => ({
     headerWrapper: {
         display: 'flex',
         justifyContent: 'space-between'
+    },
+    description: {
+        margin: theme.spacing(1)
     },
     buttonWrapper: {
         display: 'flex',

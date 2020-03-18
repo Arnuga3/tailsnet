@@ -38,7 +38,7 @@ const styles = theme => ({
         marginRight: theme.spacing(1),
         color: theme.palette.primary.main,
         backgroundColor: theme.palette.primary.contrastText,
-        borderColor: theme.palette.primary.main,
+        border: `1px solid ${theme.palette.primary.main}`,
         fontSize: theme.spacing(2),
         letterSpacing: -1
     },

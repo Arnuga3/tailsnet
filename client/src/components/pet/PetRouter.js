@@ -9,7 +9,7 @@ const PetRouter = ({ match }) => {
         <React.Fragment>
             <AuthRoute exact path={`${match.url}`} component={Pets}/>
             <AuthRoute exact path={`${match.url}/create`} component={PetCreate}/>
-            <AuthRoute exact path={`${match.url}/:petId/wall`} component={PetWall}/>
+            <AuthRoute path={`${match.url}/:petId/wall`} component={PetWall}/>
         </React.Fragment>
     );
 }

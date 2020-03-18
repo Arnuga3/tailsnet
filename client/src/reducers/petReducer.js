@@ -1,5 +1,5 @@
 import { SAVE_PET_ACCOUNT, STORE_PET_ACCOUNTS, STORE_PET_DATA }  from './../actions/petActions';
-import { STORE_POSTS } from './../actions/postActions';
+import { STORE_POSTS, STORE_NEW_POST } from './../actions/postActions';
 
 const defaultState = {
     accounts: [],
@@ -26,6 +26,14 @@ const petStore = (state = defaultState, { type, value }) => {
             return {
                 ...state,
                 petsData: {...state.petsData, [value.id]: value}
+            }
+
+        case STORE_NEW_POST:
+            const currentPosts = state.petsPosts[value.id] ? state.petsPosts[value.id] : [];
+            const aggregatedPosts = [...value.data, ...currentPosts];
+            return {
+                ...state,
+                petsPosts: {...state.petsPosts, [value.id]: aggregatedPosts}
             }
 
         case STORE_POSTS:

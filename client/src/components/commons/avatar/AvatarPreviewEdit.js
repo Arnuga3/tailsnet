@@ -16,7 +16,7 @@ const AvatarPreviewEdit = ({ classes, label, image, onEdit }) => {
     return (
         <div className={classes.wrapper}>
             <div className={classes.avatarWrapper}>
-                <AvatarPreview image={image} label={label}/>
+                <AvatarPreview image={image} label={label} size='medium'/>
                 <IconButton className={classes.editBtn}
                     onClick={onEdit} 
                 >

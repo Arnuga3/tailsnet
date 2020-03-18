@@ -12,8 +12,11 @@ const PostCreate = ({ classes, petData, dispatch }) => {
     let textRef = null;
     const [image, setImage] = useState(null);
 
-    const getImage = str => {
-        return `/image/${str}.jpg`;
+    const [isDisabled, setIsDisabled] = useState(true);
+
+    const handleDisabled = () => {
+        const disabled = textRef === null || textRef.value === '';
+        setIsDisabled(disabled);
     };
 
     const handlePost = () => {
@@ -22,6 +25,10 @@ const PostCreate = ({ classes, petData, dispatch }) => {
             petId: petData.id,
             image
         }));
+    };
+
+    const getImage = str => {
+        return `/image/${str}.jpg`;
     };
 
     return (
@@ -41,6 +48,7 @@ const PostCreate = ({ classes, petData, dispatch }) => {
                     label=''
                     multiline
                     rows='2'
+                    onChange={handleDisabled}
                 />
                 { image && <img className={classes.image} src={image} alt='post image'/>}
                 <div className={classes.buttonWrapper}>
@@ -52,6 +60,7 @@ const PostCreate = ({ classes, petData, dispatch }) => {
                             className={classes.button}
                             variant='contained'
                             color='primary'
+                            disabled={isDisabled}
                             onClick={handlePost}
                         >
                             Post
